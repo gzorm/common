@@ -2334,6 +2334,22 @@ func (s *Redis) ReleaseLock(ctx context.Context, key string) (bool, error) {
 
 	return result == 1, nil
 }
+
+// WithLock runs the given function with a distributed lock
+func (s *Redis) WithLock(ctx context.Context, key string, expiration int, fn func()) error {
+	acquired, err := s.AcquireLock(ctx, key, expiration)
+	if err != nil {
+		return fmt.Errorf("error acquiring lock: %v", err)
+	}
+
+	if !acquired {
+		return fmt.Errorf("lock not acquired. Another process is holding the lock")
+	}
+
+	defer s.ReleaseLock(ctx, key)
+	fn()
+	return nil
+}
 func (s *Redis) checkConnection(pingTimeout time.Duration) error {
 	conn, err := getRedis(s)
 	if err != nil {
