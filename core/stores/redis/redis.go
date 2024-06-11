@@ -2320,6 +2320,20 @@ func (s *Redis) ZunionstoreCtx(ctx context.Context, dest string, store *ZStore) 
 	return conn.ZUnionStore(ctx, dest, store).Result()
 }
 
+// AcquireLock tries to acquire a lock with the given key and expiration time
+func (s *Redis) AcquireLock(ctx context.Context, key string, expiration int) (bool, error) {
+	return s.SetnxExCtx(ctx, key, "locked", expiration)
+}
+
+// ReleaseLock releases the lock with the given key
+func (s *Redis) ReleaseLock(ctx context.Context, key string) (bool, error) {
+	result, err := s.DelCtx(ctx, key)
+	if err != nil {
+		return false, err
+	}
+
+	return result == 1, nil
+}
 func (s *Redis) checkConnection(pingTimeout time.Duration) error {
 	conn, err := getRedis(s)
 	if err != nil {
