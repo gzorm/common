@@ -13,6 +13,7 @@ type WinUserBankList struct {
 	Username         string `gorm:"column:username;type:varchar(32);not null;comment:用户名" json:"username"`                                                          // 用户名
 	CategoryCurrency int64  `gorm:"column:category_currency;type:tinyint;not null;comment:货币类型:0-数字货币 1-法币" json:"categoryCurrency"`                                // 货币类型:0-数字货币 1-法币
 	CategoryTransfer int64  `gorm:"column:category_transfer;type:tinyint;not null;default:1;comment:转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH" json:"categoryTransfer"` // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
+	BankName         string `gorm:"column:bank_name;type:varchar(255);comment:银行名称" json:"bankName"`                                                                // 银行名称
 	Address          string `gorm:"column:address;type:varchar(255);not null;comment:提款地址" json:"address"`                                                          // 提款地址
 	Status           int64  `gorm:"column:status;type:tinyint;not null;default:2;comment:状态:1-默认地址(启用) 2-正常启用 3-删除" json:"status"`                                  // 状态:1-默认地址(启用) 2-正常启用 3-删除
 	CreatedAt        int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`

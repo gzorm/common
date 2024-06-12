@@ -32,6 +32,7 @@ func newWinUserBankList(db *gorm.DB, opts ...gen.DOOption) winUserBankList {
 	_winUserBankList.Username = field.NewString(tableName, "username")
 	_winUserBankList.CategoryCurrency = field.NewInt64(tableName, "category_currency")
 	_winUserBankList.CategoryTransfer = field.NewInt64(tableName, "category_transfer")
+	_winUserBankList.BankName = field.NewString(tableName, "bank_name")
 	_winUserBankList.Address = field.NewString(tableName, "address")
 	_winUserBankList.Status = field.NewInt64(tableName, "status")
 	_winUserBankList.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -55,6 +56,7 @@ type winUserBankList struct {
 	Username         field.String // 用户名
 	CategoryCurrency field.Int64  // 货币类型:0-数字货币 1-法币
 	CategoryTransfer field.Int64  // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
+	BankName         field.String // 银行名称
 	Address          field.String // 提款地址
 	Status           field.Int64  // 状态:1-默认地址(启用) 2-正常启用 3-删除
 	CreatedAt        field.Int64
@@ -83,6 +85,7 @@ func (w *winUserBankList) updateTableName(table string) *winUserBankList {
 	w.Username = field.NewString(table, "username")
 	w.CategoryCurrency = field.NewInt64(table, "category_currency")
 	w.CategoryTransfer = field.NewInt64(table, "category_transfer")
+	w.BankName = field.NewString(table, "bank_name")
 	w.Address = field.NewString(table, "address")
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
@@ -106,12 +109,13 @@ func (w *winUserBankList) GetFieldByName(fieldName string) (field.OrderExpr, boo
 }
 
 func (w *winUserBankList) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 12)
+	w.fieldMap = make(map[string]field.Expr, 13)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["category_currency"] = w.CategoryCurrency
 	w.fieldMap["category_transfer"] = w.CategoryTransfer
+	w.fieldMap["bank_name"] = w.BankName
 	w.fieldMap["address"] = w.Address
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
