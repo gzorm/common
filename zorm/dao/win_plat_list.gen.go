@@ -34,6 +34,7 @@ func newWinPlatList(db *gorm.DB, opts ...gen.DOOption) winPlatList {
 	_winPlatList.Rate = field.NewString(tableName, "rate")
 	_winPlatList.Sort = field.NewInt64(tableName, "sort")
 	_winPlatList.Status = field.NewInt64(tableName, "status")
+	_winPlatList.RsaPublicKey = field.NewString(tableName, "rsa_public_key")
 	_winPlatList.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winPlatList.UpdatedAt = field.NewInt64(tableName, "updated_at")
 
@@ -45,16 +46,17 @@ func newWinPlatList(db *gorm.DB, opts ...gen.DOOption) winPlatList {
 type winPlatList struct {
 	winPlatListDo
 
-	ALL       field.Asterisk
-	ID        field.Int64
-	Code      field.String // 平台编码
-	Name      field.String // 平台名称
-	Config    field.String // 配置信息
-	Rate      field.String // 费率
-	Sort      field.Int64  // 排序(从高到底、ID降序)
-	Status    field.Int64  // 状态: 1-启用 0-停用
-	CreatedAt field.Int64  // 创建时间
-	UpdatedAt field.Int64  // 更新时间
+	ALL          field.Asterisk
+	ID           field.Int64
+	Code         field.String // 平台编码
+	Name         field.String // 平台名称
+	Config       field.String // 配置信息
+	Rate         field.String // 费率
+	Sort         field.Int64  // 排序(从高到底、ID降序)
+	Status       field.Int64  // 状态: 1-启用 0-停用
+	RsaPublicKey field.String // 平台rsa公钥
+	CreatedAt    field.Int64  // 创建时间
+	UpdatedAt    field.Int64  // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -78,6 +80,7 @@ func (w *winPlatList) updateTableName(table string) *winPlatList {
 	w.Rate = field.NewString(table, "rate")
 	w.Sort = field.NewInt64(table, "sort")
 	w.Status = field.NewInt64(table, "status")
+	w.RsaPublicKey = field.NewString(table, "rsa_public_key")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
 
@@ -96,7 +99,7 @@ func (w *winPlatList) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winPlatList) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 9)
+	w.fieldMap = make(map[string]field.Expr, 10)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["code"] = w.Code
 	w.fieldMap["name"] = w.Name
@@ -104,6 +107,7 @@ func (w *winPlatList) fillFieldMap() {
 	w.fieldMap["rate"] = w.Rate
 	w.fieldMap["sort"] = w.Sort
 	w.fieldMap["status"] = w.Status
+	w.fieldMap["rsa_public_key"] = w.RsaPublicKey
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
 }
