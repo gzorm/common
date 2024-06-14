@@ -24,6 +24,7 @@ type WinCoinWithdrawalRecord struct {
 	ExchangeRate            decimal.Decimal `gorm:"column:exchange_rate;type:decimal(15,4);not null;default:0.0000;comment:汇率" json:"exchangeRate"`                                       // 汇率
 	RealAmount              decimal.Decimal `gorm:"column:real_amount;type:decimal(15,4);not null;default:0.0000;comment:到账金额" json:"realAmount"`                                         // 到账金额
 	CoinBefore              decimal.Decimal `gorm:"column:coin_before;type:decimal(15,4);not null;default:0.0000;comment:提款前用户金额" json:"coinBefore"`                                      // 提款前用户金额
+	PlatNetfees             decimal.Decimal `gorm:"column:plat_netfees;type:decimal(15,4);default:0.0000;comment:平台手续费" json:"platNetfees"`                                               // 平台手续费
 	MainNetFees             decimal.Decimal `gorm:"column:main_net_fees;type:decimal(15,4);not null;default:0.0000;comment:主网费" json:"mainNetFees"`                                       // 主网费
 	Currency                string          `gorm:"column:currency;type:varchar(50);not null;comment:币种" json:"currency"`                                                                 // 币种
 	CategoryCurrency        int64           `gorm:"column:category_currency;type:tinyint;not null;default:1;comment:货币类型:0-数字货币 1-法币" json:"categoryCurrency"`                            // 货币类型:0-数字货币 1-法币

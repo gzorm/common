@@ -41,6 +41,7 @@ func newWinCoinWithdrawalRecord(db *gorm.DB, opts ...gen.DOOption) winCoinWithdr
 	_winCoinWithdrawalRecord.ExchangeRate = field.NewField(tableName, "exchange_rate")
 	_winCoinWithdrawalRecord.RealAmount = field.NewField(tableName, "real_amount")
 	_winCoinWithdrawalRecord.CoinBefore = field.NewField(tableName, "coin_before")
+	_winCoinWithdrawalRecord.PlatNetfees = field.NewField(tableName, "plat_netfees")
 	_winCoinWithdrawalRecord.MainNetFees = field.NewField(tableName, "main_net_fees")
 	_winCoinWithdrawalRecord.Currency = field.NewString(tableName, "currency")
 	_winCoinWithdrawalRecord.CategoryCurrency = field.NewInt64(tableName, "category_currency")
@@ -80,6 +81,7 @@ type winCoinWithdrawalRecord struct {
 	ExchangeRate            field.Field  // 汇率
 	RealAmount              field.Field  // 到账金额
 	CoinBefore              field.Field  // 提款前用户金额
+	PlatNetfees             field.Field  // 平台手续费
 	MainNetFees             field.Field  // 主网费
 	Currency                field.String // 币种
 	CategoryCurrency        field.Int64  // 货币类型:0-数字货币 1-法币
@@ -124,6 +126,7 @@ func (w *winCoinWithdrawalRecord) updateTableName(table string) *winCoinWithdraw
 	w.ExchangeRate = field.NewField(table, "exchange_rate")
 	w.RealAmount = field.NewField(table, "real_amount")
 	w.CoinBefore = field.NewField(table, "coin_before")
+	w.PlatNetfees = field.NewField(table, "plat_netfees")
 	w.MainNetFees = field.NewField(table, "main_net_fees")
 	w.Currency = field.NewString(table, "currency")
 	w.CategoryCurrency = field.NewInt64(table, "category_currency")
@@ -154,7 +157,7 @@ func (w *winCoinWithdrawalRecord) GetFieldByName(fieldName string) (field.OrderE
 }
 
 func (w *winCoinWithdrawalRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 28)
+	w.fieldMap = make(map[string]field.Expr, 29)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -169,6 +172,7 @@ func (w *winCoinWithdrawalRecord) fillFieldMap() {
 	w.fieldMap["exchange_rate"] = w.ExchangeRate
 	w.fieldMap["real_amount"] = w.RealAmount
 	w.fieldMap["coin_before"] = w.CoinBefore
+	w.fieldMap["plat_netfees"] = w.PlatNetfees
 	w.fieldMap["main_net_fees"] = w.MainNetFees
 	w.fieldMap["currency"] = w.Currency
 	w.fieldMap["category_currency"] = w.CategoryCurrency
