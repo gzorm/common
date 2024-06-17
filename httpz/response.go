@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	xhttp "github.com/zeromicro/x/http"
+	xhttp "github.com/gzorm/common/core/http"
 )
 
 // ErrorCtx writes err into w.

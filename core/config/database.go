@@ -24,9 +24,9 @@ import (
 
 	entsql "entgo.io/ent/dialect/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gzorm/common/core/logx"
 	_ "github.com/lib/pq"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 // DatabaseConf stores database configurations.

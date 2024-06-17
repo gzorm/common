@@ -3,9 +3,9 @@ package captcha
 import (
 	"context"
 	"github.com/gzorm/common/core/config"
+	"github.com/gzorm/common/core/logx"
 	"github.com/mojocn/base64Captcha"
 	"github.com/redis/go-redis/v9"
-	"github.com/zeromicro/go-zero/core/logx"
 	"time"
 )
 

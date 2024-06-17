@@ -41,8 +41,6 @@ require (
 	github.com/smartystreets/goconvey v1.8.1
 	github.com/spaolacci/murmur3 v1.1.0
 	github.com/stretchr/testify v1.9.0
-	github.com/zeromicro/go-zero v1.6.5
-	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 	go.etcd.io/etcd/api/v3 v3.5.13
 	go.etcd.io/etcd/client/v3 v3.5.13
 	go.mongodb.org/mongo-driver v1.13.1
