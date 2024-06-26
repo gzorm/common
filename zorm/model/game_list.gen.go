@@ -15,6 +15,7 @@ type GameList struct {
 	GameTypeID            int64  `gorm:"column:game_type_id;type:int;not null;comment:游戏类型id" json:"gameTypeId"`                                              // 游戏类型id
 	GameProviderID        int64  `gorm:"column:game_provider_id;type:int;primaryKey;comment:游戏供应商id" json:"gameProviderId"`                                   // 游戏供应商id
 	GameStartParam        string `gorm:"column:game_start_param;type:varchar(64);comment:特殊游戏三方启动参数，如:elbet" json:"gameStartParam"`                           // 特殊游戏三方启动参数，如:elbet
+	GameURL               string `gorm:"column:game_url;type:varchar(255);comment:三方平台游戏url" json:"gameUrl"`                                                  // 三方平台游戏url
 	Sort                  int64  `gorm:"column:sort;type:int;not null;comment:排序: 从低到高" json:"sort"`                                                          // 排序: 从低到高
 	Status                int64  `gorm:"column:status;type:tinyint;not null;comment:状态: 1-启用 0-停用" json:"status"`                                             // 状态: 1-启用 0-停用
 	Name                  string `gorm:"column:name;type:varchar(64);not null;comment:简体名称" json:"name"`                                                      // 简体名称

@@ -34,6 +34,7 @@ func newGameList(db *gorm.DB, opts ...gen.DOOption) gameList {
 	_gameList.GameTypeID = field.NewInt64(tableName, "game_type_id")
 	_gameList.GameProviderID = field.NewInt64(tableName, "game_provider_id")
 	_gameList.GameStartParam = field.NewString(tableName, "game_start_param")
+	_gameList.GameURL = field.NewString(tableName, "game_url")
 	_gameList.Sort = field.NewInt64(tableName, "sort")
 	_gameList.Status = field.NewInt64(tableName, "status")
 	_gameList.Name = field.NewString(tableName, "name")
@@ -66,6 +67,7 @@ type gameList struct {
 	GameTypeID            field.Int64  // 游戏类型id
 	GameProviderID        field.Int64  // 游戏供应商id
 	GameStartParam        field.String // 特殊游戏三方启动参数，如:elbet
+	GameURL               field.String // 三方平台游戏url
 	Sort                  field.Int64  // 排序: 从低到高
 	Status                field.Int64  // 状态: 1-启用 0-停用
 	Name                  field.String // 简体名称
@@ -103,6 +105,7 @@ func (g *gameList) updateTableName(table string) *gameList {
 	g.GameTypeID = field.NewInt64(table, "game_type_id")
 	g.GameProviderID = field.NewInt64(table, "game_provider_id")
 	g.GameStartParam = field.NewString(table, "game_start_param")
+	g.GameURL = field.NewString(table, "game_url")
 	g.Sort = field.NewInt64(table, "sort")
 	g.Status = field.NewInt64(table, "status")
 	g.Name = field.NewString(table, "name")
@@ -133,7 +136,7 @@ func (g *gameList) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (g *gameList) fillFieldMap() {
-	g.fieldMap = make(map[string]field.Expr, 21)
+	g.fieldMap = make(map[string]field.Expr, 22)
 	g.fieldMap["id"] = g.ID
 	g.fieldMap["code"] = g.Code
 	g.fieldMap["game_provider_subtype_id"] = g.GameProviderSubtypeID
@@ -141,6 +144,7 @@ func (g *gameList) fillFieldMap() {
 	g.fieldMap["game_type_id"] = g.GameTypeID
 	g.fieldMap["game_provider_id"] = g.GameProviderID
 	g.fieldMap["game_start_param"] = g.GameStartParam
+	g.fieldMap["game_url"] = g.GameURL
 	g.fieldMap["sort"] = g.Sort
 	g.fieldMap["status"] = g.Status
 	g.fieldMap["name"] = g.Name
