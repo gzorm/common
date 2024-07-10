@@ -10,7 +10,7 @@ const TableNameWinCoinWithdrawalRecord = "win_coin_withdrawal_record"
 
 // WinCoinWithdrawalRecord 提款记录表
 type WinCoinWithdrawalRecord struct {
-	ID                      int64           `gorm:"column:id;type:bigint;primaryKey" json:"id,string"`
+	ID                      int64           `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true" json:"id,string"`
 	OrderID                 string          `gorm:"column:order_id;type:varchar(64);not null;comment:订单号(三方平台用)" json:"orderId"`                                                          // 订单号(三方平台用)
 	PlatOrderID             string          `gorm:"column:plat_order_id;type:varchar(64);not null;comment:三方平台订单号" json:"platOrderId"`                                                    // 三方平台订单号
 	UID                     int64           `gorm:"column:uid;type:int;not null;comment:UID" json:"uid"`                                                                                  // UID
@@ -27,6 +27,7 @@ type WinCoinWithdrawalRecord struct {
 	PlatNetfees             decimal.Decimal `gorm:"column:plat_netfees;type:decimal(15,4);default:0.0000;comment:平台手续费" json:"platNetfees"`                                               // 平台手续费
 	MainNetFees             decimal.Decimal `gorm:"column:main_net_fees;type:decimal(15,4);not null;default:0.0000;comment:主网费" json:"mainNetFees"`                                       // 主网费
 	Currency                string          `gorm:"column:currency;type:varchar(50);not null;comment:币种" json:"currency"`                                                                 // 币种
+	Category                int64           `gorm:"column:category;type:tinyint;default:1;comment:提现类型 1==正常提现  4==佣金提现" json:"category"`                                                 // 提现类型 1==正常提现  4==佣金提现
 	CategoryCurrency        int64           `gorm:"column:category_currency;type:tinyint;not null;default:1;comment:货币类型:0-数字货币 1-法币" json:"categoryCurrency"`                            // 货币类型:0-数字货币 1-法币
 	CategoryTransfer        int64           `gorm:"column:category_transfer;type:tinyint;not null;default:3;comment:转账类型:1-TRC-20 2-ERC-20 3-BANK 4-PIX 5-GCASH" json:"categoryTransfer"` // 转账类型:1-TRC-20 2-ERC-20 3-BANK 4-PIX 5-GCASH
 	Status                  int64           `gorm:"column:status;type:tinyint;not null;comment:状态: 0-申请中，1-提款成功，2-提款失败，3-稽核成功 4-代付种" json:"status"`                                       // 状态: 0-申请中，1-提款成功，2-提款失败，3-稽核成功 4-代付种
