@@ -1,8 +1,10 @@
 package es
 
 import (
+	"fmt"
 	"log"
 	"testing"
+	"time"
 )
 
 func TestHttpAdd(t *testing.T) {
@@ -14,8 +16,8 @@ func TestHttpAdd(t *testing.T) {
 
 	// 示例：添加文档
 	doc := map[string]interface{}{
-		"title":   "Test Document",
-		"content": "This is a test document.",
+		"title":   "Test DocumentBBB",
+		"content": "This is a test documentBB.",
 	}
 	err = esClientHTTP.AddDocument("test-index", "1", doc)
 	if err != nil {
@@ -66,6 +68,100 @@ func TestHttpDelete(t *testing.T) {
 	}
 	log.Println("Document deleted successfully (HTTP)")
 }
+
+// 查询带分页
+func TestSearchPaging(t *testing.T) {
+	// 使用HTTP
+	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+	if err != nil {
+		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
+	}
+	// 查询条件
+	query := map[string]interface{}{
+		"query": map[string]interface{}{
+			"match_all": map[string]interface{}{},
+		},
+	}
+
+	// 分页查询
+	from := 0
+	size := 10
+
+	result, err := esClientHTTP.SearchWithPagination("test-index", query, from, size)
+	if err != nil {
+		log.Fatalf("Error executing search query: %s", err)
+	}
+
+	fmt.Printf("Search results: %+v\n", result)
+}
+
+// 大数据量分页A
+func TestSearchWithScroll(t *testing.T) {
+	// 使用HTTP
+	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+	if err != nil {
+		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
+	}
+	// 查询条件
+	query := map[string]interface{}{
+		"query": map[string]interface{}{
+			"match_all": map[string]interface{}{},
+		},
+	}
+
+	// 分页查询
+	scrollTime := 2 * time.Minute
+	size := 100
+
+	results, err := esClientHTTP.SearchWithScroll("test-index", query, scrollTime, size)
+	if err != nil {
+		log.Fatalf("Error executing search query: %s", err)
+	}
+
+	for _, result := range results {
+		fmt.Printf("Document: %s\n", result)
+	}
+}
+
+//	func TestDisableId(t *testing.T) {
+//		// 使用HTTP
+//		esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+//		if err != nil {
+//			log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
+//		}
+//
+//		err = esClientHTTP.UpdateIndexSettings("test-index")
+//		fmt.Println(err)
+//	}
+//
+// // 大数据量分页B
+//
+//	func TestSearchWithSearchAfter(t *testing.T) {
+//		// 使用HTTP
+//		esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+//		if err != nil {
+//			log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
+//		}
+//		// 查询条件
+//		query := map[string]interface{}{
+//			"query": map[string]interface{}{
+//				"match_all": map[string]interface{}{},
+//			},
+//		}
+//
+//		// 分页查询
+//		sortFields := []string{"_id"} // 使用文档ID排序
+//		size := 100
+//
+//		results, err := esClientHTTP.SearchWithSearchAfter("test-index", query, sortFields, size)
+//		if err != nil {
+//			log.Fatalf("Error executing search query: %s", err)
+//		}
+//
+//		for _, result := range results {
+//			fmt.Printf("Document: %s\n", result)
+//		}
+//	}
 func TestES(test *testing.T) {
 	// 使用HTTPS和证书
 	esClientTLS, err := NewElasticsearchClient(true, "D:\\other\\lxgame\\ese\\CloudSearchService.cer", "admin", "123456", []string{"https://21.1.22.10:9200"})
