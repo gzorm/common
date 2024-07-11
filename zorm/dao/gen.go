@@ -28,7 +28,7 @@ var (
 	WinCoinLog              *winCoinLog
 	WinCoinLog5             *winCoinLog5
 	WinCoinRate             *winCoinRate
-	WinCoinReward           *winCoinReward
+	WinCoinReward           *winCoinRewards
 	WinUserWallet           *winUserWallet
 	WinCoinWithdrawalRecord *winCoinWithdrawalRecord
 	WinBetslipsDetails      *winBetslipsDetails
@@ -287,7 +287,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinCoinLog:              newWinCoinLog(db, opts...),
 		WinCoinLog5:             newWinCoinLog5(db, opts...),
 		WinCoinRate:             newWinCoinRate(db, opts...),
-		WinCoinReward:           newWinCoinReward(db, opts...),
+		WinCoinReward:           newWinCoinRewards(db, opts...),
 		WinUserWallet:           newWinUserWallet(db, opts...),
 		WinCoinWithdrawalRecord: newWinCoinWithdrawalRecord(db, opts...),
 		WinBetslipsDetails:      newWinBetslipsDetails(db, opts...),
@@ -418,7 +418,7 @@ type Query struct {
 	WinCoinLog              winCoinLog
 	WinCoinLog5             winCoinLog5
 	WinCoinRate             winCoinRate
-	WinCoinReward           winCoinReward
+	WinCoinReward           winCoinRewards
 	WinUserWallet           winUserWallet
 	WinCoinWithdrawalRecord winCoinWithdrawalRecord
 	WinBetslipsDetails      winBetslipsDetails
@@ -818,7 +818,7 @@ type queryCtx struct {
 	WinCoinLog              IWinCoinLogDo
 	WinCoinLog5             IWinCoinLog5Do
 	WinCoinRate             IWinCoinRateDo
-	WinCoinReward           IWinCoinRewardDo
+	WinCoinReward           IWinCoinRewardsDo
 	WinUserWallet           IWinUserWalletDo
 	WinCoinWithdrawalRecord IWinCoinWithdrawalRecordDo
 	WinBetslipsDetails      IWinBetslipsDetailsDo
