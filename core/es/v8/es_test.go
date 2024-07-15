@@ -175,7 +175,7 @@ func TestHttpSearchAfter(t *testing.T) {
 
 func TestSearch(t *testing.T) {
 	// 使用HTTP
-	esClientHTTP, err := NewElasticsearchClient(false, "", "admin", "123456", []string{"https://192.168.114.133:9200"})
+	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"https://192.168.114.133:9200"})
 
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
@@ -204,7 +204,7 @@ func TestSearch(t *testing.T) {
 }
 func TestES(test *testing.T) {
 	// 使用HTTPS和证书
-	esClientTLS, err := NewElasticsearchClient(false, "", "admin", "123456", []string{"https://192.168.114.133:9200"})
+	esClientTLS, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"https://192.168.114.133:9200"})
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (TLS): %s", err)
 	}

@@ -75,6 +75,7 @@ func TestHttpDelete(t *testing.T) {
 func TestSearchPaging(t *testing.T) {
 	// 使用HTTP
 	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
 	}
@@ -83,12 +84,17 @@ func TestSearchPaging(t *testing.T) {
 	from := 0
 	size := 10
 
-	conditions := []QueryCondition{
-		{Field: "username", Operator: Wildcard, Value: "bin"},
-		//{Field: "age", Operator: GreaterThan, Value: 25},
+	queryConditions := []QueryCondition{
+		//{Field: "username", Operator: Wildcard, Value: "bin"},
+		//{Field: "id", Operator: Equal, Value: 9},
+		{
+			Field:    "id",
+			Operator: In,
+			Value:    []interface{}{3, 11, 16},
+		},
 	}
 
-	sources, total, err := esClientHTTP.SearchWithPagination("win_user", conditions, from, size)
+	sources, total, err := esClientHTTP.SearchWithPagination("win_user", queryConditions, from, size)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -111,12 +117,17 @@ func TestSearchWithScroll(t *testing.T) {
 	// 分页查询
 	scrollTime := 2 * time.Minute
 	size := 100
-	conditions := []QueryCondition{
-		{Field: "username", Operator: Wildcard, Value: "bin"},
-		//{Field: "age", Operator: GreaterThan, Value: 25},
+	queryConditions := []QueryCondition{
+		//{Field: "username", Operator: Wildcard, Value: "bin"},
+		//{Field: "id", Operator: Equal, Value: 9},
+		{
+			Field:    "id",
+			Operator: In,
+			Value:    []interface{}{3, 11, 16},
+		},
 	}
 
-	results, total, err := esClientHTTP.SearchWithScroll("win_user", conditions, scrollTime, size)
+	results, total, err := esClientHTTP.SearchWithScroll("win_user", queryConditions, scrollTime, size)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -148,8 +159,13 @@ func TestHttpSearchAfter(t *testing.T) {
 	}
 	// 示例查询条件
 	queryConditions := []QueryCondition{
-		{Field: "username", Operator: Wildcard, Value: "bin"},
+		//{Field: "username", Operator: Wildcard, Value: "bin"},
 		//{Field: "id", Operator: Equal, Value: 9},
+		{
+			Field:    "id",
+			Operator: In,
+			Value:    []interface{}{3, 11, 16},
+		},
 	}
 	sources, nextAfter, total, err := esClientHTTP.SearchWithAfter("win_user", []interface{}{}, 20, queryConditions)
 	if err != nil {
@@ -176,13 +192,15 @@ func TestHttpSearchAfter(t *testing.T) {
 func TestSearch(t *testing.T) {
 	// 使用HTTP
 	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
-
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
 	}
 	conditions := []QueryCondition{
-		{Field: "username", Operator: Wildcard, Value: "bin"},
+		//{Field: "username", Operator: Wildcard, Value: "bin"},
 		//{Field: "age", Operator: GreaterThan, Value: 25},
+		{Field: "id", Operator: In,
+			Value: []interface{}{3, 11, 16},
+		},
 	}
 	fields := []string{}
 	results, total, err := esClientHTTP.Search("win_user", conditions, fields)
@@ -204,7 +222,7 @@ func TestSearch(t *testing.T) {
 }
 func TestES(test *testing.T) {
 	// 使用HTTPS和证书
-	esClientTLS, err := NewElasticsearchClient(false, "", "admin", "123456", []string{"https://192.168.114.133:9200"})
+	esClientTLS, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"https://192.168.114.133:9200"})
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (TLS): %s", err)
 	}

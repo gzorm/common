@@ -162,6 +162,13 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -269,6 +276,13 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -375,6 +389,13 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -491,7 +512,13 @@ func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
-
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
 			default:
 				return nil, nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
