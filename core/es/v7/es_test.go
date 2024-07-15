@@ -198,7 +198,7 @@ func TestSearch(t *testing.T) {
 	conditions := []QueryCondition{
 		//{Field: "username", Operator: Wildcard, Value: "bin"},
 		//{Field: "age", Operator: GreaterThan, Value: 25},
-		{Field: "id", Operator: In,
+		{Field: "id", Operator: NotIn,
 			Value: []interface{}{3, 11, 16},
 		},
 	}

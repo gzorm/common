@@ -24,6 +24,8 @@ const (
 	Wildcard ComparisonOperator = "wildcard"
 	// In 包含
 	In ComparisonOperator = "in"
+	// NotIn 不包含
+	NotIn ComparisonOperator = "not_in"
 )
 
 // QueryCondition 表示一个查询条件
