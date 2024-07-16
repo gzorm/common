@@ -176,6 +176,9 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
 				}
 				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -300,6 +303,10 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
 				}
 				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -423,6 +430,10 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
 				}
 				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
@@ -556,6 +567,9 @@ func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}
 					return nil, nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
 				}
 				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
 			default:
 				return nil, nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}

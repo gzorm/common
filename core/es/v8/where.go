@@ -26,6 +26,8 @@ const (
 	In ComparisonOperator = "in"
 	// NotIn 不包含
 	NotIn ComparisonOperator = "not_in"
+	// NotEqual 不等于
+	NotEqual ComparisonOperator = "neq"
 )
 
 // QueryCondition 表示一个查询条件
