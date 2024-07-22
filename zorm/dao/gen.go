@@ -86,6 +86,7 @@ var (
 	WinCodeRecord                 *winCodeRecord
 	WinCoinAdminTransferM2        *winCoinAdminTransferM2
 	WinCoinCommission             *winCoinCommission
+	WinCoinCommissionLog          *winCoinCommissionLog
 	WinCoinCommissionM2           *winCoinCommissionM2
 	WinCoinDepositRecordM2        *winCoinDepositRecordM2
 	WinCoinRateM2                 *winCoinRateM2
@@ -216,6 +217,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	WinCodeRecord = &Q.WinCodeRecord
 	WinCoinAdminTransferM2 = &Q.WinCoinAdminTransferM2
 	WinCoinCommission = &Q.WinCoinCommission
+	WinCoinCommissionLog = &Q.WinCoinCommissionLog
 	WinCoinCommissionM2 = &Q.WinCoinCommissionM2
 	WinCoinDepositRecordM2 = &Q.WinCoinDepositRecordM2
 	WinCoinRateM2 = &Q.WinCoinRateM2
@@ -347,6 +349,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinCodeRecord:                 newWinCodeRecord(db, opts...),
 		WinCoinAdminTransferM2:        newWinCoinAdminTransferM2(db, opts...),
 		WinCoinCommission:             newWinCoinCommission(db, opts...),
+		WinCoinCommissionLog:          newWinCoinCommissionLog(db, opts...),
 		WinCoinCommissionM2:           newWinCoinCommissionM2(db, opts...),
 		WinCoinDepositRecordM2:        newWinCoinDepositRecordM2(db, opts...),
 		WinCoinRateM2:                 newWinCoinRateM2(db, opts...),
@@ -479,6 +482,7 @@ type Query struct {
 	WinCodeRecord                 winCodeRecord
 	WinCoinAdminTransferM2        winCoinAdminTransferM2
 	WinCoinCommission             winCoinCommission
+	WinCoinCommissionLog          winCoinCommissionLog
 	WinCoinCommissionM2           winCoinCommissionM2
 	WinCoinDepositRecordM2        winCoinDepositRecordM2
 	WinCoinRateM2                 winCoinRateM2
@@ -612,6 +616,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		WinCodeRecord:                 q.WinCodeRecord.clone(db),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.clone(db),
 		WinCoinCommission:             q.WinCoinCommission.clone(db),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.clone(db),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.clone(db),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.clone(db),
 		WinCoinRateM2:                 q.WinCoinRateM2.clone(db),
@@ -752,6 +757,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		WinCodeRecord:                 q.WinCodeRecord.replaceDB(db),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.replaceDB(db),
 		WinCoinCommission:             q.WinCoinCommission.replaceDB(db),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.replaceDB(db),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.replaceDB(db),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.replaceDB(db),
 		WinCoinRateM2:                 q.WinCoinRateM2.replaceDB(db),
@@ -881,6 +887,7 @@ type queryCtx struct {
 	WinCodeAudit                  IWinCodeAuditDo
 	WinCodeRecord                 IWinCodeRecordDo
 	WinCoinCommission             IWinCoinCommissionDo
+	WinCoinCommissionLog          IWinCoinCommissionLogDo
 	WinCoinAdminTransferM2        IWinCoinAdminTransferM2Do
 	WinCoinCommissionM2           IWinCoinCommissionM2Do
 	WinCoinDepositRecordM2        IWinCoinDepositRecordM2Do
@@ -1012,6 +1019,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		WinCodeRecord:                 q.WinCodeRecord.WithContext(ctx),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.WithContext(ctx),
 		WinCoinCommission:             q.WinCoinCommission.WithContext(ctx),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.WithContext(ctx),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.WithContext(ctx),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.WithContext(ctx),
 		WinCoinRateM2:                 q.WinCoinRateM2.WithContext(ctx),

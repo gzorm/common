@@ -10,7 +10,7 @@ const TableNameWinCoinCommission = "win_coin_commission"
 
 // WinCoinCommission mapped from table <win_coin_commission>
 type WinCoinCommission struct {
-	ID             int64           `gorm:"column:id;type:bigint;primaryKey" json:"id,string"`
+	ID             int64           `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true" json:"id,string"`
 	UID            int64           `gorm:"column:uid;type:int;comment:代理UID" json:"uid"`                                                   // 代理UID
 	Username       string          `gorm:"column:username;type:varchar(32);comment:用户名" json:"username"`                                   // 用户名
 	AgentLevel     int64           `gorm:"column:agent_level;type:tinyint;comment:代理层级" json:"agentLevel"`                                 // 代理层级
