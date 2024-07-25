@@ -43,3 +43,13 @@ func CurrentMicros() int64 {
 func CurrentMillis() int64 {
 	return time.Now().UnixNano() / int64(time.Millisecond)
 }
+
+// GetTodayStartAndEndTime
+func GetTodayStartAndEndTime() (int64, int64) {
+	now := time.Now()
+	midnight := time.Date(now.Year(), now.Month(), now.Day(), 0, 0, 0, 0, now.Location())
+	endOfDay := midnight.Add(time.Hour*24-time.Second).UnixNano() / 1e9 // 减去一秒得到当天的最后一秒
+
+	startOfDay := midnight.Unix()
+	return startOfDay, endOfDay
+}

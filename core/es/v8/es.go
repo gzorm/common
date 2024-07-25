@@ -17,7 +17,8 @@ import (
 )
 
 type ElasticsearchClient struct {
-	client *elasticsearch8.Client
+	client  *elasticsearch8.Client
+	baseURL string
 }
 
 // NewElasticsearchClient 初始化Elasticsearch客户端
@@ -72,7 +73,7 @@ func NewElasticsearchClient(useTLS bool, caCertPath, username, password string, 
 		return nil, fmt.Errorf("Error creating the client: %s", err)
 	}
 
-	return &ElasticsearchClient{client: client}, nil
+	return &ElasticsearchClient{client: client, baseURL: addresses[0]}, nil
 }
 
 // CreateIndex 创建索引
@@ -252,6 +253,82 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 
 	// 返回结果和总记录数
 	return results, result.Aggregations.TotalCount.Value, nil
+}
+
+// QueryByOpenDistroSQL 原始SQL查询
+func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string) (map[string]interface{}, error) {
+	body := map[string]interface{}{
+		"query": query,
+	}
+
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling query body: %s", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_opendistro/_sql?format=json", es.baseURL), bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %s", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	res, err := es.client.Perform(req.WithContext(ctx))
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("error response from Elasticsearch: %s", res.Status)
+	}
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("error parsing response body: %s", err)
+	}
+
+	return result, nil
+}
+func (es *ElasticsearchClient) QueryByXPackSQL(query string) (map[string]interface{}, error) {
+	body := map[string]interface{}{
+		"query": query,
+	}
+
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling query body: %s", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_sql?format=json", es.baseURL), bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %s", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	res, err := es.client.Perform(req.WithContext(ctx))
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("error response from Elasticsearch: %s", res.Status)
+	}
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("error parsing response body: %s", err)
+	}
+
+	return result, nil
 }
 
 // SearchWithPagination 查询带分页
