@@ -87,15 +87,18 @@ func NewClient(config *DBConfig) *gorm.DB {
 }
 
 func getConn(config SchemaConfig, mode string) *gorm.DB {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local&timeout=20s",
 		config.Username, config.Password, config.Host,
 		config.Port, config.DBName,
 	)
-	Db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{Logger: NewGormLogger(mode)})
+	Db, err := gorm.Open(mysql.New(mysql.Config{DSN: dsn}), &gorm.Config{
+		Logger: NewGormLogger(mode),
+	})
 	if err != nil {
 		panic(err)
 	}
 	db, err := Db.DB()
+
 	db.SetMaxIdleConns(config.MaxIdelConn)
 	db.SetMaxOpenConns(config.MaxOpenConn)
 	if err != nil {

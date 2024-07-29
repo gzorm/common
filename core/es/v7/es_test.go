@@ -356,7 +356,7 @@ func TestSQL(t *testing.T) {
 		log.Fatalf("Error creating Elasticsearch client (TLS): %s", err)
 	}
 	// 获取当前时间的时间戳（以秒为单位）
-	currentTimestamp := time.Now().AddDate(time.Now().Year(), cast.ToInt(time.Now().Month()), -30).Unix()
+	//currentTimestamp := time.Now().AddDate(time.Now().Year(), cast.ToInt(time.Now().Month()), -30).Unix()
 	/*
 				  POST _opendistro/_sql?format=json
 		{
@@ -370,28 +370,42 @@ func TestSQL(t *testing.T) {
 
 
 	*/
-	currentTimestamp = 0
-	query := fmt.Sprintf(`
-       SELECT   
-           xb_uid as uid, 
-           game_type_id AS gameTypeId, 
-           SUM(xb_profit) AS profit, 
-           SUM(valid_stake) AS validStake 
-       FROM win_betslips 
-       WHERE created_at >= %d
-       GROUP BY uid, gameTypeId
-       ORDER BY profit DESC
-    `, currentTimestamp)
-
-	result, err := esClientTLS.QueryByOpenDistroSQL(query)
+	//currentTimestamp = 0
+	//query := fmt.Sprintf(`
+	//   SELECT
+	//       xb_uid as uid,
+	//       game_type_id AS gameTypeId,
+	//       SUM(xb_profit) AS profit,
+	//       SUM(valid_stake) AS validStake
+	//   FROM win_betslips
+	//   WHERE created_at >= %d
+	//   GROUP BY uid, gameTypeId
+	//   ORDER BY profit DESC LIMIT 10
+	//`, currentTimestamp)
+	query := "select sum(xb_profit) as totalProfit from win_betslips"
+	result, err := esClientTLS.QueryByOpenDistroSQL(query, "json") // csv
 	if err != nil {
 		log.Fatalf("error performing SQL query: %s", err)
 	}
-	response, count, err := extractFields(result)
-	fmt.Println(response)
-	fmt.Println(count)
-	// 打印结果
-	fmt.Println(result)
+	hits, ok := result["hits"].(map[string]interface{})
+	if !ok {
+		return
+	}
+
+	total, ok := hits["total"].(map[string]interface{})
+	if !ok {
+		return
+	}
+	value, ok := total["value"].(float64)
+	if !ok {
+		return
+	}
+	fmt.Println(value)
+	//response, count, err := extractFields(result)
+	//fmt.Println(response)
+	//fmt.Println(count)
+	//// 打印结果
+	//fmt.Println(result)
 }
 
 type AggregationResult struct {

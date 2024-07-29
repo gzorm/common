@@ -346,7 +346,7 @@ func (es *ElasticsearchClient) SearchSQL(index string, conditions []QueryConditi
 }
 
 // QueryByOpenDistroSQL 原始SQL查询
-func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string) (map[string]interface{}, error) {
+func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string, formatType string) (map[string]interface{}, error) {
 	body := map[string]interface{}{
 		"query": query,
 	}
@@ -356,7 +356,7 @@ func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string) (map[string]in
 		return nil, fmt.Errorf("error marshalling query body: %s", err)
 	}
 
-	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_opendistro/_sql?format=json", es.baseURL), bytes.NewReader(bodyBytes))
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_opendistro/_sql?format=%v", es.baseURL, formatType), bytes.NewReader(bodyBytes))
 	if err != nil {
 		return nil, fmt.Errorf("error creating request: %s", err)
 	}
