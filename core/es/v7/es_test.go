@@ -595,3 +595,6 @@ func extractFields2(result map[string]interface{}) ([]AggregationResult, int, er
 
 	return aggregationResults, int(recordCount), nil
 }
+func TestBBB(t *testing.T) {
+
+}

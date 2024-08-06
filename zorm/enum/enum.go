@@ -164,6 +164,40 @@ func (p PLAT) String() string {
 	return ""
 }
 
+type TICKESTATUS string
+
+type STATUS int8
+
+const (
+	STATUSRUNNING STATUS = iota + 1
+	STATUSWON
+	STATUSLOSE
+	STATUSDRAW
+	STATUSVOID
+	STATUSREFUND
+	STATUSREJECT
+)
+
+func (s STATUS) String() string {
+	switch s {
+	case STATUSRUNNING:
+		return "running"
+	case STATUSWON:
+		return "won"
+	case STATUSLOSE:
+		return "lose"
+	case STATUSDRAW:
+		return "draw"
+	case STATUSVOID:
+		return "void"
+	case STATUSREFUND:
+		return "refund"
+	case STATUSREJECT:
+		return "reject"
+	}
+	return ""
+}
+
 type GAME int8
 
 const (
