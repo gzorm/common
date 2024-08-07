@@ -54,10 +54,11 @@ type WinUser struct {
 	LastLoginDeviceID string          `gorm:"column:last_login_device_id;type:varchar(64);comment:最后登录设备id" json:"lastLoginDeviceId"`                  // 最后登录设备id
 	CreatedAt         int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt         int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	FreezeCause       string          `gorm:"column:freeze_cause;type:varchar(255);comment:冻结原因" json:"freezeCause"`        // 冻结原因
-	FreezeAt          int64           `gorm:"column:freeze_at;type:int;comment:冻结时间" json:"freezeAt"`                       // 冻结时间
-	OperatorName      string          `gorm:"column:operator_name;type:varchar(32);comment:操作人姓名" json:"operatorName"`      // 操作人姓名
-	CreatedName       string          `gorm:"column:created_name;type:varchar(32);not null;comment:创建人" json:"createdName"` // 创建人
+	FreezeCause       string          `gorm:"column:freeze_cause;type:varchar(255);comment:冻结原因" json:"freezeCause"`               // 冻结原因
+	FreezeAt          int64           `gorm:"column:freeze_at;type:int;comment:冻结时间" json:"freezeAt"`                              // 冻结时间
+	OperatorName      string          `gorm:"column:operator_name;type:varchar(32);comment:操作人姓名" json:"operatorName"`             // 操作人姓名
+	CreatedName       string          `gorm:"column:created_name;type:varchar(32);not null;comment:创建人" json:"createdName"`        // 创建人
+	MemberType        int64           `gorm:"column:memberType;type:tinyint;default:1;comment:会员类型1==直客 2==非直客" json:"memberType"` // 会员类型1==直客 2==非直客
 }
 
 // TableName WinUser's table name
