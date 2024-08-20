@@ -97,7 +97,7 @@ const (
 	TG
 	ELECTRON
 
-	//HABANERO
+	//HABANERO1
 )
 
 func (p PLAT) String() string {
