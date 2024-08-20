@@ -94,6 +94,8 @@ const (
 	FUNKY
 	AG
 	PP
+	TG
+	ELECTRON
 
 	//HABANERO
 )
@@ -152,14 +154,18 @@ func (p PLAT) String() string {
 		return "PB"
 	case RTG:
 		return "RTG"
-	//case HABANERO:
-	//	return "HABANERO"
+		//case HABANERO:
+		// return "HABANERO"
 	case FUNKY:
 		return "FUNKY"
 	case AG:
 		return "AG"
 	case PP:
 		return "PP"
+	case TG:
+		return "v99_100001"
+	case ELECTRON:
+		return "v99_100002"
 	}
 	return ""
 }
