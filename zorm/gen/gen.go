@@ -29,7 +29,8 @@ func main() {
 	if _, err := fmt.Scanln(&tableName); err != nil {
 		fmt.Println("没有输入表名将全部同步数据库", err.Error())
 	}
-	var fileName = Case2Camel(tableName) // 转为首字目大写
+	var fileName = Case2Camel(tableName)
+	// 转为首字目大写
 	fmt.Println(fileName)
 	// 连接数据库
 	db, err := gorm.Open(mysql.Open(dsn))
