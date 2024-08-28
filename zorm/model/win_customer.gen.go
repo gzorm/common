@@ -8,7 +8,7 @@ const TableNameWinCustomer = "win_customer"
 
 // WinCustomer mapped from table <win_customer>
 type WinCustomer struct {
-	ID           int64  `gorm:"column:id;type:int;primaryKey" json:"id,string"`
+	ID           int64  `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id,string"`
 	CustomerName string `gorm:"column:customer_name;type:varchar(255);comment:客服名称" json:"customerName"` // 客服名称
 	CustomerURL  string `gorm:"column:customer_url;type:varchar(500);comment:客服连接" json:"customerUrl"`   // 客服连接
 	CustomerFace string `gorm:"column:customer_face;type:varchar(355);comment:客服头像" json:"customerFace"` // 客服头像
