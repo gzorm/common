@@ -34,6 +34,7 @@ var (
 	WinBetslipsDetails      *winBetslipsDetails
 	WinPlatList             *winPlatList
 
+	WinCustomer                   *winCustomer
 	WinGameSlot                   *winGameSlot
 	ActivityAlertLog              *activityAlertLog
 	ActivityAlertUserConfig       *activityAlertUserConfig
@@ -164,6 +165,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	WinCoinWithdrawalRecord = &Q.WinCoinWithdrawalRecord
 	WinBetslipsDetails = &Q.WinBetslipsDetails
 
+	WinCustomer = &Q.WinCustomer
 	WinGameSlot = &Q.WinGameSlot
 	WinPlatList = &Q.WinPlatList
 	ActivityAlertLog = &Q.ActivityAlertLog
@@ -296,6 +298,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinCoinWithdrawalRecord: newWinCoinWithdrawalRecord(db, opts...),
 		WinBetslipsDetails:      newWinBetslipsDetails(db, opts...),
 
+		WinCustomer:                   newWinCustomer(db, opts...),
 		WinGameSlot:                   newWinGameSlot(db, opts...),
 		WinPlatList:                   newWinPlatList(db, opts...),
 		ActivityAlertLog:              newActivityAlertLog(db, opts...),
@@ -429,6 +432,7 @@ type Query struct {
 	WinCoinWithdrawalRecord winCoinWithdrawalRecord
 	WinBetslipsDetails      winBetslipsDetails
 
+	WinCustomer                   winCustomer
 	WinGameSlot                   winGameSlot
 	WinPlatList                   winPlatList
 	ActivityAlertLog              activityAlertLog
@@ -563,6 +567,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.clone(db),
 		WinBetslipsDetails:      q.WinBetslipsDetails.clone(db),
 
+		WinCustomer:                   q.WinCustomer.clone(db),
 		WinGameSlot:                   q.WinGameSlot.clone(db),
 		WinPlatList:                   q.WinPlatList.clone(db),
 		ActivityAlertLog:              q.ActivityAlertLog.clone(db),
@@ -704,6 +709,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.replaceDB(db),
 		WinBetslipsDetails:      q.WinBetslipsDetails.replaceDB(db),
 
+		WinCustomer:                   q.WinCustomer.replaceDB(db),
 		WinGameSlot:                   q.WinGameSlot.replaceDB(db),
 		WinPlatList:                   q.WinPlatList.replaceDB(db),
 		ActivityAlertLog:              q.ActivityAlertLog.replaceDB(db),
@@ -835,6 +841,7 @@ type queryCtx struct {
 	WinCoinWithdrawalRecord IWinCoinWithdrawalRecordDo
 	WinBetslipsDetails      IWinBetslipsDetailsDo
 
+	WinCustomer                   IWinCustomerDo
 	WinGameSlot                   IWinGameSlotDo
 	WinPlatList                   IWinPlatListDo
 	ActivityAlertLog              IActivityAlertLogDo
@@ -968,6 +975,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		WinPlatList:             q.WinPlatList.WithContext(ctx),
 		WinGameSlot:             q.WinGameSlot.WithContext(ctx),
 
+		WinCustomer:                   q.WinCustomer.WithContext(ctx),
 		ActivityAlertLog:              q.ActivityAlertLog.WithContext(ctx),
 		ActivityAlertUserConfig:       q.ActivityAlertUserConfig.WithContext(ctx),
 		ActivityBase:                  q.ActivityBase.WithContext(ctx),
