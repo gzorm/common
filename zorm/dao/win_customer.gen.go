@@ -31,6 +31,7 @@ func newWinCustomer(db *gorm.DB, opts ...gen.DOOption) winCustomer {
 	_winCustomer.CustomerName = field.NewString(tableName, "customer_name")
 	_winCustomer.CustomerURL = field.NewString(tableName, "customer_url")
 	_winCustomer.CustomerFace = field.NewString(tableName, "customer_face")
+	_winCustomer.Language = field.NewString(tableName, "language")
 	_winCustomer.Status = field.NewInt64(tableName, "status")
 	_winCustomer.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCustomer.UpdatedAt = field.NewInt64(tableName, "updated_at")
@@ -49,8 +50,9 @@ type winCustomer struct {
 	CustomerName field.String // 客服名称
 	CustomerURL  field.String // 客服连接
 	CustomerFace field.String // 客服头像
+	Language     field.String // 语言
 	Status       field.Int64  // 是否启用
-	CreatedAt    field.Int64
+	CreatedAt    field.Int64  // 1==禁用  3==正常
 	UpdatedAt    field.Int64
 	UpdatedUser  field.String // 最后修改人
 
@@ -73,6 +75,7 @@ func (w *winCustomer) updateTableName(table string) *winCustomer {
 	w.CustomerName = field.NewString(table, "customer_name")
 	w.CustomerURL = field.NewString(table, "customer_url")
 	w.CustomerFace = field.NewString(table, "customer_face")
+	w.Language = field.NewString(table, "language")
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
@@ -93,11 +96,12 @@ func (w *winCustomer) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winCustomer) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 8)
+	w.fieldMap = make(map[string]field.Expr, 9)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["customer_name"] = w.CustomerName
 	w.fieldMap["customer_url"] = w.CustomerURL
 	w.fieldMap["customer_face"] = w.CustomerFace
+	w.fieldMap["language"] = w.Language
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
