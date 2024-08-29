@@ -37,6 +37,7 @@ func newWinCodeAudit(db *gorm.DB, opts ...gen.DOOption) winCodeAudit {
 	_winCodeAudit.Status = field.NewInt64(tableName, "status")
 	_winCodeAudit.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCodeAudit.UpdatedAt = field.NewInt64(tableName, "updated_at")
+	_winCodeAudit.Remark = field.NewString(tableName, "remark")
 
 	_winCodeAudit.fillFieldMap()
 
@@ -57,6 +58,7 @@ type winCodeAudit struct {
 	Status        field.Int64  // 状态:1-稽核成功 2-稽核失败
 	CreatedAt     field.Int64  // 创建时间
 	UpdatedAt     field.Int64
+	Remark        field.String // 备注
 
 	fieldMap map[string]field.Expr
 }
@@ -83,6 +85,7 @@ func (w *winCodeAudit) updateTableName(table string) *winCodeAudit {
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
+	w.Remark = field.NewString(table, "remark")
 
 	w.fillFieldMap()
 
@@ -99,7 +102,7 @@ func (w *winCodeAudit) GetFieldByName(fieldName string) (field.OrderExpr, bool) 
 }
 
 func (w *winCodeAudit) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 10)
+	w.fieldMap = make(map[string]field.Expr, 11)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -110,6 +113,7 @@ func (w *winCodeAudit) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
+	w.fieldMap["remark"] = w.Remark
 }
 
 func (w winCodeAudit) clone(db *gorm.DB) winCodeAudit {
