@@ -12,6 +12,8 @@ const TableNameGameRankReport = "game_rank_report"
 type GameRankReport struct {
 	ID              int64           `gorm:"column:id;type:int unsigned;primaryKey;autoIncrement:true;comment:id" json:"id,string"`          // id
 	AgentID         int64           `gorm:"column:agent_id;type:int;not null;comment:代理uid" json:"agentId"`                                 // 代理uid
+	UID             int64           `gorm:"column:uid;type:bigint;not null;comment:用户id" json:"uid"`                                        // 用户id
+	Username        string          `gorm:"column:username;type:varchar(50);not null;comment:用户名称" json:"username"`                         // 用户名称
 	SortType        int64           `gorm:"column:sort_type;type:tinyint;not null;comment:0:盈虧,1:投注" json:"sortType"`                       // 0:盈虧,1:投注
 	Provider        string          `gorm:"column:provider;type:varchar(32);not null;comment:遊戲商" json:"provider"`                          // 遊戲商
 	ProviderSubtype string          `gorm:"column:provider_subtype;type:varchar(32);not null;comment:子遊戲" json:"providerSubtype"`           // 子遊戲
