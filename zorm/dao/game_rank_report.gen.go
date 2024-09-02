@@ -31,6 +31,7 @@ func newGameRankReport(db *gorm.DB, opts ...gen.DOOption) gameRankReport {
 	_gameRankReport.AgentID = field.NewInt64(tableName, "agent_id")
 	_gameRankReport.UID = field.NewInt64(tableName, "uid")
 	_gameRankReport.Username = field.NewString(tableName, "username")
+	_gameRankReport.GameIcon = field.NewString(tableName, "game_icon")
 	_gameRankReport.SortType = field.NewInt64(tableName, "sort_type")
 	_gameRankReport.Provider = field.NewString(tableName, "provider")
 	_gameRankReport.ProviderSubtype = field.NewString(tableName, "provider_subtype")
@@ -54,6 +55,7 @@ type gameRankReport struct {
 	AgentID         field.Int64  // 代理uid
 	UID             field.Int64  // 用户id
 	Username        field.String // 用户名称
+	GameIcon        field.String // 游戏图标
 	SortType        field.Int64  // 0:盈虧,1:投注
 	Provider        field.String // 遊戲商
 	ProviderSubtype field.String // 子遊戲
@@ -82,6 +84,7 @@ func (g *gameRankReport) updateTableName(table string) *gameRankReport {
 	g.AgentID = field.NewInt64(table, "agent_id")
 	g.UID = field.NewInt64(table, "uid")
 	g.Username = field.NewString(table, "username")
+	g.GameIcon = field.NewString(table, "game_icon")
 	g.SortType = field.NewInt64(table, "sort_type")
 	g.Provider = field.NewString(table, "provider")
 	g.ProviderSubtype = field.NewString(table, "provider_subtype")
@@ -106,11 +109,12 @@ func (g *gameRankReport) GetFieldByName(fieldName string) (field.OrderExpr, bool
 }
 
 func (g *gameRankReport) fillFieldMap() {
-	g.fieldMap = make(map[string]field.Expr, 12)
+	g.fieldMap = make(map[string]field.Expr, 13)
 	g.fieldMap["id"] = g.ID
 	g.fieldMap["agent_id"] = g.AgentID
 	g.fieldMap["uid"] = g.UID
 	g.fieldMap["username"] = g.Username
+	g.fieldMap["game_icon"] = g.GameIcon
 	g.fieldMap["sort_type"] = g.SortType
 	g.fieldMap["provider"] = g.Provider
 	g.fieldMap["provider_subtype"] = g.ProviderSubtype
