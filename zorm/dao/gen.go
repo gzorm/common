@@ -34,6 +34,7 @@ var (
 	WinBetslipsDetails      *winBetslipsDetails
 	WinPlatList             *winPlatList
 
+	WinUserStatistics             *winUserStatistics
 	WinCustomer                   *winCustomer
 	WinGameSlot                   *winGameSlot
 	ActivityAlertLog              *activityAlertLog
@@ -150,6 +151,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	WinUserStatistics = &Q.WinUserStatistics
 	WinBetslips1 = &Q.WinBetslips1
 	WinBetslips5 = &Q.WinBetslips5
 	WinBetslips9 = &Q.WinBetslips9
@@ -283,6 +285,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                      db,
+		WinUserStatistics:       newWinUserStatistics(db, opts...),
 		WinBetslips1:            newWinBetslips1(db, opts...),
 		WinBetslips5:            newWinBetslips5(db, opts...),
 		WinBetslips9:            newWinBetslips9(db, opts...),
@@ -415,8 +418,8 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 }
 
 type Query struct {
-	db *gorm.DB
-
+	db                      *gorm.DB
+	WinUserStatistics       winUserStatistics
 	WinBetslips1            winBetslips1
 	WinBetslips5            winBetslips5
 	WinBetslips9            winBetslips9
@@ -552,6 +555,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		WinUserStatistics:       q.WinUserStatistics.clone(db),
 		WinBetslips1:            q.WinBetslips1.clone(db),
 		WinBetslips5:            q.WinBetslips5.clone(db),
 		WinBetslips9:            q.WinBetslips9.clone(db),
@@ -694,6 +698,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		WinUserStatistics:       q.WinUserStatistics.replaceDB(db),
 		WinBetslips1:            q.WinBetslips1.replaceDB(db),
 		WinBetslips5:            q.WinBetslips5.replaceDB(db),
 		WinBetslips9:            q.WinBetslips9.replaceDB(db),
@@ -826,6 +831,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	WinUserStatistics       IWinUserStatisticsDo
 	WinBetslips1            IWinBetslips1Do
 	WinBetslips5            IWinBetslips5Do
 	WinBetslips9            IWinBetslips9Do
@@ -958,6 +964,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		WinUserStatistics:       q.WinUserStatistics.WithContext(ctx),
 		WinBetslips1:            q.WinBetslips1.WithContext(ctx),
 		WinBetslips5:            q.WinBetslips5.WithContext(ctx),
 		WinBetslips9:            q.WinBetslips9.WithContext(ctx),
