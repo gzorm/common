@@ -13,11 +13,12 @@ type WinUser struct {
 	ID                int64           `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id,string"`
 	Username          string          `gorm:"column:username;type:varchar(32);not null;comment:用户名" json:"username"`                                   // 用户名
 	MerchantID        int64           `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"`                                     // 商户id
-	Avatar            string          `gorm:"column:avatar;type:varchar(64);comment:头像" json:"avatar"`                                                 // 头像
+	Avatar            string          `gorm:"column:avatar;type:varchar(255);comment:头像" json:"avatar"`                                                // 头像
 	Fcoin             decimal.Decimal `gorm:"column:fcoin;type:decimal(15,4);not null;default:0.0000;comment:冻结金额" json:"fcoin"`                       // 冻结金额
 	CoinCommission    decimal.Decimal `gorm:"column:coin_commission;type:decimal(15,4);not null;default:0.0000;comment:佣金可提现金额" json:"coinCommission"` // 佣金可提现金额
 	LevelID           int64           `gorm:"column:level_id;type:tinyint;not null;default:1;comment:会员等级" json:"levelId"`                             // 会员等级
 	Role              int64           `gorm:"column:role;type:tinyint;not null;comment:角色:0-会员 1-代理 4-测试" json:"role"`                                 // 角色:0-会员 1-代理 4-测试
+	AgentLevel        int64           `gorm:"column:agent_level;type:int;default:1;comment:代理级别 默认1" json:"agentLevel"`                                // 代理级别 默认1
 	IsPromoter        int64           `gorm:"column:is_promoter;type:tinyint;not null;comment:是否推广:0-不是 1-是" json:"isPromoter"`                        // 是否推广:0-不是 1-是
 	Flag              int64           `gorm:"column:flag;type:int;not null;comment:会员旗" json:"flag"`                                                   // 会员旗
 	RealName          string          `gorm:"column:real_name;type:varchar(32);not null;comment:真实姓名" json:"realName"`                                 // 真实姓名

@@ -35,6 +35,7 @@ func newWinUser(db *gorm.DB, opts ...gen.DOOption) winUser {
 	_winUser.CoinCommission = field.NewField(tableName, "coin_commission")
 	_winUser.LevelID = field.NewInt64(tableName, "level_id")
 	_winUser.Role = field.NewInt64(tableName, "role")
+	_winUser.AgentLevel = field.NewInt64(tableName, "agent_level")
 	_winUser.IsPromoter = field.NewInt64(tableName, "is_promoter")
 	_winUser.Flag = field.NewInt64(tableName, "flag")
 	_winUser.RealName = field.NewString(tableName, "real_name")
@@ -95,6 +96,7 @@ type winUser struct {
 	CoinCommission    field.Field  // 佣金可提现金额
 	LevelID           field.Int64  // 会员等级
 	Role              field.Int64  // 角色:0-会员 1-代理 4-测试
+	AgentLevel        field.Int64  // 代理级别 默认1
 	IsPromoter        field.Int64  // 是否推广:0-不是 1-是
 	Flag              field.Int64  // 会员旗
 	RealName          field.String // 真实姓名
@@ -160,6 +162,7 @@ func (w *winUser) updateTableName(table string) *winUser {
 	w.CoinCommission = field.NewField(table, "coin_commission")
 	w.LevelID = field.NewInt64(table, "level_id")
 	w.Role = field.NewInt64(table, "role")
+	w.AgentLevel = field.NewInt64(table, "agent_level")
 	w.IsPromoter = field.NewInt64(table, "is_promoter")
 	w.Flag = field.NewInt64(table, "flag")
 	w.RealName = field.NewString(table, "real_name")
@@ -217,7 +220,7 @@ func (w *winUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winUser) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 49)
+	w.fieldMap = make(map[string]field.Expr, 50)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
@@ -226,6 +229,7 @@ func (w *winUser) fillFieldMap() {
 	w.fieldMap["coin_commission"] = w.CoinCommission
 	w.fieldMap["level_id"] = w.LevelID
 	w.fieldMap["role"] = w.Role
+	w.fieldMap["agent_level"] = w.AgentLevel
 	w.fieldMap["is_promoter"] = w.IsPromoter
 	w.fieldMap["flag"] = w.Flag
 	w.fieldMap["real_name"] = w.RealName
