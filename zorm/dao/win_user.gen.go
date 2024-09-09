@@ -217,7 +217,7 @@ func (w *winUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winUser) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 50)
+	w.fieldMap = make(map[string]field.Expr, 49)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
