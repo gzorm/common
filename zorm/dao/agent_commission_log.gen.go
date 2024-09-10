@@ -52,8 +52,8 @@ type agentCommissionLog struct {
 	OrderID    field.String // 订单序号
 	AgentID    field.Int64  // 代理商序号
 	AgentName  field.String // 代理账号
-	TradeType  field.Int64  // 交易类型 1==发放 3==扣除 5==提现成功  7==提现失败
-	OutIn      field.Int64  // 收支类型 1==支出  3==收入
+	TradeType  field.Int64  // 交易类型 1==发放 2==扣除 3==提现成功  4==提现失败
+	OutIn      field.Int64  // 收支类型 0==支出  1==收入
 	CoinBefore field.Field  // 交易前金额
 	Coin       field.Field  // 交易金额
 	CoinAfter  field.Field  // 交易后金额

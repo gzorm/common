@@ -18,7 +18,7 @@ type AgentCommission struct {
 	CommissionAmount  decimal.Decimal `gorm:"column:commission_amount;type:decimal(18,2);default:0.00;comment:当月佣金额度" json:"commissionAmount"`    // 当月佣金额度
 	CommissionMonth   string          `gorm:"column:commission_month;type:varchar(7);comment:月份" json:"commissionMonth"`                          // 月份
 	DistributedAmount decimal.Decimal `gorm:"column:distributed_amount;type:decimal(18,2);default:0.00;comment:当前已发放额度" json:"distributedAmount"` // 当前已发放额度
-	Status            int64           `gorm:"column:status;type:int;comment:状态(未发放=1，已发放=3，不可发放=5)" json:"status"`                                // 状态(未发放=1，已发放=3，不可发放=5)
+	Status            int64           `gorm:"column:status;type:int;comment:状态(未发放=2，已发放=1，不可发放=3)" json:"status"`                                // 状态(未发放=2，已发放=1，不可发放=3)
 	LastOperator      string          `gorm:"column:last_operator;type:varchar(100);comment:最后操作人" json:"lastOperator"`                           // 最后操作人
 	LastOperationTime int64           `gorm:"column:last_operation_time;type:bigint;comment:最后操作时间" json:"lastOperationTime"`                     // 最后操作时间
 	CreateTime        int64           `gorm:"column:create_time;type:bigint;comment:创建时间" json:"createTime"`                                      // 创建时间

@@ -58,7 +58,7 @@ type agentCommission struct {
 	CommissionAmount  field.Field  // 当月佣金额度
 	CommissionMonth   field.String // 月份
 	DistributedAmount field.Field  // 当前已发放额度
-	Status            field.Int64  // 状态(未发放=1，已发放=3，不可发放=5)
+	Status            field.Int64  // 状态(未发放=2，已发放=1，不可发放=3)
 	LastOperator      field.String // 最后操作人
 	LastOperationTime field.Int64  // 最后操作时间
 	CreateTime        field.Int64  // 创建时间

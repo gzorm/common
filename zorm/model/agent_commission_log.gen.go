@@ -14,8 +14,8 @@ type AgentCommissionLog struct {
 	OrderID    string          `gorm:"column:order_id;type:varchar(64);comment:订单序号" json:"orderId"`                          // 订单序号
 	AgentID    int64           `gorm:"column:agent_id;type:bigint;comment:代理商序号" json:"agentId"`                              // 代理商序号
 	AgentName  string          `gorm:"column:agent_name;type:varchar(150);comment:代理账号" json:"agentName"`                     // 代理账号
-	TradeType  int64           `gorm:"column:trade_type;type:int;comment:交易类型 1==发放 3==扣除 5==提现成功  7==提现失败" json:"tradeType"` // 交易类型 1==发放 3==扣除 5==提现成功  7==提现失败
-	OutIn      int64           `gorm:"column:out_in;type:int;comment:收支类型 1==支出  3==收入" json:"outIn"`                         // 收支类型 1==支出  3==收入
+	TradeType  int64           `gorm:"column:trade_type;type:int;comment:交易类型 1==发放 2==扣除 3==提现成功  4==提现失败" json:"tradeType"` // 交易类型 1==发放 2==扣除 3==提现成功  4==提现失败
+	OutIn      int64           `gorm:"column:out_in;type:int;comment:收支类型 0==支出  1==收入" json:"outIn"`                         // 收支类型 0==支出  1==收入
 	CoinBefore decimal.Decimal `gorm:"column:coin_before;type:decimal(18,2);default:0.00;comment:交易前金额" json:"coinBefore"`    // 交易前金额
 	Coin       decimal.Decimal `gorm:"column:coin;type:decimal(18,2);default:0.00;comment:交易金额" json:"coin"`                  // 交易金额
 	CoinAfter  decimal.Decimal `gorm:"column:coin_after;type:decimal(18,2);default:0.00;comment:交易后金额" json:"coinAfter"`      // 交易后金额
