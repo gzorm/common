@@ -18,6 +18,8 @@ import (
 
 var (
 	Q                       = new(Query)
+	AgentCommissionLog      *agentCommissionLog
+	AgentCommission         *agentCommission
 	WinBetslips1            *winBetslips1
 	WinBetslips5            *winBetslips5
 	WinBetslips9            *winBetslips9
@@ -151,6 +153,8 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	AgentCommissionLog = &Q.AgentCommissionLog
+	AgentCommission = &Q.AgentCommission
 	WinUserStatistics = &Q.WinUserStatistics
 	WinBetslips1 = &Q.WinBetslips1
 	WinBetslips5 = &Q.WinBetslips5
@@ -285,6 +289,8 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      newAgentCommissionLog(db, opts...),
+		AgentCommission:         newAgentCommission(db, opts...),
 		WinUserStatistics:       newWinUserStatistics(db, opts...),
 		WinBetslips1:            newWinBetslips1(db, opts...),
 		WinBetslips5:            newWinBetslips5(db, opts...),
@@ -419,6 +425,8 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                      *gorm.DB
+	AgentCommissionLog      agentCommissionLog
+	AgentCommission         agentCommission
 	WinUserStatistics       winUserStatistics
 	WinBetslips1            winBetslips1
 	WinBetslips5            winBetslips5
@@ -555,6 +563,8 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      q.AgentCommissionLog.clone(db),
+		AgentCommission:         q.AgentCommission.clone(db),
 		WinUserStatistics:       q.WinUserStatistics.clone(db),
 		WinBetslips1:            q.WinBetslips1.clone(db),
 		WinBetslips5:            q.WinBetslips5.clone(db),
@@ -698,6 +708,8 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      q.AgentCommissionLog.replaceDB(db),
+		AgentCommission:         q.AgentCommission.replaceDB(db),
 		WinUserStatistics:       q.WinUserStatistics.replaceDB(db),
 		WinBetslips1:            q.WinBetslips1.replaceDB(db),
 		WinBetslips5:            q.WinBetslips5.replaceDB(db),
@@ -831,6 +843,8 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	AgentCommissionLog      IAgentCommissionLogDo
+	AgentCommission         IAgentCommissionDo
 	WinUserStatistics       IWinUserStatisticsDo
 	WinBetslips1            IWinBetslips1Do
 	WinBetslips5            IWinBetslips5Do
@@ -964,6 +978,8 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		AgentCommissionLog:      q.AgentCommissionLog.WithContext(ctx),
+		AgentCommission:         q.AgentCommission.WithContext(ctx),
 		WinUserStatistics:       q.WinUserStatistics.WithContext(ctx),
 		WinBetslips1:            q.WinBetslips1.WithContext(ctx),
 		WinBetslips5:            q.WinBetslips5.WithContext(ctx),
