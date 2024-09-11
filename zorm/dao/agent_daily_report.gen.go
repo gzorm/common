@@ -30,12 +30,12 @@ func newAgentDailyReport(db *gorm.DB, opts ...gen.DOOption) agentDailyReport {
 	_agentDailyReport.ID = field.NewInt64(tableName, "id")
 	_agentDailyReport.AgentID = field.NewInt64(tableName, "agent_id")
 	_agentDailyReport.Ngr = field.NewField(tableName, "ngr")
-	_agentDailyReport.DepositAmount = field.NewInt64(tableName, "deposit_amount")
-	_agentDailyReport.WithdrawalAmount = field.NewInt64(tableName, "withdrawal_amount")
+	_agentDailyReport.DepositAmount = field.NewField(tableName, "deposit_amount")
+	_agentDailyReport.WithdrawalAmount = field.NewField(tableName, "withdrawal_amount")
 	_agentDailyReport.BetAmount = field.NewField(tableName, "bet_amount")
 	_agentDailyReport.ValidAmount = field.NewField(tableName, "valid_amount")
 	_agentDailyReport.PayoutAmount = field.NewField(tableName, "payout_amount")
-	_agentDailyReport.TransferDepositAmount = field.NewInt64(tableName, "transfer_deposit_amount")
+	_agentDailyReport.TransferDepositAmount = field.NewField(tableName, "transfer_deposit_amount")
 	_agentDailyReport.TransferWithdrawalAmount = field.NewField(tableName, "transfer_withdrawal_amount")
 	_agentDailyReport.BonusAmount = field.NewField(tableName, "bonus_amount")
 	_agentDailyReport.TransferBonusAmount = field.NewField(tableName, "transfer_bonus_amount")
@@ -49,10 +49,10 @@ func newAgentDailyReport(db *gorm.DB, opts ...gen.DOOption) agentDailyReport {
 	_agentDailyReport.BonusCount = field.NewInt64(tableName, "bonus_count")
 	_agentDailyReport.BetCount = field.NewInt64(tableName, "bet_count")
 	_agentDailyReport.DepositRatio = field.NewField(tableName, "deposit_ratio")
-	_agentDailyReport.FirstDepositAmount = field.NewInt64(tableName, "first_deposit_amount")
-	_agentDailyReport.SecondDepositAmount = field.NewInt64(tableName, "second_deposit_amount")
-	_agentDailyReport.ThirdDepositAmount = field.NewInt64(tableName, "third_deposit_amount")
-	_agentDailyReport.OtherDepositAmount = field.NewInt64(tableName, "other_deposit_amount")
+	_agentDailyReport.FirstDepositAmount = field.NewField(tableName, "first_deposit_amount")
+	_agentDailyReport.SecondDepositAmount = field.NewField(tableName, "second_deposit_amount")
+	_agentDailyReport.ThirdDepositAmount = field.NewField(tableName, "third_deposit_amount")
+	_agentDailyReport.OtherDepositAmount = field.NewField(tableName, "other_deposit_amount")
 	_agentDailyReport.SubordinateCount = field.NewInt64(tableName, "subordinate_count")
 	_agentDailyReport.NgrPayout = field.NewField(tableName, "ngr_payout")
 	_agentDailyReport.NgrSetting = field.NewString(tableName, "ngr_setting")
@@ -73,12 +73,12 @@ type agentDailyReport struct {
 	ID                       field.Int64  // id
 	AgentID                  field.Int64  // 代理uid
 	Ngr                      field.Field  // ngr=有效投注-派彩-三方稅收-活動支出-parcor稅收
-	DepositAmount            field.Int64  // 累计存款金额
-	WithdrawalAmount         field.Int64  // 累计提款金额
+	DepositAmount            field.Field  // 累计存款金额
+	WithdrawalAmount         field.Field  // 累计提款金额
 	BetAmount                field.Field  // 累计投注金额
 	ValidAmount              field.Field  // 累计有效投注金额
 	PayoutAmount             field.Field  // 累计派彩金额
-	TransferDepositAmount    field.Int64  // 人工存款金额
+	TransferDepositAmount    field.Field  // 人工存款金额
 	TransferWithdrawalAmount field.Field  // 人工提款金额
 	BonusAmount              field.Field  // 累计发放彩金金额
 	TransferBonusAmount      field.Field  // 人工发放彩金金额
@@ -92,10 +92,10 @@ type agentDailyReport struct {
 	BonusCount               field.Int64  // 彩金发放人数
 	BetCount                 field.Int64  // 累计投注人数
 	DepositRatio             field.Field  // 玩家存款占比
-	FirstDepositAmount       field.Int64  // 首存金额
-	SecondDepositAmount      field.Int64  // 次存金额
-	ThirdDepositAmount       field.Int64  // 三存金额
-	OtherDepositAmount       field.Int64  // 其它存款金额
+	FirstDepositAmount       field.Field  // 首存金额
+	SecondDepositAmount      field.Field  // 次存金额
+	ThirdDepositAmount       field.Field  // 三存金额
+	OtherDepositAmount       field.Field  // 其它存款金额
 	SubordinateCount         field.Int64  // 下級代理人數
 	NgrPayout                field.Field  // 代理NGR收益
 	NgrSetting               field.String // NGR計算當時的配置
@@ -121,12 +121,12 @@ func (a *agentDailyReport) updateTableName(table string) *agentDailyReport {
 	a.ID = field.NewInt64(table, "id")
 	a.AgentID = field.NewInt64(table, "agent_id")
 	a.Ngr = field.NewField(table, "ngr")
-	a.DepositAmount = field.NewInt64(table, "deposit_amount")
-	a.WithdrawalAmount = field.NewInt64(table, "withdrawal_amount")
+	a.DepositAmount = field.NewField(table, "deposit_amount")
+	a.WithdrawalAmount = field.NewField(table, "withdrawal_amount")
 	a.BetAmount = field.NewField(table, "bet_amount")
 	a.ValidAmount = field.NewField(table, "valid_amount")
 	a.PayoutAmount = field.NewField(table, "payout_amount")
-	a.TransferDepositAmount = field.NewInt64(table, "transfer_deposit_amount")
+	a.TransferDepositAmount = field.NewField(table, "transfer_deposit_amount")
 	a.TransferWithdrawalAmount = field.NewField(table, "transfer_withdrawal_amount")
 	a.BonusAmount = field.NewField(table, "bonus_amount")
 	a.TransferBonusAmount = field.NewField(table, "transfer_bonus_amount")
@@ -140,10 +140,10 @@ func (a *agentDailyReport) updateTableName(table string) *agentDailyReport {
 	a.BonusCount = field.NewInt64(table, "bonus_count")
 	a.BetCount = field.NewInt64(table, "bet_count")
 	a.DepositRatio = field.NewField(table, "deposit_ratio")
-	a.FirstDepositAmount = field.NewInt64(table, "first_deposit_amount")
-	a.SecondDepositAmount = field.NewInt64(table, "second_deposit_amount")
-	a.ThirdDepositAmount = field.NewInt64(table, "third_deposit_amount")
-	a.OtherDepositAmount = field.NewInt64(table, "other_deposit_amount")
+	a.FirstDepositAmount = field.NewField(table, "first_deposit_amount")
+	a.SecondDepositAmount = field.NewField(table, "second_deposit_amount")
+	a.ThirdDepositAmount = field.NewField(table, "third_deposit_amount")
+	a.OtherDepositAmount = field.NewField(table, "other_deposit_amount")
 	a.SubordinateCount = field.NewInt64(table, "subordinate_count")
 	a.NgrPayout = field.NewField(table, "ngr_payout")
 	a.NgrSetting = field.NewString(table, "ngr_setting")
