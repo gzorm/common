@@ -10,7 +10,7 @@ import (
 
 func TestHttpAdd(t *testing.T) {
 	// 使用HTTP
-	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+	esClientHTTP, err := NewElasticsearchClient(false, "", "admin", "J>f6/yk?O8.l*p<z", []string{"https://189.1.232.60:9200 "})
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
 	}

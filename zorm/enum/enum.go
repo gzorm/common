@@ -30,6 +30,7 @@ const (
 	WITHDRAWAL_REFUND FlowCategoryTypeEnum = iota + 2
 	TRANSFER_OUT
 	TRANSFER_IN
+	BALANCE_GAME
 )
 
 // Xb_STATUS状态
