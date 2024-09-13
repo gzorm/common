@@ -75,6 +75,7 @@ func newWinUser(db *gorm.DB, opts ...gen.DOOption) winUser {
 	_winUser.FreezeAt = field.NewInt64(tableName, "freeze_at")
 	_winUser.OperatorName = field.NewString(tableName, "operator_name")
 	_winUser.CreatedName = field.NewString(tableName, "created_name")
+	_winUser.MemberType = field.NewInt64(tableName, "memberType")
 
 	_winUser.fillFieldMap()
 
@@ -134,6 +135,7 @@ type winUser struct {
 	FreezeAt          field.Int64  // 冻结时间
 	OperatorName      field.String // 操作人姓名
 	CreatedName       field.String // 创建人
+	MemberType        field.Int64  // 会员类型1==直客 2==非直客
 
 	fieldMap map[string]field.Expr
 }
@@ -198,6 +200,7 @@ func (w *winUser) updateTableName(table string) *winUser {
 	w.FreezeAt = field.NewInt64(table, "freeze_at")
 	w.OperatorName = field.NewString(table, "operator_name")
 	w.CreatedName = field.NewString(table, "created_name")
+	w.MemberType = field.NewInt64(table, "memberType")
 
 	w.fillFieldMap()
 
@@ -214,7 +217,7 @@ func (w *winUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winUser) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 48)
+	w.fieldMap = make(map[string]field.Expr, 49)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
@@ -263,6 +266,7 @@ func (w *winUser) fillFieldMap() {
 	w.fieldMap["freeze_at"] = w.FreezeAt
 	w.fieldMap["operator_name"] = w.OperatorName
 	w.fieldMap["created_name"] = w.CreatedName
+	w.fieldMap["memberType"] = w.MemberType
 }
 
 func (w winUser) clone(db *gorm.DB) winUser {

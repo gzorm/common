@@ -49,6 +49,7 @@ func newGameList(db *gorm.DB, opts ...gen.DOOption) gameList {
 	_gameList.CreatedBy = field.NewString(tableName, "created_by")
 	_gameList.UpdatedBy = field.NewString(tableName, "updated_by")
 	_gameList.Maintenance = field.NewString(tableName, "maintenance")
+	_gameList.IsCasino = field.NewInt64(tableName, "is_casino")
 
 	_gameList.fillFieldMap()
 
@@ -82,6 +83,7 @@ type gameList struct {
 	CreatedBy             field.String // 操作人姓名
 	UpdatedBy             field.String // 最后更新人
 	Maintenance           field.String // 维护时间
+	IsCasino              field.Int64  // 是否isCasino 1是 0否
 
 	fieldMap map[string]field.Expr
 }
@@ -120,6 +122,7 @@ func (g *gameList) updateTableName(table string) *gameList {
 	g.CreatedBy = field.NewString(table, "created_by")
 	g.UpdatedBy = field.NewString(table, "updated_by")
 	g.Maintenance = field.NewString(table, "maintenance")
+	g.IsCasino = field.NewInt64(table, "is_casino")
 
 	g.fillFieldMap()
 
@@ -136,7 +139,7 @@ func (g *gameList) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (g *gameList) fillFieldMap() {
-	g.fieldMap = make(map[string]field.Expr, 22)
+	g.fieldMap = make(map[string]field.Expr, 23)
 	g.fieldMap["id"] = g.ID
 	g.fieldMap["code"] = g.Code
 	g.fieldMap["game_provider_subtype_id"] = g.GameProviderSubtypeID
@@ -159,6 +162,7 @@ func (g *gameList) fillFieldMap() {
 	g.fieldMap["created_by"] = g.CreatedBy
 	g.fieldMap["updated_by"] = g.UpdatedBy
 	g.fieldMap["maintenance"] = g.Maintenance
+	g.fieldMap["is_casino"] = g.IsCasino
 }
 
 func (g gameList) clone(db *gorm.DB) gameList {

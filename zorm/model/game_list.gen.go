@@ -27,9 +27,10 @@ type GameList struct {
 	Device                int64  `gorm:"column:device;type:tinyint;comment:设备:0-all 1-pc 2-h5" json:"device"`                                                 // 设备:0-all 1-pc 2-h5
 	CreatedAt             int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt             int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	CreatedBy             string `gorm:"column:created_by;type:varchar(30);comment:操作人姓名" json:"createdBy"`    // 操作人姓名
-	UpdatedBy             string `gorm:"column:updated_by;type:varchar(30);comment:最后更新人" json:"updatedBy"`    // 最后更新人
-	Maintenance           string `gorm:"column:maintenance;type:varchar(255);comment:维护时间" json:"maintenance"` // 维护时间
+	CreatedBy             string `gorm:"column:created_by;type:varchar(30);comment:操作人姓名" json:"createdBy"`      // 操作人姓名
+	UpdatedBy             string `gorm:"column:updated_by;type:varchar(30);comment:最后更新人" json:"updatedBy"`      // 最后更新人
+	Maintenance           string `gorm:"column:maintenance;type:varchar(255);comment:维护时间" json:"maintenance"`   // 维护时间
+	IsCasino              int64  `gorm:"column:is_casino;type:tinyint;comment:是否isCasino 1是 0否" json:"isCasino"` // 是否isCasino 1是 0否
 }
 
 // TableName GameList's table name

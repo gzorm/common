@@ -30,6 +30,8 @@ func newWinDictItem(db *gorm.DB, opts ...gen.DOOption) winDictItem {
 	_winDictItem.ID = field.NewInt64(tableName, "id")
 	_winDictItem.Code = field.NewString(tableName, "code")
 	_winDictItem.Title = field.NewString(tableName, "title")
+	_winDictItem.TitleEn = field.NewString(tableName, "title_en")
+	_winDictItem.TitleAr = field.NewString(tableName, "title_ar")
 	_winDictItem.Remark = field.NewString(tableName, "remark")
 	_winDictItem.Sort = field.NewInt64(tableName, "sort")
 	_winDictItem.ReferID = field.NewInt64(tableName, "refer_id")
@@ -51,6 +53,8 @@ type winDictItem struct {
 	ID        field.Int64
 	Code      field.String // 字典码
 	Title     field.String // 字典名称
+	TitleEn   field.String // 英文
+	TitleAr   field.String // 阿拉伯文
 	Remark    field.String // 备注
 	Sort      field.Int64  // 排序:从高到低
 	ReferID   field.Int64  // 字典表ID
@@ -77,6 +81,8 @@ func (w *winDictItem) updateTableName(table string) *winDictItem {
 	w.ID = field.NewInt64(table, "id")
 	w.Code = field.NewString(table, "code")
 	w.Title = field.NewString(table, "title")
+	w.TitleEn = field.NewString(table, "title_en")
+	w.TitleAr = field.NewString(table, "title_ar")
 	w.Remark = field.NewString(table, "remark")
 	w.Sort = field.NewInt64(table, "sort")
 	w.ReferID = field.NewInt64(table, "refer_id")
@@ -100,10 +106,12 @@ func (w *winDictItem) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winDictItem) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 10)
+	w.fieldMap = make(map[string]field.Expr, 12)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["code"] = w.Code
 	w.fieldMap["title"] = w.Title
+	w.fieldMap["title_en"] = w.TitleEn
+	w.fieldMap["title_ar"] = w.TitleAr
 	w.fieldMap["remark"] = w.Remark
 	w.fieldMap["sort"] = w.Sort
 	w.fieldMap["refer_id"] = w.ReferID

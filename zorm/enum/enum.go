@@ -95,8 +95,10 @@ const (
 	FUNKY
 	AG
 	PP
+	TG
+	ELECTRON
 
-	//HABANERO
+	//HABANERO1
 )
 
 func (p PLAT) String() string {
@@ -153,14 +155,52 @@ func (p PLAT) String() string {
 		return "PB"
 	case RTG:
 		return "RTG"
-	//case HABANERO:
-	//	return "HABANERO"
+		//case HABANERO:
+		// return "HABANERO"
 	case FUNKY:
 		return "FUNKY"
 	case AG:
 		return "AG"
 	case PP:
 		return "PP"
+	case TG:
+		return "v99_100001"
+	case ELECTRON:
+		return "v99_100002"
+	}
+	return ""
+}
+
+type TICKESTATUS string
+
+type STATUS int8
+
+const (
+	STATUSRUNNING STATUS = iota + 1
+	STATUSWON
+	STATUSLOSE
+	STATUSDRAW
+	STATUSVOID
+	STATUSREFUND
+	STATUSREJECT
+)
+
+func (s STATUS) String() string {
+	switch s {
+	case STATUSRUNNING:
+		return "running"
+	case STATUSWON:
+		return "won"
+	case STATUSLOSE:
+		return "lose"
+	case STATUSDRAW:
+		return "draw"
+	case STATUSVOID:
+		return "void"
+	case STATUSREFUND:
+		return "refund"
+	case STATUSREJECT:
+		return "reject"
 	}
 	return ""
 }

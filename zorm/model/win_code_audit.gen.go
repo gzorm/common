@@ -20,6 +20,7 @@ type WinCodeAudit struct {
 	Status        int64           `gorm:"column:status;type:int;not null;comment:状态:1-稽核成功 2-稽核失败" json:"status"`           // 状态:1-稽核成功 2-稽核失败
 	CreatedAt     int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                  // 创建时间
 	UpdatedAt     int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
+	Remark        string          `gorm:"column:remark;type:varchar(255);comment:备注" json:"remark"` // 备注
 }
 
 // TableName WinCodeAudit's table name

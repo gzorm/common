@@ -39,7 +39,9 @@ type WinCoinWithdrawalRecord struct {
 	ExtraInfo               string          `gorm:"column:extra_info;type:varchar(128);comment:额外信息" json:"extraInfo"`                                                                    // 额外信息
 	CreatedAt               int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt               int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	FinanceOperatorAt       int64           `gorm:"column:finance_operator_at;type:int;comment:财务操作时间" json:"financeOperatorAt"` // 财务操作时间
+	FinanceOperatorAt       int64           `gorm:"column:finance_operator_at;type:int;comment:财务操作时间" json:"financeOperatorAt"`        // 财务操作时间
+	WithdrawName            string          `gorm:"column:withdraw_name;type:varchar(64);comment:提现姓名" json:"withdrawName"`             // 提现姓名
+	WithdrawBankName        string          `gorm:"column:withdraw_bank_name;type:varchar(255);comment:提现银行名称" json:"withdrawBankName"` // 提现银行名称
 }
 
 // TableName WinCoinWithdrawalRecord's table name

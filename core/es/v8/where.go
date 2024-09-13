@@ -22,6 +22,12 @@ const (
 	WildcardRight ComparisonOperator = "wildcard_right"
 	// Wildcard 通配符匹配
 	Wildcard ComparisonOperator = "wildcard"
+	// In 包含
+	In ComparisonOperator = "in"
+	// NotIn 不包含
+	NotIn ComparisonOperator = "not_in"
+	// NotEqual 不等于
+	NotEqual ComparisonOperator = "neq"
 )
 
 // QueryCondition 表示一个查询条件

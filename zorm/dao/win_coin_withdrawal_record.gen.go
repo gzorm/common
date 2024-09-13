@@ -57,6 +57,8 @@ func newWinCoinWithdrawalRecord(db *gorm.DB, opts ...gen.DOOption) winCoinWithdr
 	_winCoinWithdrawalRecord.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCoinWithdrawalRecord.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_winCoinWithdrawalRecord.FinanceOperatorAt = field.NewInt64(tableName, "finance_operator_at")
+	_winCoinWithdrawalRecord.WithdrawName = field.NewString(tableName, "withdraw_name")
+	_winCoinWithdrawalRecord.WithdrawBankName = field.NewString(tableName, "withdraw_bank_name")
 
 	_winCoinWithdrawalRecord.fillFieldMap()
 
@@ -97,7 +99,9 @@ type winCoinWithdrawalRecord struct {
 	ExtraInfo               field.String // 额外信息
 	CreatedAt               field.Int64
 	UpdatedAt               field.Int64
-	FinanceOperatorAt       field.Int64 // 财务操作时间
+	FinanceOperatorAt       field.Int64  // 财务操作时间
+	WithdrawName            field.String // 提现姓名
+	WithdrawBankName        field.String // 提现银行名称
 
 	fieldMap map[string]field.Expr
 }
@@ -144,6 +148,8 @@ func (w *winCoinWithdrawalRecord) updateTableName(table string) *winCoinWithdraw
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
 	w.FinanceOperatorAt = field.NewInt64(table, "finance_operator_at")
+	w.WithdrawName = field.NewString(table, "withdraw_name")
+	w.WithdrawBankName = field.NewString(table, "withdraw_bank_name")
 
 	w.fillFieldMap()
 
@@ -160,7 +166,7 @@ func (w *winCoinWithdrawalRecord) GetFieldByName(fieldName string) (field.OrderE
 }
 
 func (w *winCoinWithdrawalRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 30)
+	w.fieldMap = make(map[string]field.Expr, 32)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -191,6 +197,8 @@ func (w *winCoinWithdrawalRecord) fillFieldMap() {
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
 	w.fieldMap["finance_operator_at"] = w.FinanceOperatorAt
+	w.fieldMap["withdraw_name"] = w.WithdrawName
+	w.fieldMap["withdraw_bank_name"] = w.WithdrawBankName
 }
 
 func (w winCoinWithdrawalRecord) clone(db *gorm.DB) winCoinWithdrawalRecord {

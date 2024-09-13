@@ -18,6 +18,8 @@ import (
 
 var (
 	Q                       = new(Query)
+	AgentCommissionLog      *agentCommissionLog
+	AgentCommission         *agentCommission
 	WinBetslips1            *winBetslips1
 	WinBetslips5            *winBetslips5
 	WinBetslips9            *winBetslips9
@@ -34,6 +36,8 @@ var (
 	WinBetslipsDetails      *winBetslipsDetails
 	WinPlatList             *winPlatList
 
+	WinUserStatistics             *winUserStatistics
+	WinCustomer                   *winCustomer
 	WinGameSlot                   *winGameSlot
 	ActivityAlertLog              *activityAlertLog
 	ActivityAlertUserConfig       *activityAlertUserConfig
@@ -85,6 +89,8 @@ var (
 	WinCodeAudit                  *winCodeAudit
 	WinCodeRecord                 *winCodeRecord
 	WinCoinAdminTransferM2        *winCoinAdminTransferM2
+	WinCoinCommission             *winCoinCommission
+	WinCoinCommissionLog          *winCoinCommissionLog
 	WinCoinCommissionM2           *winCoinCommissionM2
 	WinCoinDepositRecordM2        *winCoinDepositRecordM2
 	WinCoinRateM2                 *winCoinRateM2
@@ -147,6 +153,9 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	AgentCommissionLog = &Q.AgentCommissionLog
+	AgentCommission = &Q.AgentCommission
+	WinUserStatistics = &Q.WinUserStatistics
 	WinBetslips1 = &Q.WinBetslips1
 	WinBetslips5 = &Q.WinBetslips5
 	WinBetslips9 = &Q.WinBetslips9
@@ -162,6 +171,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	WinCoinWithdrawalRecord = &Q.WinCoinWithdrawalRecord
 	WinBetslipsDetails = &Q.WinBetslipsDetails
 
+	WinCustomer = &Q.WinCustomer
 	WinGameSlot = &Q.WinGameSlot
 	WinPlatList = &Q.WinPlatList
 	ActivityAlertLog = &Q.ActivityAlertLog
@@ -214,6 +224,8 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	WinCodeAudit = &Q.WinCodeAudit
 	WinCodeRecord = &Q.WinCodeRecord
 	WinCoinAdminTransferM2 = &Q.WinCoinAdminTransferM2
+	WinCoinCommission = &Q.WinCoinCommission
+	WinCoinCommissionLog = &Q.WinCoinCommissionLog
 	WinCoinCommissionM2 = &Q.WinCoinCommissionM2
 	WinCoinDepositRecordM2 = &Q.WinCoinDepositRecordM2
 	WinCoinRateM2 = &Q.WinCoinRateM2
@@ -277,6 +289,9 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      newAgentCommissionLog(db, opts...),
+		AgentCommission:         newAgentCommission(db, opts...),
+		WinUserStatistics:       newWinUserStatistics(db, opts...),
 		WinBetslips1:            newWinBetslips1(db, opts...),
 		WinBetslips5:            newWinBetslips5(db, opts...),
 		WinBetslips9:            newWinBetslips9(db, opts...),
@@ -292,6 +307,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinCoinWithdrawalRecord: newWinCoinWithdrawalRecord(db, opts...),
 		WinBetslipsDetails:      newWinBetslipsDetails(db, opts...),
 
+		WinCustomer:                   newWinCustomer(db, opts...),
 		WinGameSlot:                   newWinGameSlot(db, opts...),
 		WinPlatList:                   newWinPlatList(db, opts...),
 		ActivityAlertLog:              newActivityAlertLog(db, opts...),
@@ -344,6 +360,8 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinCodeAudit:                  newWinCodeAudit(db, opts...),
 		WinCodeRecord:                 newWinCodeRecord(db, opts...),
 		WinCoinAdminTransferM2:        newWinCoinAdminTransferM2(db, opts...),
+		WinCoinCommission:             newWinCoinCommission(db, opts...),
+		WinCoinCommissionLog:          newWinCoinCommissionLog(db, opts...),
 		WinCoinCommissionM2:           newWinCoinCommissionM2(db, opts...),
 		WinCoinDepositRecordM2:        newWinCoinDepositRecordM2(db, opts...),
 		WinCoinRateM2:                 newWinCoinRateM2(db, opts...),
@@ -406,8 +424,10 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 }
 
 type Query struct {
-	db *gorm.DB
-
+	db                      *gorm.DB
+	AgentCommissionLog      agentCommissionLog
+	AgentCommission         agentCommission
+	WinUserStatistics       winUserStatistics
 	WinBetslips1            winBetslips1
 	WinBetslips5            winBetslips5
 	WinBetslips9            winBetslips9
@@ -423,6 +443,7 @@ type Query struct {
 	WinCoinWithdrawalRecord winCoinWithdrawalRecord
 	WinBetslipsDetails      winBetslipsDetails
 
+	WinCustomer                   winCustomer
 	WinGameSlot                   winGameSlot
 	WinPlatList                   winPlatList
 	ActivityAlertLog              activityAlertLog
@@ -475,6 +496,8 @@ type Query struct {
 	WinCodeAudit                  winCodeAudit
 	WinCodeRecord                 winCodeRecord
 	WinCoinAdminTransferM2        winCoinAdminTransferM2
+	WinCoinCommission             winCoinCommission
+	WinCoinCommissionLog          winCoinCommissionLog
 	WinCoinCommissionM2           winCoinCommissionM2
 	WinCoinDepositRecordM2        winCoinDepositRecordM2
 	WinCoinRateM2                 winCoinRateM2
@@ -540,6 +563,9 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      q.AgentCommissionLog.clone(db),
+		AgentCommission:         q.AgentCommission.clone(db),
+		WinUserStatistics:       q.WinUserStatistics.clone(db),
 		WinBetslips1:            q.WinBetslips1.clone(db),
 		WinBetslips5:            q.WinBetslips5.clone(db),
 		WinBetslips9:            q.WinBetslips9.clone(db),
@@ -555,6 +581,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.clone(db),
 		WinBetslipsDetails:      q.WinBetslipsDetails.clone(db),
 
+		WinCustomer:                   q.WinCustomer.clone(db),
 		WinGameSlot:                   q.WinGameSlot.clone(db),
 		WinPlatList:                   q.WinPlatList.clone(db),
 		ActivityAlertLog:              q.ActivityAlertLog.clone(db),
@@ -607,6 +634,8 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		WinCodeAudit:                  q.WinCodeAudit.clone(db),
 		WinCodeRecord:                 q.WinCodeRecord.clone(db),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.clone(db),
+		WinCoinCommission:             q.WinCoinCommission.clone(db),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.clone(db),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.clone(db),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.clone(db),
 		WinCoinRateM2:                 q.WinCoinRateM2.clone(db),
@@ -679,6 +708,9 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                      db,
+		AgentCommissionLog:      q.AgentCommissionLog.replaceDB(db),
+		AgentCommission:         q.AgentCommission.replaceDB(db),
+		WinUserStatistics:       q.WinUserStatistics.replaceDB(db),
 		WinBetslips1:            q.WinBetslips1.replaceDB(db),
 		WinBetslips5:            q.WinBetslips5.replaceDB(db),
 		WinBetslips9:            q.WinBetslips9.replaceDB(db),
@@ -694,6 +726,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.replaceDB(db),
 		WinBetslipsDetails:      q.WinBetslipsDetails.replaceDB(db),
 
+		WinCustomer:                   q.WinCustomer.replaceDB(db),
 		WinGameSlot:                   q.WinGameSlot.replaceDB(db),
 		WinPlatList:                   q.WinPlatList.replaceDB(db),
 		ActivityAlertLog:              q.ActivityAlertLog.replaceDB(db),
@@ -746,6 +779,8 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		WinCodeAudit:                  q.WinCodeAudit.replaceDB(db),
 		WinCodeRecord:                 q.WinCodeRecord.replaceDB(db),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.replaceDB(db),
+		WinCoinCommission:             q.WinCoinCommission.replaceDB(db),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.replaceDB(db),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.replaceDB(db),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.replaceDB(db),
 		WinCoinRateM2:                 q.WinCoinRateM2.replaceDB(db),
@@ -808,6 +843,9 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	AgentCommissionLog      IAgentCommissionLogDo
+	AgentCommission         IAgentCommissionDo
+	WinUserStatistics       IWinUserStatisticsDo
 	WinBetslips1            IWinBetslips1Do
 	WinBetslips5            IWinBetslips5Do
 	WinBetslips9            IWinBetslips9Do
@@ -823,6 +861,7 @@ type queryCtx struct {
 	WinCoinWithdrawalRecord IWinCoinWithdrawalRecordDo
 	WinBetslipsDetails      IWinBetslipsDetailsDo
 
+	WinCustomer                   IWinCustomerDo
 	WinGameSlot                   IWinGameSlotDo
 	WinPlatList                   IWinPlatListDo
 	ActivityAlertLog              IActivityAlertLogDo
@@ -874,6 +913,8 @@ type queryCtx struct {
 	WinCityItem                   IWinCityItemDo
 	WinCodeAudit                  IWinCodeAuditDo
 	WinCodeRecord                 IWinCodeRecordDo
+	WinCoinCommission             IWinCoinCommissionDo
+	WinCoinCommissionLog          IWinCoinCommissionLogDo
 	WinCoinAdminTransferM2        IWinCoinAdminTransferM2Do
 	WinCoinCommissionM2           IWinCoinCommissionM2Do
 	WinCoinDepositRecordM2        IWinCoinDepositRecordM2Do
@@ -937,6 +978,9 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		AgentCommissionLog:      q.AgentCommissionLog.WithContext(ctx),
+		AgentCommission:         q.AgentCommission.WithContext(ctx),
+		WinUserStatistics:       q.WinUserStatistics.WithContext(ctx),
 		WinBetslips1:            q.WinBetslips1.WithContext(ctx),
 		WinBetslips5:            q.WinBetslips5.WithContext(ctx),
 		WinBetslips9:            q.WinBetslips9.WithContext(ctx),
@@ -954,6 +998,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		WinPlatList:             q.WinPlatList.WithContext(ctx),
 		WinGameSlot:             q.WinGameSlot.WithContext(ctx),
 
+		WinCustomer:                   q.WinCustomer.WithContext(ctx),
 		ActivityAlertLog:              q.ActivityAlertLog.WithContext(ctx),
 		ActivityAlertUserConfig:       q.ActivityAlertUserConfig.WithContext(ctx),
 		ActivityBase:                  q.ActivityBase.WithContext(ctx),
@@ -1004,6 +1049,8 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		WinCodeAudit:                  q.WinCodeAudit.WithContext(ctx),
 		WinCodeRecord:                 q.WinCodeRecord.WithContext(ctx),
 		WinCoinAdminTransferM2:        q.WinCoinAdminTransferM2.WithContext(ctx),
+		WinCoinCommission:             q.WinCoinCommission.WithContext(ctx),
+		WinCoinCommissionLog:          q.WinCoinCommissionLog.WithContext(ctx),
 		WinCoinCommissionM2:           q.WinCoinCommissionM2.WithContext(ctx),
 		WinCoinDepositRecordM2:        q.WinCoinDepositRecordM2.WithContext(ctx),
 		WinCoinRateM2:                 q.WinCoinRateM2.WithContext(ctx),

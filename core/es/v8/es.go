@@ -17,7 +17,8 @@ import (
 )
 
 type ElasticsearchClient struct {
-	client *elasticsearch8.Client
+	client  *elasticsearch8.Client
+	baseURL string
 }
 
 // NewElasticsearchClient 初始化Elasticsearch客户端
@@ -72,7 +73,7 @@ func NewElasticsearchClient(useTLS bool, caCertPath, username, password string, 
 		return nil, fmt.Errorf("Error creating the client: %s", err)
 	}
 
-	return &ElasticsearchClient{client: client}, nil
+	return &ElasticsearchClient{client: client, baseURL: addresses[0]}, nil
 }
 
 // CreateIndex 创建索引
@@ -138,7 +139,7 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 	if len(conditions) > 0 {
 		boolQuery := make(map[string]interface{})
 		mustClauses := make([]map[string]interface{}, 0)
-
+		mustNotClauses := make([]map[string]interface{}, 0)
 		for _, condition := range conditions {
 			switch condition.Operator {
 			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
@@ -162,12 +163,32 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotIn:
+				// Not In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
+				}
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
 
 		boolQuery["must"] = mustClauses
+		if len(mustNotClauses) > 0 {
+			boolQuery["must_not"] = mustNotClauses
+		}
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
@@ -234,6 +255,82 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 	return results, result.Aggregations.TotalCount.Value, nil
 }
 
+// QueryByOpenDistroSQL 原始SQL查询
+func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string) (map[string]interface{}, error) {
+	body := map[string]interface{}{
+		"query": query,
+	}
+
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling query body: %s", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_opendistro/_sql?format=json", es.baseURL), bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %s", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	res, err := es.client.Perform(req.WithContext(ctx))
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("error response from Elasticsearch: %s", res.Status)
+	}
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("error parsing response body: %s", err)
+	}
+
+	return result, nil
+}
+func (es *ElasticsearchClient) QueryByXPackSQL(query string) (map[string]interface{}, error) {
+	body := map[string]interface{}{
+		"query": query,
+	}
+
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return nil, fmt.Errorf("error marshalling query body: %s", err)
+	}
+
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/_sql?format=json", es.baseURL), bytes.NewReader(bodyBytes))
+	if err != nil {
+		return nil, fmt.Errorf("error creating request: %s", err)
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	res, err := es.client.Perform(req.WithContext(ctx))
+	if err != nil {
+		return nil, fmt.Errorf("error performing request: %s", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("error response from Elasticsearch: %s", res.Status)
+	}
+
+	var result map[string]interface{}
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
+		return nil, fmt.Errorf("error parsing response body: %s", err)
+	}
+
+	return result, nil
+}
+
 // SearchWithPagination 查询带分页
 func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []QueryCondition, from, size int) ([][]byte, int, error) {
 	// 构建查询体
@@ -245,7 +342,7 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 	if len(conditions) > 0 {
 		boolQuery := make(map[string]interface{})
 		mustClauses := make([]map[string]interface{}, 0)
-
+		mustNotClauses := make([]map[string]interface{}, 0)
 		for _, condition := range conditions {
 			switch condition.Operator {
 			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
@@ -269,12 +366,33 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotIn:
+				// Not In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
+				}
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
 
 		boolQuery["must"] = mustClauses
+		if len(mustNotClauses) > 0 {
+			boolQuery["must_not"] = mustNotClauses
+		}
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
@@ -351,7 +469,7 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 	if len(conditions) > 0 {
 		boolQuery := make(map[string]interface{})
 		mustClauses := make([]map[string]interface{}, 0)
-
+		mustNotClauses := make([]map[string]interface{}, 0)
 		for _, condition := range conditions {
 			switch condition.Operator {
 			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
@@ -375,12 +493,33 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotIn:
+				// Not In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
+				}
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+
 			default:
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
 
 		boolQuery["must"] = mustClauses
+		if len(mustNotClauses) > 0 {
+			boolQuery["must_not"] = mustNotClauses
+		}
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
@@ -467,7 +606,7 @@ func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}
 	if len(conditions) > 0 {
 		boolQuery := make(map[string]interface{})
 		mustClauses := make([]map[string]interface{}, 0)
-
+		mustNotClauses := make([]map[string]interface{}, 0)
 		for _, condition := range conditions {
 			switch condition.Operator {
 			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
@@ -491,13 +630,32 @@ func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}
 			case Wildcard:
 				// 双通配符匹配
 				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
-
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotIn:
+				// Not In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
+				}
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
 			default:
 				return nil, nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
 
 		boolQuery["must"] = mustClauses
+		if len(mustNotClauses) > 0 {
+			boolQuery["must_not"] = mustNotClauses
+		}
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
