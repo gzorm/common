@@ -35,6 +35,7 @@ type WinCoinDepositRecord struct {
 	ActivityID       int64           `gorm:"column:activity_id;type:bigint;comment:参与活动ID" json:"activityId"`                                               // 参与活动ID
 	CreatedAt        int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt        int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
+	IsCounted        int64           `gorm:"column:is_counted;type:tinyint(1);default:1;comment:是否统计过：1=否，3=是" json:"isCounted"` // 是否统计过：1=否，3=是
 }
 
 // TableName WinCoinDepositRecord's table name

@@ -52,6 +52,7 @@ func newWinCoinDepositRecord(db *gorm.DB, opts ...gen.DOOption) winCoinDepositRe
 	_winCoinDepositRecord.ActivityID = field.NewInt64(tableName, "activity_id")
 	_winCoinDepositRecord.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCoinDepositRecord.UpdatedAt = field.NewInt64(tableName, "updated_at")
+	_winCoinDepositRecord.IsCounted = field.NewInt64(tableName, "is_counted")
 
 	_winCoinDepositRecord.fillFieldMap()
 
@@ -88,6 +89,7 @@ type winCoinDepositRecord struct {
 	ActivityID       field.Int64  // 参与活动ID
 	CreatedAt        field.Int64
 	UpdatedAt        field.Int64
+	IsCounted        field.Int64 // 是否统计过：1=否，3=是
 
 	fieldMap map[string]field.Expr
 }
@@ -129,6 +131,7 @@ func (w *winCoinDepositRecord) updateTableName(table string) *winCoinDepositReco
 	w.ActivityID = field.NewInt64(table, "activity_id")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
+	w.IsCounted = field.NewInt64(table, "is_counted")
 
 	w.fillFieldMap()
 
@@ -145,7 +148,7 @@ func (w *winCoinDepositRecord) GetFieldByName(fieldName string) (field.OrderExpr
 }
 
 func (w *winCoinDepositRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 25)
+	w.fieldMap = make(map[string]field.Expr, 26)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -171,6 +174,7 @@ func (w *winCoinDepositRecord) fillFieldMap() {
 	w.fieldMap["activity_id"] = w.ActivityID
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
+	w.fieldMap["is_counted"] = w.IsCounted
 }
 
 func (w winCoinDepositRecord) clone(db *gorm.DB) winCoinDepositRecord {

@@ -46,6 +46,7 @@ func newWinCoinLog(db *gorm.DB, opts ...gen.DOOption) winCoinLog {
 	_winCoinLog.Status = field.NewInt64(tableName, "status")
 	_winCoinLog.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCoinLog.UpdatedAt = field.NewInt64(tableName, "updated_at")
+	_winCoinLog.IsCounted = field.NewInt64(tableName, "is_counted")
 
 	_winCoinLog.fillFieldMap()
 
@@ -62,7 +63,7 @@ type winCoinLog struct {
 	MerchantID field.Int64  // 商户id
 	WalletID   field.Int64  // 钱包id
 	Currency   field.Int64  // 币种
-	Category   field.Int64  // 类型:1-存款 2-提款 3-投注 4-派彩 5-返水 6-佣金 7-活动(奖励) 8-系统调账 9-退款 10-佣金钱包转主账户余额 11-小费  13==转入  14==转出
+	Category   field.Int64  // 类型:1-存款 2-提款 3-投注 4-派彩 5-返水 6-佣金 7-活动(奖励) 8-系统调账 9-退款 10-佣金钱包转主账户余额 11-小费,12-提款退款,13-系统调账转出,14-系统调账转入,15-余额带出入游戏,16-游戏调整余额
 	ReferID    field.Int64  // 关联ID
 	Coin       field.Field  // 金额
 	CoinReal   field.Field  // 实际金额
@@ -75,6 +76,7 @@ type winCoinLog struct {
 	Status     field.Int64  // 状态:0-处理中 1-成功 2-失败
 	CreatedAt  field.Int64
 	UpdatedAt  field.Int64
+	IsCounted  field.Int64 // 是否统计过：1=否，3=是
 
 	fieldMap map[string]field.Expr
 }
@@ -110,6 +112,7 @@ func (w *winCoinLog) updateTableName(table string) *winCoinLog {
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
+	w.IsCounted = field.NewInt64(table, "is_counted")
 
 	w.fillFieldMap()
 
@@ -126,7 +129,7 @@ func (w *winCoinLog) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winCoinLog) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 19)
+	w.fieldMap = make(map[string]field.Expr, 20)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -146,6 +149,7 @@ func (w *winCoinLog) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
+	w.fieldMap["is_counted"] = w.IsCounted
 }
 
 func (w winCoinLog) clone(db *gorm.DB) winCoinLog {
