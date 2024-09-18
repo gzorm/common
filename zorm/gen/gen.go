@@ -40,7 +40,6 @@ func main() {
 	// 构造生成器实例
 	g := gen.NewGenerator(gen.Config{
 		// 相对执行`go run`时的路径, 会自动创建目录
-
 		OutPath:      "./zorm/dao2", //curd代码的输出路径
 		ModelPkgPath: "./model",     //model代码的输出路径
 

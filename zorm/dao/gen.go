@@ -83,7 +83,7 @@ var (
 	WinAuthRuleMap                *winAuthRuleMap
 	WinBanner                     *winBanner
 	WinBetSlipsException          *winBetSlipsException
-	WinBetslip                    *winBetslip
+	WinBetslip                    *winBetslips
 	WinBlog                       *winBlog
 	WinCheckInRecord              *winCheckInRecord
 	WinCheckInRule                *winCheckInRule
@@ -359,7 +359,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		WinAuthRuleMap:                newWinAuthRuleMap(db, opts...),
 		WinBanner:                     newWinBanner(db, opts...),
 		WinBetSlipsException:          newWinBetSlipsException(db, opts...),
-		WinBetslip:                    newWinBetslip(db, opts...),
+		WinBetslip:                    newWinBetslips(db, opts...),
 		WinBlog:                       newWinBlog(db, opts...),
 		WinCheckInRecord:              newWinCheckInRecord(db, opts...),
 		WinCheckInRule:                newWinCheckInRule(db, opts...),
@@ -497,7 +497,7 @@ type Query struct {
 	WinAuthRuleMap                winAuthRuleMap
 	WinBanner                     winBanner
 	WinBetSlipsException          winBetSlipsException
-	WinBetslip                    winBetslip
+	WinBetslip                    winBetslips
 	WinBlog                       winBlog
 	WinCheckInRecord              winCheckInRecord
 	WinCheckInRule                winCheckInRule
@@ -921,7 +921,7 @@ type queryCtx struct {
 	WinAuthRuleMap                IWinAuthRuleMapDo
 	WinBanner                     IWinBannerDo
 	WinBetSlipsException          IWinBetSlipsExceptionDo
-	WinBetslip                    IWinBetslipDo
+	WinBetslip                    IWinBetslipsDo
 	WinBlog                       IWinBlogDo
 	WinCheckInRecord              IWinCheckInRecordDo
 	WinCheckInRule                IWinCheckInRuleDo
