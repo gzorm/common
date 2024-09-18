@@ -6,11 +6,11 @@ package model
 
 import "github.com/shopspring/decimal"
 
-const TableNameWinBetslip = "win_betslips"
+const TableNameWinBetslips = "win_betslips"
 
-// WinBetslip mapped from table <win_betslips>
-type WinBetslip struct {
-	ID                    int64           `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true;comment:主键" json:"id,string"`                                       // 主键
+// WinBetslips mapped from table <win_betslips>
+type WinBetslips struct {
+	ID                    int64           `gorm:"column:id;type:bigint;primaryKey;comment:主键" json:"id,string"`                                                          // 主键
 	RoundID               string          `gorm:"column:round_id;type:varchar(128);not null;comment:回合id" json:"roundId"`                                                // 回合id
 	TransactionID         string          `gorm:"column:transaction_id;type:varchar(128);not null;comment:注单号 对应三方拉单transaction_id" json:"transactionId"`                // 注单号 对应三方拉单transaction_id
 	XbStatus              int64           `gorm:"column:xb_status;type:tinyint;not null;comment:注单状态 1:待开彩  2:完成  3: 退款" json:"xbStatus"`                                // 注单状态 1:待开彩  2:完成  3: 退款
@@ -26,18 +26,19 @@ type WinBetslip struct {
 	GameProviderSubtypeID int64           `gorm:"column:game_provider_subtype_id;type:int;not null;comment:游戏id对应game_provider_subtype表id" json:"gameProviderSubtypeId"` // 游戏id对应game_provider_subtype表id
 	GameListID            int64           `gorm:"column:game_list_id;type:int;not null;comment:游戏id对应game_list表id" json:"gameListId"`                                    // 游戏id对应game_list表id
 	GamePagcorID          int64           `gorm:"column:game_pagcor_id;type:int;not null;comment:pagcor分组id" json:"gamePagcorId"`                                        // pagcor分组id
-	GameTypeID            int64           `gorm:"column:game_type_id;type:int;not null;comment:游戏分组id" json:"gameTypeId"`                                                // 游戏分组id
 	GameProviderID        int64           `gorm:"column:game_provider_id;type:int;not null;comment:游戏供应商id" json:"gameProviderId"`                                       // 游戏供应商id
 	AmountType            int64           `gorm:"column:amount_type;type:int;not null;comment:投注方式 1:现金，2:奖金 3:免费旋转 4:活动免费旋转" json:"amountType"`                         // 投注方式 1:现金，2:奖金 3:免费旋转 4:活动免费旋转
 	DtStarted             int64           `gorm:"column:dt_started;type:bigint;not null;comment:游戏开始时间" json:"dtStarted"`                                                // 游戏开始时间
-	DtCompleted           int64           `gorm:"column:dt_completed;type:bigint;not null;comment:游戏结束时间" json:"dtCompleted"`                                            // 游戏结束时间
+	DtCompleted           int64           `gorm:"column:dt_completed;type:bigint;comment:游戏结束时间" json:"dtCompleted"`                                                     // 游戏结束时间
 	WinTransactionID      string          `gorm:"column:win_transaction_id;type:varchar(300);comment:开奖交易单号" json:"winTransactionId"`                                    // 开奖交易单号
 	CreateTimeStr         string          `gorm:"column:create_time_str;type:varchar(10);not null;comment:投注时间" json:"createTimeStr"`                                    // 投注时间
-	CreatedAt             int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                                                       // 创建时间
-	UpdatedAt             int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                                                       // 更新时间
+	CreatedAt             int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
+	UpdatedAt             int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
+	GameTypeID            int64           `gorm:"column:game_type_id;type:int;not null;comment:游戏分组id" json:"gameTypeId"`             // 游戏分组id
+	IsCounted             int64           `gorm:"column:is_counted;type:tinyint(1);default:1;comment:是否统计过：1=否，3=是" json:"isCounted"` // 是否统计过：1=否，3=是
 }
 
-// TableName WinBetslip's table name
-func (*WinBetslip) TableName() string {
-	return TableNameWinBetslip
+// TableName WinBetslips's table name
+func (*WinBetslips) TableName() string {
+	return TableNameWinBetslips
 }

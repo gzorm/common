@@ -46,7 +46,6 @@ func newWinCoinLog(db *gorm.DB, opts ...gen.DOOption) winCoinLog {
 	_winCoinLog.Status = field.NewInt64(tableName, "status")
 	_winCoinLog.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCoinLog.UpdatedAt = field.NewInt64(tableName, "updated_at")
-	_winCoinLog.IsCounted = field.NewInt64(tableName, "is_counted")
 
 	_winCoinLog.fillFieldMap()
 
@@ -76,7 +75,6 @@ type winCoinLog struct {
 	Status     field.Int64  // 状态:0-处理中 1-成功 2-失败
 	CreatedAt  field.Int64
 	UpdatedAt  field.Int64
-	IsCounted  field.Int64 // 是否统计过：1=否，3=是
 
 	fieldMap map[string]field.Expr
 }
@@ -112,7 +110,6 @@ func (w *winCoinLog) updateTableName(table string) *winCoinLog {
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
-	w.IsCounted = field.NewInt64(table, "is_counted")
 
 	w.fillFieldMap()
 
@@ -129,7 +126,7 @@ func (w *winCoinLog) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winCoinLog) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 20)
+	w.fieldMap = make(map[string]field.Expr, 19)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -149,7 +146,6 @@ func (w *winCoinLog) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
-	w.fieldMap["is_counted"] = w.IsCounted
 }
 
 func (w winCoinLog) clone(db *gorm.DB) winCoinLog {

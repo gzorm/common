@@ -29,7 +29,6 @@ type WinCoinLog struct {
 	Status     int64           `gorm:"column:status;type:tinyint;not null;comment:状态:0-处理中 1-成功 2-失败" json:"status"`                                                                                                                       // 状态:0-处理中 1-成功 2-失败
 	CreatedAt  int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt  int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	IsCounted  int64           `gorm:"column:is_counted;type:tinyint(1);default:1;comment:是否统计过：1=否，3=是" json:"isCounted"` // 是否统计过：1=否，3=是
 }
 
 // TableName WinCoinLog's table name
