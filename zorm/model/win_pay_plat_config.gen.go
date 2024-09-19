@@ -12,7 +12,8 @@ type WinPayPlatConfig struct {
 	PlatName     string `gorm:"column:plat_name;type:varchar(255);not null;comment:平台名称" json:"platName"`              // 平台名称
 	PlatNickName string `gorm:"column:plat_nick_name;type:varchar(255);comment:平台昵称" json:"platNickName"`              // 平台昵称
 	MerchantID   string `gorm:"column:merchant_id;type:varchar(64);not null;comment:商户号" json:"merchantId"`            // 商户号
-	APIKey       string `gorm:"column:api_key;type:varchar(256);not null;comment:商户秘钥" json:"apiKey"`                  // 商户秘钥
+	APIKey       string `gorm:"column:api_key;type:varchar(256);not null;comment:商户秘钥(代收)" json:"apiKey"`              // 商户秘钥(代收)
+	TransferKey  string `gorm:"column:transfer_key;type:varchar(256);comment:商户密钥(代付)" json:"transferKey"`             // 商户密钥(代付)
 	Status       int64  `gorm:"column:status;type:tinyint;not null;default:1;comment:状态:0-停用 1-启用 2-删除" json:"status"` // 状态:0-停用 1-启用 2-删除
 	PlatConfig   string `gorm:"column:plat_config;type:longtext;comment:平台特殊配置" json:"platConfig"`                     // 平台特殊配置
 	CreatedAt    int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                       // 创建时间

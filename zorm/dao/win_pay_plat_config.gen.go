@@ -32,6 +32,7 @@ func newWinPayPlatConfig(db *gorm.DB, opts ...gen.DOOption) winPayPlatConfig {
 	_winPayPlatConfig.PlatNickName = field.NewString(tableName, "plat_nick_name")
 	_winPayPlatConfig.MerchantID = field.NewString(tableName, "merchant_id")
 	_winPayPlatConfig.APIKey = field.NewString(tableName, "api_key")
+	_winPayPlatConfig.TransferKey = field.NewString(tableName, "transfer_key")
 	_winPayPlatConfig.Status = field.NewInt64(tableName, "status")
 	_winPayPlatConfig.PlatConfig = field.NewString(tableName, "plat_config")
 	_winPayPlatConfig.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -53,7 +54,8 @@ type winPayPlatConfig struct {
 	PlatName     field.String // 平台名称
 	PlatNickName field.String // 平台昵称
 	MerchantID   field.String // 商户号
-	APIKey       field.String // 商户秘钥
+	APIKey       field.String // 商户秘钥(代收)
+	TransferKey  field.String // 商户密钥(代付)
 	Status       field.Int64  // 状态:0-停用 1-启用 2-删除
 	PlatConfig   field.String // 平台特殊配置
 	CreatedAt    field.Int64  // 创建时间
@@ -81,6 +83,7 @@ func (w *winPayPlatConfig) updateTableName(table string) *winPayPlatConfig {
 	w.PlatNickName = field.NewString(table, "plat_nick_name")
 	w.MerchantID = field.NewString(table, "merchant_id")
 	w.APIKey = field.NewString(table, "api_key")
+	w.TransferKey = field.NewString(table, "transfer_key")
 	w.Status = field.NewInt64(table, "status")
 	w.PlatConfig = field.NewString(table, "plat_config")
 	w.CreatedAt = field.NewInt64(table, "created_at")
@@ -103,12 +106,13 @@ func (w *winPayPlatConfig) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (w *winPayPlatConfig) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 11)
+	w.fieldMap = make(map[string]field.Expr, 12)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["plat_name"] = w.PlatName
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
 	w.fieldMap["merchant_id"] = w.MerchantID
 	w.fieldMap["api_key"] = w.APIKey
+	w.fieldMap["transfer_key"] = w.TransferKey
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["plat_config"] = w.PlatConfig
 	w.fieldMap["created_at"] = w.CreatedAt
