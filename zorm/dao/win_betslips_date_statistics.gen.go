@@ -30,7 +30,12 @@ func newWinBetslipsDateStatistics(db *gorm.DB, opts ...gen.DOOption) winBetslips
 	_winBetslipsDateStatistics.ID = field.NewInt64(tableName, "id")
 	_winBetslipsDateStatistics.UID = field.NewInt64(tableName, "uid")
 	_winBetslipsDateStatistics.Username = field.NewString(tableName, "username")
-	_winBetslipsDateStatistics.BetAmountCount = field.NewField(tableName, "bet_amount_count")
+	_winBetslipsDateStatistics.ActivityCommission = field.NewField(tableName, "activity_commission")
+	_winBetslipsDateStatistics.TotalBetAmount = field.NewField(tableName, "total_bet_amount")
+	_winBetslipsDateStatistics.CoinBefore = field.NewField(tableName, "coin_before")
+	_winBetslipsDateStatistics.ReferID = field.NewInt64(tableName, "refer_id")
+	_winBetslipsDateStatistics.ActicityRewardConfig = field.NewField(tableName, "acticity_reward_config")
+	_winBetslipsDateStatistics.Status = field.NewInt64(tableName, "status")
 	_winBetslipsDateStatistics.Date = field.NewString(tableName, "date")
 	_winBetslipsDateStatistics.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winBetslipsDateStatistics.UpdatedAt = field.NewInt64(tableName, "updated_at")
@@ -44,14 +49,19 @@ func newWinBetslipsDateStatistics(db *gorm.DB, opts ...gen.DOOption) winBetslips
 type winBetslipsDateStatistics struct {
 	winBetslipsDateStatisticsDo
 
-	ALL            field.Asterisk
-	ID             field.Int64  // 自增主键
-	UID            field.Int64  // 用户ID
-	Username       field.String // 用户名
-	BetAmountCount field.Field  // 打码量金额，保留两位小数
-	Date           field.String // 按天时间，格式为Y-m-d
-	CreatedAt      field.Int64  // 创建时间，Unix时间戳
-	UpdatedAt      field.Int64  // 更新时间，Unix时间戳
+	ALL                  field.Asterisk
+	ID                   field.Int64  // 自增主键
+	UID                  field.Int64  // 用户ID
+	Username             field.String // 用户名
+	ActivityCommission   field.Field  // 活动佣金
+	TotalBetAmount       field.Field  // 上一个周期下注总金额
+	CoinBefore           field.Field  // 全部实时金额
+	ReferID              field.Int64  // 关联ID(活动表ID)
+	ActicityRewardConfig field.Field  // 活动奖励/活动奖励百分比
+	Status               field.Int64  // 状态: 1-成功 2-失败
+	Date                 field.String // 按天时间，格式为Y-m-d
+	CreatedAt            field.Int64  // 创建时间，Unix时间戳
+	UpdatedAt            field.Int64  // 更新时间，Unix时间戳
 
 	fieldMap map[string]field.Expr
 }
@@ -71,7 +81,12 @@ func (w *winBetslipsDateStatistics) updateTableName(table string) *winBetslipsDa
 	w.ID = field.NewInt64(table, "id")
 	w.UID = field.NewInt64(table, "uid")
 	w.Username = field.NewString(table, "username")
-	w.BetAmountCount = field.NewField(table, "bet_amount_count")
+	w.ActivityCommission = field.NewField(table, "activity_commission")
+	w.TotalBetAmount = field.NewField(table, "total_bet_amount")
+	w.CoinBefore = field.NewField(table, "coin_before")
+	w.ReferID = field.NewInt64(table, "refer_id")
+	w.ActicityRewardConfig = field.NewField(table, "acticity_reward_config")
+	w.Status = field.NewInt64(table, "status")
 	w.Date = field.NewString(table, "date")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
@@ -91,11 +106,16 @@ func (w *winBetslipsDateStatistics) GetFieldByName(fieldName string) (field.Orde
 }
 
 func (w *winBetslipsDateStatistics) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 7)
+	w.fieldMap = make(map[string]field.Expr, 12)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
-	w.fieldMap["bet_amount_count"] = w.BetAmountCount
+	w.fieldMap["activity_commission"] = w.ActivityCommission
+	w.fieldMap["total_bet_amount"] = w.TotalBetAmount
+	w.fieldMap["coin_before"] = w.CoinBefore
+	w.fieldMap["refer_id"] = w.ReferID
+	w.fieldMap["acticity_reward_config"] = w.ActicityRewardConfig
+	w.fieldMap["status"] = w.Status
 	w.fieldMap["date"] = w.Date
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
