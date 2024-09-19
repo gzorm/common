@@ -41,6 +41,8 @@ func newWinCoinCommission(db *gorm.DB, opts ...gen.DOOption) winCoinCommission {
 	_winCoinCommission.Status = field.NewInt64(tableName, "status")
 	_winCoinCommission.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winCoinCommission.UpdatedAt = field.NewInt64(tableName, "updated_at")
+	_winCoinCommission.Month = field.NewInt64(tableName, "month")
+	_winCoinCommission.Year = field.NewInt64(tableName, "year")
 
 	_winCoinCommission.fillFieldMap()
 
@@ -65,6 +67,8 @@ type winCoinCommission struct {
 	Status         field.Int64  // 状态:0-未发放 1-已发放
 	CreatedAt      field.Int64  // 创建时间
 	UpdatedAt      field.Int64  // 更新时间
+	Month          field.Int64  // 佣金月份
+	Year           field.Int64  // 佣金年份
 
 	fieldMap map[string]field.Expr
 }
@@ -95,6 +99,8 @@ func (w *winCoinCommission) updateTableName(table string) *winCoinCommission {
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
+	w.Month = field.NewInt64(table, "month")
+	w.Year = field.NewInt64(table, "year")
 
 	w.fillFieldMap()
 
@@ -111,7 +117,7 @@ func (w *winCoinCommission) GetFieldByName(fieldName string) (field.OrderExpr, b
 }
 
 func (w *winCoinCommission) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 14)
+	w.fieldMap = make(map[string]field.Expr, 16)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -126,6 +132,8 @@ func (w *winCoinCommission) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
+	w.fieldMap["month"] = w.Month
+	w.fieldMap["year"] = w.Year
 }
 
 func (w winCoinCommission) clone(db *gorm.DB) winCoinCommission {

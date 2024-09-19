@@ -24,6 +24,8 @@ type WinCoinCommission struct {
 	Status         int64           `gorm:"column:status;type:tinyint;comment:状态:0-未发放 1-已发放" json:"status"`                                // 状态:0-未发放 1-已发放
 	CreatedAt      int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                                // 创建时间
 	UpdatedAt      int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                                // 更新时间
+	Month          int64           `gorm:"column:month;type:int;comment:佣金月份" json:"month"`                                                // 佣金月份
+	Year           int64           `gorm:"column:year;type:int;comment:佣金年份" json:"year"`                                                  // 佣金年份
 }
 
 // TableName WinCoinCommission's table name
