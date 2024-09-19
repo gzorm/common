@@ -35,6 +35,7 @@ func newWinBetslipsDateStatistics(db *gorm.DB, opts ...gen.DOOption) winBetslips
 	_winBetslipsDateStatistics.CoinBefore = field.NewField(tableName, "coin_before")
 	_winBetslipsDateStatistics.ReferID = field.NewInt64(tableName, "refer_id")
 	_winBetslipsDateStatistics.ActicityName = field.NewString(tableName, "acticity_name")
+	_winBetslipsDateStatistics.ActicityLadderName = field.NewString(tableName, "acticity_ladder_name")
 	_winBetslipsDateStatistics.ActicityRewardConfig = field.NewField(tableName, "acticity_reward_config")
 	_winBetslipsDateStatistics.Status = field.NewInt64(tableName, "status")
 	_winBetslipsDateStatistics.Date = field.NewString(tableName, "date")
@@ -59,6 +60,7 @@ type winBetslipsDateStatistics struct {
 	CoinBefore           field.Field  // 全部实时金额
 	ReferID              field.Int64  // 关联ID(活动表ID)
 	ActicityName         field.String // 活动名称
+	ActicityLadderName   field.String // 活动内置配置名称
 	ActicityRewardConfig field.Field  // 活动奖励/活动奖励百分比
 	Status               field.Int64  // 状态: 1-成功 2-失败
 	Date                 field.String // 按天时间，格式为Y-m-d
@@ -88,6 +90,7 @@ func (w *winBetslipsDateStatistics) updateTableName(table string) *winBetslipsDa
 	w.CoinBefore = field.NewField(table, "coin_before")
 	w.ReferID = field.NewInt64(table, "refer_id")
 	w.ActicityName = field.NewString(table, "acticity_name")
+	w.ActicityLadderName = field.NewString(table, "acticity_ladder_name")
 	w.ActicityRewardConfig = field.NewField(table, "acticity_reward_config")
 	w.Status = field.NewInt64(table, "status")
 	w.Date = field.NewString(table, "date")
@@ -109,7 +112,7 @@ func (w *winBetslipsDateStatistics) GetFieldByName(fieldName string) (field.Orde
 }
 
 func (w *winBetslipsDateStatistics) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 13)
+	w.fieldMap = make(map[string]field.Expr, 14)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -118,6 +121,7 @@ func (w *winBetslipsDateStatistics) fillFieldMap() {
 	w.fieldMap["coin_before"] = w.CoinBefore
 	w.fieldMap["refer_id"] = w.ReferID
 	w.fieldMap["acticity_name"] = w.ActicityName
+	w.fieldMap["acticity_ladder_name"] = w.ActicityLadderName
 	w.fieldMap["acticity_reward_config"] = w.ActicityRewardConfig
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["date"] = w.Date

@@ -18,6 +18,7 @@ type WinBetslipsDateStatistics struct {
 	CoinBefore           decimal.Decimal `gorm:"column:coin_before;type:decimal(18,2);not null;comment:全部实时金额" json:"coinBefore"`                            // 全部实时金额
 	ReferID              int64           `gorm:"column:refer_id;type:bigint;not null;comment:关联ID(活动表ID)" json:"referId"`                                    // 关联ID(活动表ID)
 	ActicityName         string          `gorm:"column:acticity_name;type:varchar(255);not null;comment:活动名称" json:"acticityName"`                           // 活动名称
+	ActicityLadderName   string          `gorm:"column:acticity_ladder_name;type:varchar(255);not null;comment:活动内置配置名称" json:"acticityLadderName"`          // 活动内置配置名称
 	ActicityRewardConfig decimal.Decimal `gorm:"column:acticity_reward_config;type:decimal(18,4);not null;comment:活动奖励/活动奖励百分比" json:"acticityRewardConfig"` // 活动奖励/活动奖励百分比
 	Status               int64           `gorm:"column:status;type:tinyint(1);not null;default:1;comment:状态: 1-成功 2-失败" json:"status"`                       // 状态: 1-成功 2-失败
 	Date                 string          `gorm:"column:date;type:varchar(10);not null;comment:按天时间，格式为Y-m-d" json:"date"`                                    // 按天时间，格式为Y-m-d
