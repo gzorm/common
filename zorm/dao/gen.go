@@ -17,26 +17,27 @@ import (
 )
 
 var (
-	Q                       = new(Query)
-	AgentCommissionDay      *agentCommissionDay
-	AgentCommissionYear     *agentCommissionYear
-	AgentCommissionLog      *agentCommissionLog
-	AgentCommission         *agentCommission
-	WinBetslips1            *winBetslips1
-	WinBetslips5            *winBetslips5
-	WinBetslips9            *winBetslips9
-	WinBetslipsDetails1     *winBetslipsDetails1
-	WinBetslipsDetails5     *winBetslipsDetails5
-	WinCoinAdminTransfer    *winCoinAdminTransfer
-	WinCoinDepositRecord    *winCoinDepositRecord
-	WinCoinLog              *winCoinLog
-	WinCoinLog5             *winCoinLog5
-	WinCoinRate             *winCoinRate
-	WinCoinReward           *winCoinRewards
-	WinUserWallet           *winUserWallet
-	WinCoinWithdrawalRecord *winCoinWithdrawalRecord
-	WinBetslipsDetails      *winBetslipsDetails
-	WinPlatList             *winPlatList
+	Q                         = new(Query)
+	WinBetslipsDateStatistics *winBetslipsDateStatistics
+	AgentCommissionDay        *agentCommissionDay
+	AgentCommissionYear       *agentCommissionYear
+	AgentCommissionLog        *agentCommissionLog
+	AgentCommission           *agentCommission
+	WinBetslips1              *winBetslips1
+	WinBetslips5              *winBetslips5
+	WinBetslips9              *winBetslips9
+	WinBetslipsDetails1       *winBetslipsDetails1
+	WinBetslipsDetails5       *winBetslipsDetails5
+	WinCoinAdminTransfer      *winCoinAdminTransfer
+	WinCoinDepositRecord      *winCoinDepositRecord
+	WinCoinLog                *winCoinLog
+	WinCoinLog5               *winCoinLog5
+	WinCoinRate               *winCoinRate
+	WinCoinReward             *winCoinRewards
+	WinUserWallet             *winUserWallet
+	WinCoinWithdrawalRecord   *winCoinWithdrawalRecord
+	WinBetslipsDetails        *winBetslipsDetails
+	WinPlatList               *winPlatList
 
 	WinUserStatistics             *winUserStatistics
 	WinCustomer                   *winCustomer
@@ -156,6 +157,7 @@ var (
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 
+	WinBetslipsDateStatistics = &Q.WinBetslipsDateStatistics
 	AgentCommissionDay = &Q.AgentCommissionDay
 	AgentCommissionYear = &Q.AgentCommissionYear
 	AgentCommissionLog = &Q.AgentCommissionLog
@@ -293,26 +295,27 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
-		db:                      db,
-		AgentCommissionDay:      newAgentCommissionDay(db, opts...),
-		AgentCommissionYear:     newAgentCommissionYear(db, opts...),
-		AgentCommissionLog:      newAgentCommissionLog(db, opts...),
-		AgentCommission:         newAgentCommission(db, opts...),
-		WinUserStatistics:       newWinUserStatistics(db, opts...),
-		WinBetslips1:            newWinBetslips1(db, opts...),
-		WinBetslips5:            newWinBetslips5(db, opts...),
-		WinBetslips9:            newWinBetslips9(db, opts...),
-		WinBetslipsDetails1:     newWinBetslipsDetails1(db, opts...),
-		WinBetslipsDetails5:     newWinBetslipsDetails5(db, opts...),
-		WinCoinAdminTransfer:    newWinCoinAdminTransfer(db, opts...),
-		WinCoinDepositRecord:    newWinCoinDepositRecord(db, opts...),
-		WinCoinLog:              newWinCoinLog(db, opts...),
-		WinCoinLog5:             newWinCoinLog5(db, opts...),
-		WinCoinRate:             newWinCoinRate(db, opts...),
-		WinCoinReward:           newWinCoinRewards(db, opts...),
-		WinUserWallet:           newWinUserWallet(db, opts...),
-		WinCoinWithdrawalRecord: newWinCoinWithdrawalRecord(db, opts...),
-		WinBetslipsDetails:      newWinBetslipsDetails(db, opts...),
+		db:                        db,
+		WinBetslipsDateStatistics: newWinBetslipsDateStatistics(db, opts...),
+		AgentCommissionDay:        newAgentCommissionDay(db, opts...),
+		AgentCommissionYear:       newAgentCommissionYear(db, opts...),
+		AgentCommissionLog:        newAgentCommissionLog(db, opts...),
+		AgentCommission:           newAgentCommission(db, opts...),
+		WinUserStatistics:         newWinUserStatistics(db, opts...),
+		WinBetslips1:              newWinBetslips1(db, opts...),
+		WinBetslips5:              newWinBetslips5(db, opts...),
+		WinBetslips9:              newWinBetslips9(db, opts...),
+		WinBetslipsDetails1:       newWinBetslipsDetails1(db, opts...),
+		WinBetslipsDetails5:       newWinBetslipsDetails5(db, opts...),
+		WinCoinAdminTransfer:      newWinCoinAdminTransfer(db, opts...),
+		WinCoinDepositRecord:      newWinCoinDepositRecord(db, opts...),
+		WinCoinLog:                newWinCoinLog(db, opts...),
+		WinCoinLog5:               newWinCoinLog5(db, opts...),
+		WinCoinRate:               newWinCoinRate(db, opts...),
+		WinCoinReward:             newWinCoinRewards(db, opts...),
+		WinUserWallet:             newWinUserWallet(db, opts...),
+		WinCoinWithdrawalRecord:   newWinCoinWithdrawalRecord(db, opts...),
+		WinBetslipsDetails:        newWinBetslipsDetails(db, opts...),
 
 		WinCustomer:                   newWinCustomer(db, opts...),
 		WinGameSlot:                   newWinGameSlot(db, opts...),
@@ -431,26 +434,27 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 }
 
 type Query struct {
-	db                      *gorm.DB
-	AgentCommissionDay      agentCommissionDay
-	AgentCommissionYear     agentCommissionYear
-	AgentCommissionLog      agentCommissionLog
-	AgentCommission         agentCommission
-	WinUserStatistics       winUserStatistics
-	WinBetslips1            winBetslips1
-	WinBetslips5            winBetslips5
-	WinBetslips9            winBetslips9
-	WinBetslipsDetails1     winBetslipsDetails1
-	WinBetslipsDetails5     winBetslipsDetails5
-	WinCoinAdminTransfer    winCoinAdminTransfer
-	WinCoinDepositRecord    winCoinDepositRecord
-	WinCoinLog              winCoinLog
-	WinCoinLog5             winCoinLog5
-	WinCoinRate             winCoinRate
-	WinCoinReward           winCoinRewards
-	WinUserWallet           winUserWallet
-	WinCoinWithdrawalRecord winCoinWithdrawalRecord
-	WinBetslipsDetails      winBetslipsDetails
+	db                        *gorm.DB
+	WinBetslipsDateStatistics winBetslipsDateStatistics
+	AgentCommissionDay        agentCommissionDay
+	AgentCommissionYear       agentCommissionYear
+	AgentCommissionLog        agentCommissionLog
+	AgentCommission           agentCommission
+	WinUserStatistics         winUserStatistics
+	WinBetslips1              winBetslips1
+	WinBetslips5              winBetslips5
+	WinBetslips9              winBetslips9
+	WinBetslipsDetails1       winBetslipsDetails1
+	WinBetslipsDetails5       winBetslipsDetails5
+	WinCoinAdminTransfer      winCoinAdminTransfer
+	WinCoinDepositRecord      winCoinDepositRecord
+	WinCoinLog                winCoinLog
+	WinCoinLog5               winCoinLog5
+	WinCoinRate               winCoinRate
+	WinCoinReward             winCoinRewards
+	WinUserWallet             winUserWallet
+	WinCoinWithdrawalRecord   winCoinWithdrawalRecord
+	WinBetslipsDetails        winBetslipsDetails
 
 	WinCustomer                   winCustomer
 	WinGameSlot                   winGameSlot
@@ -571,26 +575,27 @@ func (q *Query) Available() bool { return q.db != nil }
 
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
-		db:                      db,
-		AgentCommissionDay:      q.AgentCommissionDay.clone(db),
-		AgentCommissionYear:     q.AgentCommissionYear.clone(db),
-		AgentCommissionLog:      q.AgentCommissionLog.clone(db),
-		AgentCommission:         q.AgentCommission.clone(db),
-		WinUserStatistics:       q.WinUserStatistics.clone(db),
-		WinBetslips1:            q.WinBetslips1.clone(db),
-		WinBetslips5:            q.WinBetslips5.clone(db),
-		WinBetslips9:            q.WinBetslips9.clone(db),
-		WinBetslipsDetails1:     q.WinBetslipsDetails1.clone(db),
-		WinBetslipsDetails5:     q.WinBetslipsDetails5.clone(db),
-		WinCoinAdminTransfer:    q.WinCoinAdminTransfer.clone(db),
-		WinCoinDepositRecord:    q.WinCoinDepositRecord.clone(db),
-		WinCoinLog:              q.WinCoinLog.clone(db),
-		WinCoinLog5:             q.WinCoinLog5.clone(db),
-		WinCoinRate:             q.WinCoinRate.clone(db),
-		WinCoinReward:           q.WinCoinReward.clone(db),
-		WinUserWallet:           q.WinUserWallet.clone(db),
-		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.clone(db),
-		WinBetslipsDetails:      q.WinBetslipsDetails.clone(db),
+		db:                        db,
+		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.clone(db),
+		AgentCommissionDay:        q.AgentCommissionDay.clone(db),
+		AgentCommissionYear:       q.AgentCommissionYear.clone(db),
+		AgentCommissionLog:        q.AgentCommissionLog.clone(db),
+		AgentCommission:           q.AgentCommission.clone(db),
+		WinUserStatistics:         q.WinUserStatistics.clone(db),
+		WinBetslips1:              q.WinBetslips1.clone(db),
+		WinBetslips5:              q.WinBetslips5.clone(db),
+		WinBetslips9:              q.WinBetslips9.clone(db),
+		WinBetslipsDetails1:       q.WinBetslipsDetails1.clone(db),
+		WinBetslipsDetails5:       q.WinBetslipsDetails5.clone(db),
+		WinCoinAdminTransfer:      q.WinCoinAdminTransfer.clone(db),
+		WinCoinDepositRecord:      q.WinCoinDepositRecord.clone(db),
+		WinCoinLog:                q.WinCoinLog.clone(db),
+		WinCoinLog5:               q.WinCoinLog5.clone(db),
+		WinCoinRate:               q.WinCoinRate.clone(db),
+		WinCoinReward:             q.WinCoinReward.clone(db),
+		WinUserWallet:             q.WinUserWallet.clone(db),
+		WinCoinWithdrawalRecord:   q.WinCoinWithdrawalRecord.clone(db),
+		WinBetslipsDetails:        q.WinBetslipsDetails.clone(db),
 
 		WinCustomer:                   q.WinCustomer.clone(db),
 		WinGameSlot:                   q.WinGameSlot.clone(db),
@@ -718,26 +723,27 @@ func (q *Query) WriteDB() *Query {
 
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
-		db:                      db,
-		AgentCommissionDay:      q.AgentCommissionDay.replaceDB(db),
-		AgentCommissionYear:     q.AgentCommissionYear.replaceDB(db),
-		AgentCommissionLog:      q.AgentCommissionLog.replaceDB(db),
-		AgentCommission:         q.AgentCommission.replaceDB(db),
-		WinUserStatistics:       q.WinUserStatistics.replaceDB(db),
-		WinBetslips1:            q.WinBetslips1.replaceDB(db),
-		WinBetslips5:            q.WinBetslips5.replaceDB(db),
-		WinBetslips9:            q.WinBetslips9.replaceDB(db),
-		WinBetslipsDetails1:     q.WinBetslipsDetails1.replaceDB(db),
-		WinBetslipsDetails5:     q.WinBetslipsDetails5.replaceDB(db),
-		WinCoinAdminTransfer:    q.WinCoinAdminTransfer.replaceDB(db),
-		WinCoinDepositRecord:    q.WinCoinDepositRecord.replaceDB(db),
-		WinCoinLog:              q.WinCoinLog.replaceDB(db),
-		WinCoinLog5:             q.WinCoinLog5.replaceDB(db),
-		WinCoinRate:             q.WinCoinRate.replaceDB(db),
-		WinCoinReward:           q.WinCoinReward.replaceDB(db),
-		WinUserWallet:           q.WinUserWallet.replaceDB(db),
-		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.replaceDB(db),
-		WinBetslipsDetails:      q.WinBetslipsDetails.replaceDB(db),
+		db:                        db,
+		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.replaceDB(db),
+		AgentCommissionDay:        q.AgentCommissionDay.replaceDB(db),
+		AgentCommissionYear:       q.AgentCommissionYear.replaceDB(db),
+		AgentCommissionLog:        q.AgentCommissionLog.replaceDB(db),
+		AgentCommission:           q.AgentCommission.replaceDB(db),
+		WinUserStatistics:         q.WinUserStatistics.replaceDB(db),
+		WinBetslips1:              q.WinBetslips1.replaceDB(db),
+		WinBetslips5:              q.WinBetslips5.replaceDB(db),
+		WinBetslips9:              q.WinBetslips9.replaceDB(db),
+		WinBetslipsDetails1:       q.WinBetslipsDetails1.replaceDB(db),
+		WinBetslipsDetails5:       q.WinBetslipsDetails5.replaceDB(db),
+		WinCoinAdminTransfer:      q.WinCoinAdminTransfer.replaceDB(db),
+		WinCoinDepositRecord:      q.WinCoinDepositRecord.replaceDB(db),
+		WinCoinLog:                q.WinCoinLog.replaceDB(db),
+		WinCoinLog5:               q.WinCoinLog5.replaceDB(db),
+		WinCoinRate:               q.WinCoinRate.replaceDB(db),
+		WinCoinReward:             q.WinCoinReward.replaceDB(db),
+		WinUserWallet:             q.WinUserWallet.replaceDB(db),
+		WinCoinWithdrawalRecord:   q.WinCoinWithdrawalRecord.replaceDB(db),
+		WinBetslipsDetails:        q.WinBetslipsDetails.replaceDB(db),
 
 		WinCustomer:                   q.WinCustomer.replaceDB(db),
 		WinGameSlot:                   q.WinGameSlot.replaceDB(db),
@@ -856,25 +862,26 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
-	AgentCommissionDay      IAgentCommissionDayDo
-	AgentCommissionYear     IAgentCommissionYearDo
-	AgentCommissionLog      IAgentCommissionLogDo
-	AgentCommission         IAgentCommissionDo
-	WinUserStatistics       IWinUserStatisticsDo
-	WinBetslips1            IWinBetslips1Do
-	WinBetslips5            IWinBetslips5Do
-	WinBetslips9            IWinBetslips9Do
-	WinBetslipsDetails1     IWinBetslipsDetails1Do
-	WinBetslipsDetails5     IWinBetslipsDetails5Do
-	WinCoinAdminTransfer    IWinCoinAdminTransferDo
-	WinCoinDepositRecord    IWinCoinDepositRecordDo
-	WinCoinLog              IWinCoinLogDo
-	WinCoinLog5             IWinCoinLog5Do
-	WinCoinRate             IWinCoinRateDo
-	WinCoinReward           IWinCoinRewardsDo
-	WinUserWallet           IWinUserWalletDo
-	WinCoinWithdrawalRecord IWinCoinWithdrawalRecordDo
-	WinBetslipsDetails      IWinBetslipsDetailsDo
+	WinBetslipsDateStatistics IWinBetslipsDateStatisticsDo
+	AgentCommissionDay        IAgentCommissionDayDo
+	AgentCommissionYear       IAgentCommissionYearDo
+	AgentCommissionLog        IAgentCommissionLogDo
+	AgentCommission           IAgentCommissionDo
+	WinUserStatistics         IWinUserStatisticsDo
+	WinBetslips1              IWinBetslips1Do
+	WinBetslips5              IWinBetslips5Do
+	WinBetslips9              IWinBetslips9Do
+	WinBetslipsDetails1       IWinBetslipsDetails1Do
+	WinBetslipsDetails5       IWinBetslipsDetails5Do
+	WinCoinAdminTransfer      IWinCoinAdminTransferDo
+	WinCoinDepositRecord      IWinCoinDepositRecordDo
+	WinCoinLog                IWinCoinLogDo
+	WinCoinLog5               IWinCoinLog5Do
+	WinCoinRate               IWinCoinRateDo
+	WinCoinReward             IWinCoinRewardsDo
+	WinUserWallet             IWinUserWalletDo
+	WinCoinWithdrawalRecord   IWinCoinWithdrawalRecordDo
+	WinBetslipsDetails        IWinBetslipsDetailsDo
 
 	WinCustomer                   IWinCustomerDo
 	WinGameSlot                   IWinGameSlotDo
@@ -993,27 +1000,28 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
-		AgentCommissionDay:      q.AgentCommissionDay.WithContext(ctx),
-		AgentCommissionYear:     q.AgentCommissionYear.WithContext(ctx),
-		AgentCommissionLog:      q.AgentCommissionLog.WithContext(ctx),
-		AgentCommission:         q.AgentCommission.WithContext(ctx),
-		WinUserStatistics:       q.WinUserStatistics.WithContext(ctx),
-		WinBetslips1:            q.WinBetslips1.WithContext(ctx),
-		WinBetslips5:            q.WinBetslips5.WithContext(ctx),
-		WinBetslips9:            q.WinBetslips9.WithContext(ctx),
-		WinBetslipsDetails1:     q.WinBetslipsDetails1.WithContext(ctx),
-		WinBetslipsDetails5:     q.WinBetslipsDetails5.WithContext(ctx),
-		WinCoinAdminTransfer:    q.WinCoinAdminTransfer.WithContext(ctx),
-		WinCoinDepositRecord:    q.WinCoinDepositRecord.WithContext(ctx),
-		WinCoinLog:              q.WinCoinLog.WithContext(ctx),
-		WinCoinLog5:             q.WinCoinLog5.WithContext(ctx),
-		WinCoinRate:             q.WinCoinRate.WithContext(ctx),
-		WinCoinReward:           q.WinCoinReward.WithContext(ctx),
-		WinUserWallet:           q.WinUserWallet.WithContext(ctx),
-		WinCoinWithdrawalRecord: q.WinCoinWithdrawalRecord.WithContext(ctx),
-		WinBetslipsDetails:      q.WinBetslipsDetails.WithContext(ctx),
-		WinPlatList:             q.WinPlatList.WithContext(ctx),
-		WinGameSlot:             q.WinGameSlot.WithContext(ctx),
+		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.WithContext(ctx),
+		AgentCommissionDay:        q.AgentCommissionDay.WithContext(ctx),
+		AgentCommissionYear:       q.AgentCommissionYear.WithContext(ctx),
+		AgentCommissionLog:        q.AgentCommissionLog.WithContext(ctx),
+		AgentCommission:           q.AgentCommission.WithContext(ctx),
+		WinUserStatistics:         q.WinUserStatistics.WithContext(ctx),
+		WinBetslips1:              q.WinBetslips1.WithContext(ctx),
+		WinBetslips5:              q.WinBetslips5.WithContext(ctx),
+		WinBetslips9:              q.WinBetslips9.WithContext(ctx),
+		WinBetslipsDetails1:       q.WinBetslipsDetails1.WithContext(ctx),
+		WinBetslipsDetails5:       q.WinBetslipsDetails5.WithContext(ctx),
+		WinCoinAdminTransfer:      q.WinCoinAdminTransfer.WithContext(ctx),
+		WinCoinDepositRecord:      q.WinCoinDepositRecord.WithContext(ctx),
+		WinCoinLog:                q.WinCoinLog.WithContext(ctx),
+		WinCoinLog5:               q.WinCoinLog5.WithContext(ctx),
+		WinCoinRate:               q.WinCoinRate.WithContext(ctx),
+		WinCoinReward:             q.WinCoinReward.WithContext(ctx),
+		WinUserWallet:             q.WinUserWallet.WithContext(ctx),
+		WinCoinWithdrawalRecord:   q.WinCoinWithdrawalRecord.WithContext(ctx),
+		WinBetslipsDetails:        q.WinBetslipsDetails.WithContext(ctx),
+		WinPlatList:               q.WinPlatList.WithContext(ctx),
+		WinGameSlot:               q.WinGameSlot.WithContext(ctx),
 
 		WinCustomer:                   q.WinCustomer.WithContext(ctx),
 		ActivityAlertLog:              q.ActivityAlertLog.WithContext(ctx),
