@@ -22,6 +22,7 @@ type WinPayChannel struct {
 	Status             int64  `gorm:"column:status;type:tinyint;not null;default:1;comment:状态;0:关闭 1:开启" json:"status"`                                       // 状态;0:关闭 1:开启
 	RequestURL         string `gorm:"column:request_url;type:varchar(255);not null;comment:请求三方支付地址" json:"requestUrl"`                                       // 请求三方支付地址
 	NotifyURL          string `gorm:"column:notify_url;type:varchar(255);not null;comment:回调地址" json:"notifyUrl"`                                             // 回调地址
+	ReturnURL          string `gorm:"column:return_url;type:varchar(255);comment:返回URL" json:"returnUrl"`                                                     // 返回URL
 	Currency           string `gorm:"column:currency;type:varchar(100);not null;comment:币种" json:"currency"`                                                  // 币种
 	ChannelConfig      string `gorm:"column:channel_config;type:varchar(512);comment:通道配置参数" json:"channelConfig"`                                            // 通道配置参数
 	CreatedAt          int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                                                        // 创建时间

@@ -41,6 +41,7 @@ func newWinPayChannel(db *gorm.DB, opts ...gen.DOOption) winPayChannel {
 	_winPayChannel.Status = field.NewInt64(tableName, "status")
 	_winPayChannel.RequestURL = field.NewString(tableName, "request_url")
 	_winPayChannel.NotifyURL = field.NewString(tableName, "notify_url")
+	_winPayChannel.ReturnURL = field.NewString(tableName, "return_url")
 	_winPayChannel.Currency = field.NewString(tableName, "currency")
 	_winPayChannel.ChannelConfig = field.NewString(tableName, "channel_config")
 	_winPayChannel.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -75,6 +76,7 @@ type winPayChannel struct {
 	Status             field.Int64  // 状态;0:关闭 1:开启
 	RequestURL         field.String // 请求三方支付地址
 	NotifyURL          field.String // 回调地址
+	ReturnURL          field.String // 返回URL
 	Currency           field.String // 币种
 	ChannelConfig      field.String // 通道配置参数
 	CreatedAt          field.Int64  // 创建时间
@@ -115,6 +117,7 @@ func (w *winPayChannel) updateTableName(table string) *winPayChannel {
 	w.Status = field.NewInt64(table, "status")
 	w.RequestURL = field.NewString(table, "request_url")
 	w.NotifyURL = field.NewString(table, "notify_url")
+	w.ReturnURL = field.NewString(table, "return_url")
 	w.Currency = field.NewString(table, "currency")
 	w.ChannelConfig = field.NewString(table, "channel_config")
 	w.CreatedAt = field.NewInt64(table, "created_at")
@@ -141,7 +144,7 @@ func (w *winPayChannel) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (w *winPayChannel) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 24)
+	w.fieldMap = make(map[string]field.Expr, 25)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["code"] = w.Code
 	w.fieldMap["name"] = w.Name
@@ -156,6 +159,7 @@ func (w *winPayChannel) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["request_url"] = w.RequestURL
 	w.fieldMap["notify_url"] = w.NotifyURL
+	w.fieldMap["return_url"] = w.ReturnURL
 	w.fieldMap["currency"] = w.Currency
 	w.fieldMap["channel_config"] = w.ChannelConfig
 	w.fieldMap["created_at"] = w.CreatedAt
