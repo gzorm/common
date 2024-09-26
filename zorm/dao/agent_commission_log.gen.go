@@ -30,6 +30,9 @@ func newAgentCommissionLog(db *gorm.DB, opts ...gen.DOOption) agentCommissionLog
 	_agentCommissionLog.ID = field.NewInt64(tableName, "id")
 	_agentCommissionLog.OrderID = field.NewString(tableName, "order_id")
 	_agentCommissionLog.AgentID = field.NewInt64(tableName, "agent_id")
+	_agentCommissionLog.AgentId1 = field.NewInt64(tableName, "agent_id1")
+	_agentCommissionLog.AgentId2 = field.NewInt64(tableName, "agent_id2")
+	_agentCommissionLog.AgentId3 = field.NewInt64(tableName, "agent_id3")
 	_agentCommissionLog.AgentName = field.NewString(tableName, "agent_name")
 	_agentCommissionLog.TradeType = field.NewInt64(tableName, "trade_type")
 	_agentCommissionLog.OutIn = field.NewInt64(tableName, "out_in")
@@ -51,6 +54,9 @@ type agentCommissionLog struct {
 	ID         field.Int64  // 主键序号
 	OrderID    field.String // 订单序号
 	AgentID    field.Int64  // 代理商序号
+	AgentId1   field.Int64  // 一级代理序号
+	AgentId2   field.Int64  // 二级代理序号
+	AgentId3   field.Int64  // 三级代理序号
 	AgentName  field.String // 代理账号
 	TradeType  field.Int64  // 交易类型 1==发放 2==扣除 3==提现成功  4==提现失败
 	OutIn      field.Int64  // 收支类型 0==支出  1==收入
@@ -77,6 +83,9 @@ func (a *agentCommissionLog) updateTableName(table string) *agentCommissionLog {
 	a.ID = field.NewInt64(table, "id")
 	a.OrderID = field.NewString(table, "order_id")
 	a.AgentID = field.NewInt64(table, "agent_id")
+	a.AgentId1 = field.NewInt64(table, "agent_id1")
+	a.AgentId2 = field.NewInt64(table, "agent_id2")
+	a.AgentId3 = field.NewInt64(table, "agent_id3")
 	a.AgentName = field.NewString(table, "agent_name")
 	a.TradeType = field.NewInt64(table, "trade_type")
 	a.OutIn = field.NewInt64(table, "out_in")
@@ -100,10 +109,13 @@ func (a *agentCommissionLog) GetFieldByName(fieldName string) (field.OrderExpr, 
 }
 
 func (a *agentCommissionLog) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 10)
+	a.fieldMap = make(map[string]field.Expr, 13)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["order_id"] = a.OrderID
 	a.fieldMap["agent_id"] = a.AgentID
+	a.fieldMap["agent_id1"] = a.AgentId1
+	a.fieldMap["agent_id2"] = a.AgentId2
+	a.fieldMap["agent_id3"] = a.AgentId3
 	a.fieldMap["agent_name"] = a.AgentName
 	a.fieldMap["trade_type"] = a.TradeType
 	a.fieldMap["out_in"] = a.OutIn
