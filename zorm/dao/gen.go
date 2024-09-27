@@ -18,6 +18,7 @@ import (
 
 var (
 	Q                         = new(Query)
+	UserDailyReport           *userDailyReport
 	WinBetslipsDateStatistics *winBetslipsDateStatistics
 	AgentCommissionDay        *agentCommissionDay
 	AgentCommissionYear       *agentCommissionYear
@@ -157,6 +158,7 @@ var (
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
 
+	UserDailyReport = &Q.UserDailyReport
 	WinBetslipsDateStatistics = &Q.WinBetslipsDateStatistics
 	AgentCommissionDay = &Q.AgentCommissionDay
 	AgentCommissionYear = &Q.AgentCommissionYear
@@ -296,6 +298,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                        db,
+		UserDailyReport:           newUserDailyReport(db, opts...),
 		WinBetslipsDateStatistics: newWinBetslipsDateStatistics(db, opts...),
 		AgentCommissionDay:        newAgentCommissionDay(db, opts...),
 		AgentCommissionYear:       newAgentCommissionYear(db, opts...),
@@ -435,6 +438,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                        *gorm.DB
+	UserDailyReport           userDailyReport
 	WinBetslipsDateStatistics winBetslipsDateStatistics
 	AgentCommissionDay        agentCommissionDay
 	AgentCommissionYear       agentCommissionYear
@@ -576,6 +580,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		UserDailyReport:           q.UserDailyReport.clone(db),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.clone(db),
 		AgentCommissionDay:        q.AgentCommissionDay.clone(db),
 		AgentCommissionYear:       q.AgentCommissionYear.clone(db),
@@ -724,6 +729,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		UserDailyReport:           q.UserDailyReport.replaceDB(db),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.replaceDB(db),
 		AgentCommissionDay:        q.AgentCommissionDay.replaceDB(db),
 		AgentCommissionYear:       q.AgentCommissionYear.replaceDB(db),
@@ -862,6 +868,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	UserDailyReport           IUserDailyReportDo
 	WinBetslipsDateStatistics IWinBetslipsDateStatisticsDo
 	AgentCommissionDay        IAgentCommissionDayDo
 	AgentCommissionYear       IAgentCommissionYearDo
@@ -1000,6 +1007,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		UserDailyReport:           q.UserDailyReport.WithContext(ctx),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.WithContext(ctx),
 		AgentCommissionDay:        q.AgentCommissionDay.WithContext(ctx),
 		AgentCommissionYear:       q.AgentCommissionYear.WithContext(ctx),
