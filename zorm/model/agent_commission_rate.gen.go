@@ -12,6 +12,7 @@ const TableNameAgentCommissionRate = "agent_commission_rate"
 type AgentCommissionRate struct {
 	ID          int64           `gorm:"column:id;type:int unsigned;primaryKey;autoIncrement:true;comment:id" json:"id,string"`       // id
 	AgentID     int64           `gorm:"column:agent_id;type:int;not null;comment:代理uid" json:"agentId"`                              // 代理uid
+	AgentLevel  int64           `gorm:"column:agent_level;type:int;default:1;comment:级别" json:"agentLevel"`                          // 级别
 	SettingType int64           `gorm:"column:setting_type;type:tinyint;not null;comment:0總代,1非總代" json:"settingType"`               // 0總代,1非總代
 	MinAmount   int64           `gorm:"column:min_amount;type:bigint;not null;comment:金额区间 小" json:"minAmount"`                      // 金额区间 小
 	MaxAmount   int64           `gorm:"column:max_amount;type:bigint;not null;comment:金额区间 大" json:"maxAmount"`                      // 金额区间 大

@@ -29,6 +29,7 @@ func newAgentCommissionRate(db *gorm.DB, opts ...gen.DOOption) agentCommissionRa
 	_agentCommissionRate.ALL = field.NewAsterisk(tableName)
 	_agentCommissionRate.ID = field.NewInt64(tableName, "id")
 	_agentCommissionRate.AgentID = field.NewInt64(tableName, "agent_id")
+	_agentCommissionRate.AgentLevel = field.NewInt64(tableName, "agent_level")
 	_agentCommissionRate.SettingType = field.NewInt64(tableName, "setting_type")
 	_agentCommissionRate.MinAmount = field.NewInt64(tableName, "min_amount")
 	_agentCommissionRate.MaxAmount = field.NewInt64(tableName, "max_amount")
@@ -48,6 +49,7 @@ type agentCommissionRate struct {
 	ALL         field.Asterisk
 	ID          field.Int64 // id
 	AgentID     field.Int64 // 代理uid
+	AgentLevel  field.Int64 // 级别
 	SettingType field.Int64 // 0總代,1非總代
 	MinAmount   field.Int64 // 金额区间 小
 	MaxAmount   field.Int64 // 金额区间 大
@@ -72,6 +74,7 @@ func (a *agentCommissionRate) updateTableName(table string) *agentCommissionRate
 	a.ALL = field.NewAsterisk(table)
 	a.ID = field.NewInt64(table, "id")
 	a.AgentID = field.NewInt64(table, "agent_id")
+	a.AgentLevel = field.NewInt64(table, "agent_level")
 	a.SettingType = field.NewInt64(table, "setting_type")
 	a.MinAmount = field.NewInt64(table, "min_amount")
 	a.MaxAmount = field.NewInt64(table, "max_amount")
@@ -94,9 +97,10 @@ func (a *agentCommissionRate) GetFieldByName(fieldName string) (field.OrderExpr,
 }
 
 func (a *agentCommissionRate) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 8)
+	a.fieldMap = make(map[string]field.Expr, 9)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["agent_id"] = a.AgentID
+	a.fieldMap["agent_level"] = a.AgentLevel
 	a.fieldMap["setting_type"] = a.SettingType
 	a.fieldMap["min_amount"] = a.MinAmount
 	a.fieldMap["max_amount"] = a.MaxAmount
