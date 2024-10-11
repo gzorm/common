@@ -40,6 +40,7 @@ func newWinCoinAdminTransfer(db *gorm.DB, opts ...gen.DOOption) winCoinAdminTran
 	_winCoinAdminTransfer.FlowClaim = field.NewInt64(tableName, "flow_claim")
 	_winCoinAdminTransfer.Message = field.NewString(tableName, "message")
 	_winCoinAdminTransfer.MerchantID = field.NewInt64(tableName, "merchant_id")
+	_winCoinAdminTransfer.Status = field.NewInt64(tableName, "status")
 
 	_winCoinAdminTransfer.fillFieldMap()
 
@@ -64,6 +65,7 @@ type winCoinAdminTransfer struct {
 	FlowClaim  field.Int64  // 流水倍数
 	Message    field.String // 通知客户信息
 	MerchantID field.Int64  // 商户id
+	Status     field.Int64  // 1=未使用, 2=调账完成
 
 	fieldMap map[string]field.Expr
 }
@@ -93,6 +95,7 @@ func (w *winCoinAdminTransfer) updateTableName(table string) *winCoinAdminTransf
 	w.FlowClaim = field.NewInt64(table, "flow_claim")
 	w.Message = field.NewString(table, "message")
 	w.MerchantID = field.NewInt64(table, "merchant_id")
+	w.Status = field.NewInt64(table, "status")
 
 	w.fillFieldMap()
 
@@ -109,7 +112,7 @@ func (w *winCoinAdminTransfer) GetFieldByName(fieldName string) (field.OrderExpr
 }
 
 func (w *winCoinAdminTransfer) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 13)
+	w.fieldMap = make(map[string]field.Expr, 14)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["admin_id"] = w.AdminID
 	w.fieldMap["coin"] = w.Coin
@@ -123,6 +126,7 @@ func (w *winCoinAdminTransfer) fillFieldMap() {
 	w.fieldMap["flow_claim"] = w.FlowClaim
 	w.fieldMap["message"] = w.Message
 	w.fieldMap["merchant_id"] = w.MerchantID
+	w.fieldMap["status"] = w.Status
 }
 
 func (w winCoinAdminTransfer) clone(db *gorm.DB) winCoinAdminTransfer {

@@ -20,9 +20,10 @@ type WinCoinAdminTransfer struct {
 	Mark       string          `gorm:"column:mark;type:varchar(255);not null;comment:调账原因" json:"mark"`                               // 调账原因
 	CreatedAt  int64           `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt  int64           `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	FlowClaim  int64           `gorm:"column:flow_claim;type:int;not null;comment:流水倍数" json:"flowClaim"`   // 流水倍数
-	Message    string          `gorm:"column:message;type:varchar(500);comment:通知客户信息" json:"message"`      // 通知客户信息
-	MerchantID int64           `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"` // 商户id
+	FlowClaim  int64           `gorm:"column:flow_claim;type:int;not null;comment:流水倍数" json:"flowClaim"`                 // 流水倍数
+	Message    string          `gorm:"column:message;type:varchar(500);comment:通知客户信息" json:"message"`                    // 通知客户信息
+	MerchantID int64           `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"`               // 商户id
+	Status     int64           `gorm:"column:status;type:tinyint;not null;default:1;comment:1=未使用, 2=调账完成" json:"status"` // 1=未使用, 2=调账完成
 }
 
 // TableName WinCoinAdminTransfer's table name
