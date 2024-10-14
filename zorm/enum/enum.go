@@ -36,9 +36,10 @@ const (
 
 // Xb_STATUS状态
 const (
-	STATUS_WAITING = iota + 1 // 待开奖
-	STATUS_FINISH             // 已开奖
-	STATUS_REFUND             // 退款
+	STATUS_WAITING              = iota + 1 // 待开奖
+	STATUS_FINISH                          // 已开奖
+	STATUS_REFUND                          // 退款
+	STATUS_WAITING_UNDETERMINED            // 已下注待开彩(未确定下注)
 )
 
 type WalletCategory int8
