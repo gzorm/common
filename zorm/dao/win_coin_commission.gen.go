@@ -36,6 +36,7 @@ func newWinCoinCommission(db *gorm.DB, opts ...gen.DOOption) winCoinCommission {
 	_winCoinCommission.SubUID = field.NewInt64(tableName, "sub_uid")
 	_winCoinCommission.SubUsername = field.NewString(tableName, "sub_username")
 	_winCoinCommission.SubBetTrunover = field.NewField(tableName, "sub_bet_trunover")
+	_winCoinCommission.SubBetProfit = field.NewField(tableName, "sub_bet_profit")
 	_winCoinCommission.Rate = field.NewField(tableName, "rate")
 	_winCoinCommission.CoinBefore = field.NewField(tableName, "coin_before")
 	_winCoinCommission.Status = field.NewInt64(tableName, "status")
@@ -55,13 +56,14 @@ type winCoinCommission struct {
 	ALL            field.Asterisk
 	ID             field.Int64
 	UID            field.Int64  // 代理UID
-	Username       field.String // 用户名
+	Username       field.String // 代理用户名
 	AgentLevel     field.Int64  // 代理层级
 	Riqi           field.Int64  // 佣金时间
 	Coin           field.Field  // 佣金金额
 	SubUID         field.Int64  // 下级UID
 	SubUsername    field.String // 下级用户名
 	SubBetTrunover field.Field  // 下级流水总额
+	SubBetProfit   field.Field  // 下级盈亏
 	Rate           field.Field  // 佣金比例
 	CoinBefore     field.Field  // 即时余额
 	Status         field.Int64  // 状态:0-未发放 1-已发放
@@ -94,6 +96,7 @@ func (w *winCoinCommission) updateTableName(table string) *winCoinCommission {
 	w.SubUID = field.NewInt64(table, "sub_uid")
 	w.SubUsername = field.NewString(table, "sub_username")
 	w.SubBetTrunover = field.NewField(table, "sub_bet_trunover")
+	w.SubBetProfit = field.NewField(table, "sub_bet_profit")
 	w.Rate = field.NewField(table, "rate")
 	w.CoinBefore = field.NewField(table, "coin_before")
 	w.Status = field.NewInt64(table, "status")
@@ -117,7 +120,7 @@ func (w *winCoinCommission) GetFieldByName(fieldName string) (field.OrderExpr, b
 }
 
 func (w *winCoinCommission) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 16)
+	w.fieldMap = make(map[string]field.Expr, 17)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -127,6 +130,7 @@ func (w *winCoinCommission) fillFieldMap() {
 	w.fieldMap["sub_uid"] = w.SubUID
 	w.fieldMap["sub_username"] = w.SubUsername
 	w.fieldMap["sub_bet_trunover"] = w.SubBetTrunover
+	w.fieldMap["sub_bet_profit"] = w.SubBetProfit
 	w.fieldMap["rate"] = w.Rate
 	w.fieldMap["coin_before"] = w.CoinBefore
 	w.fieldMap["status"] = w.Status

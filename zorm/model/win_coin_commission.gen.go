@@ -12,13 +12,14 @@ const TableNameWinCoinCommission = "win_coin_commission"
 type WinCoinCommission struct {
 	ID             int64           `gorm:"column:id;type:bigint;primaryKey;autoIncrement:true" json:"id,string"`
 	UID            int64           `gorm:"column:uid;type:int;comment:代理UID" json:"uid"`                                                   // 代理UID
-	Username       string          `gorm:"column:username;type:varchar(32);comment:用户名" json:"username"`                                   // 用户名
+	Username       string          `gorm:"column:username;type:varchar(32);comment:代理用户名" json:"username"`                                 // 代理用户名
 	AgentLevel     int64           `gorm:"column:agent_level;type:tinyint;comment:代理层级" json:"agentLevel"`                                 // 代理层级
 	Riqi           int64           `gorm:"column:riqi;type:int;comment:佣金时间" json:"riqi"`                                                  // 佣金时间
 	Coin           decimal.Decimal `gorm:"column:coin;type:decimal(15,4);default:0.0000;comment:佣金金额" json:"coin"`                         // 佣金金额
 	SubUID         int64           `gorm:"column:sub_uid;type:int;comment:下级UID" json:"subUid"`                                            // 下级UID
 	SubUsername    string          `gorm:"column:sub_username;type:varchar(32);comment:下级用户名" json:"subUsername"`                          // 下级用户名
 	SubBetTrunover decimal.Decimal `gorm:"column:sub_bet_trunover;type:decimal(15,4);default:0.0000;comment:下级流水总额" json:"subBetTrunover"` // 下级流水总额
+	SubBetProfit   decimal.Decimal `gorm:"column:sub_bet_profit;type:decimal(15,4);default:0.0000;comment:下级盈亏" json:"subBetProfit"`       // 下级盈亏
 	Rate           decimal.Decimal `gorm:"column:rate;type:decimal(15,5);comment:佣金比例" json:"rate"`                                        // 佣金比例
 	CoinBefore     decimal.Decimal `gorm:"column:coin_before;type:decimal(15,4);default:0.0000;comment:即时余额" json:"coinBefore"`            // 即时余额
 	Status         int64           `gorm:"column:status;type:tinyint;comment:状态:0-未发放 1-已发放" json:"status"`                                // 状态:0-未发放 1-已发放
