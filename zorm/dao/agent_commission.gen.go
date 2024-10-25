@@ -35,6 +35,7 @@ func newAgentCommission(db *gorm.DB, opts ...gen.DOOption) agentCommission {
 	_agentCommission.CommissionAmount = field.NewField(tableName, "commission_amount")
 	_agentCommission.CommissionMonth = field.NewString(tableName, "commission_month")
 	_agentCommission.DistributedAmount = field.NewField(tableName, "distributed_amount")
+	_agentCommission.BalanceAmount = field.NewField(tableName, "balance_amount")
 	_agentCommission.Status = field.NewInt64(tableName, "status")
 	_agentCommission.LastOperator = field.NewString(tableName, "last_operator")
 	_agentCommission.LastOperationTime = field.NewInt64(tableName, "last_operation_time")
@@ -58,6 +59,7 @@ type agentCommission struct {
 	CommissionAmount  field.Field  // 当月佣金额度
 	CommissionMonth   field.String // 月份
 	DistributedAmount field.Field  // 当前已发放额度
+	BalanceAmount     field.Field  // 可提现金额
 	Status            field.Int64  // 状态(未发放=2，已发放=1，不可发放=3)
 	LastOperator      field.String // 最后操作人
 	LastOperationTime field.Int64  // 最后操作时间
@@ -86,6 +88,7 @@ func (a *agentCommission) updateTableName(table string) *agentCommission {
 	a.CommissionAmount = field.NewField(table, "commission_amount")
 	a.CommissionMonth = field.NewString(table, "commission_month")
 	a.DistributedAmount = field.NewField(table, "distributed_amount")
+	a.BalanceAmount = field.NewField(table, "balance_amount")
 	a.Status = field.NewInt64(table, "status")
 	a.LastOperator = field.NewString(table, "last_operator")
 	a.LastOperationTime = field.NewInt64(table, "last_operation_time")
@@ -106,7 +109,7 @@ func (a *agentCommission) GetFieldByName(fieldName string) (field.OrderExpr, boo
 }
 
 func (a *agentCommission) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 12)
+	a.fieldMap = make(map[string]field.Expr, 13)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["agent_id"] = a.AgentID
 	a.fieldMap["agent_name"] = a.AgentName
@@ -115,6 +118,7 @@ func (a *agentCommission) fillFieldMap() {
 	a.fieldMap["commission_amount"] = a.CommissionAmount
 	a.fieldMap["commission_month"] = a.CommissionMonth
 	a.fieldMap["distributed_amount"] = a.DistributedAmount
+	a.fieldMap["balance_amount"] = a.BalanceAmount
 	a.fieldMap["status"] = a.Status
 	a.fieldMap["last_operator"] = a.LastOperator
 	a.fieldMap["last_operation_time"] = a.LastOperationTime
