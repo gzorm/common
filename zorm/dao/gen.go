@@ -18,6 +18,7 @@ import (
 
 var (
 	Q                         = new(Query)
+	WinFacebookClick          *winFacebookClick
 	WinAgentUserReport        *winAgentUserReport
 	UserDailyReport           *userDailyReport
 	WinBetslipsDateStatistics *winBetslipsDateStatistics
@@ -158,6 +159,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	WinFacebookClick = &Q.WinFacebookClick
 	WinAgentUserReport = &Q.WinAgentUserReport
 	UserDailyReport = &Q.UserDailyReport
 	WinBetslipsDateStatistics = &Q.WinBetslipsDateStatistics
@@ -299,6 +301,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                        db,
+		WinFacebookClick:          newWinFacebookClick(db, opts...),
 		WinAgentUserReport:        newWinAgentUserReport(db, opts...),
 		UserDailyReport:           newUserDailyReport(db, opts...),
 		WinBetslipsDateStatistics: newWinBetslipsDateStatistics(db, opts...),
@@ -440,6 +443,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                        *gorm.DB
+	WinFacebookClick          winFacebookClick
 	WinAgentUserReport        winAgentUserReport
 	UserDailyReport           userDailyReport
 	WinBetslipsDateStatistics winBetslipsDateStatistics
@@ -583,6 +587,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinFacebookClick:          q.WinFacebookClick.clone(db),
 		WinAgentUserReport:        q.WinAgentUserReport.clone(db),
 		UserDailyReport:           q.UserDailyReport.clone(db),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.clone(db),
@@ -733,6 +738,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinFacebookClick:          q.WinFacebookClick.replaceDB(db),
 		WinAgentUserReport:        q.WinAgentUserReport.replaceDB(db),
 		UserDailyReport:           q.UserDailyReport.replaceDB(db),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.replaceDB(db),
@@ -873,6 +879,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	WinFacebookClick          IWinFacebookClickDo
 	WinAgentUserReport        IWinAgentUserReportDo
 	UserDailyReport           IUserDailyReportDo
 	WinBetslipsDateStatistics IWinBetslipsDateStatisticsDo
@@ -1013,6 +1020,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		WinFacebookClick:          q.WinFacebookClick.WithContext(ctx),
 		WinAgentUserReport:        q.WinAgentUserReport.WithContext(ctx),
 		UserDailyReport:           q.UserDailyReport.WithContext(ctx),
 		WinBetslipsDateStatistics: q.WinBetslipsDateStatistics.WithContext(ctx),
