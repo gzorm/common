@@ -156,6 +156,7 @@ var (
 	XxlJobLogglue                 *xxlJobLogglue
 	XxlJobRegistry                *xxlJobRegistry
 	XxlJobUser                    *xxlJobUser
+	GameOperationUrl              *gameOperationUrl
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
@@ -441,6 +442,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		XxlJobLogglue:                 newXxlJobLogglue(db, opts...),
 		XxlJobRegistry:                newXxlJobRegistry(db, opts...),
 		XxlJobUser:                    newXxlJobUser(db, opts...),
+		GameOperationUrl:              newGameOperationUrl(db, opts...),
 	}
 }
 
@@ -584,6 +586,7 @@ type Query struct {
 	XxlJobLogglue                 xxlJobLogglue
 	XxlJobRegistry                xxlJobRegistry
 	XxlJobUser                    xxlJobUser
+	GameOperationUrl              gameOperationUrl
 }
 
 func (q *Query) Available() bool { return q.db != nil }
@@ -729,6 +732,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		XxlJobLogglue:                 q.XxlJobLogglue.clone(db),
 		XxlJobRegistry:                q.XxlJobRegistry.clone(db),
 		XxlJobUser:                    q.XxlJobUser.clone(db),
+		GameOperationUrl:              q.GameOperationUrl.clone(db),
 	}
 }
 
@@ -881,6 +885,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		XxlJobLogglue:                 q.XxlJobLogglue.replaceDB(db),
 		XxlJobRegistry:                q.XxlJobRegistry.replaceDB(db),
 		XxlJobUser:                    q.XxlJobUser.replaceDB(db),
+		GameOperationUrl:              q.GameOperationUrl.replaceDB(db),
 	}
 }
 
@@ -1023,6 +1028,7 @@ type queryCtx struct {
 	XxlJobLogglue                 IXxlJobLogglueDo
 	XxlJobRegistry                IXxlJobRegistryDo
 	XxlJobUser                    IXxlJobUserDo
+	GameOperationUrl              IGameOperationUrlDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
@@ -1165,6 +1171,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		XxlJobLogglue:                 q.XxlJobLogglue.WithContext(ctx),
 		XxlJobRegistry:                q.XxlJobRegistry.WithContext(ctx),
 		XxlJobUser:                    q.XxlJobUser.WithContext(ctx),
+		GameOperationUrl:              q.GameOperationUrl.WithContext(ctx),
 	}
 }
 
