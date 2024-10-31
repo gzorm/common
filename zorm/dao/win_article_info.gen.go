@@ -33,6 +33,7 @@ func newWinArticleInfo(db *gorm.DB, opts ...gen.DOOption) winArticleInfo {
 	_winArticleInfo.Sort = field.NewInt64(tableName, "sort")
 	_winArticleInfo.Status = field.NewInt64(tableName, "status")
 	_winArticleInfo.Content = field.NewString(tableName, "content")
+	_winArticleInfo.Img = field.NewString(tableName, "img")
 	_winArticleInfo.CreateBy = field.NewString(tableName, "create_by")
 	_winArticleInfo.UpdateBy = field.NewString(tableName, "update_by")
 	_winArticleInfo.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -54,6 +55,7 @@ type winArticleInfo struct {
 	Sort      field.Int64  // 排序
 	Status    field.Int64  // 状态:1-启用 0-停用
 	Content   field.String // 内容
+	Img       field.String // 图片
 	CreateBy  field.String // 创建者
 	UpdateBy  field.String // 更新人
 	CreatedAt field.Int64
@@ -80,6 +82,7 @@ func (w *winArticleInfo) updateTableName(table string) *winArticleInfo {
 	w.Sort = field.NewInt64(table, "sort")
 	w.Status = field.NewInt64(table, "status")
 	w.Content = field.NewString(table, "content")
+	w.Img = field.NewString(table, "img")
 	w.CreateBy = field.NewString(table, "create_by")
 	w.UpdateBy = field.NewString(table, "update_by")
 	w.CreatedAt = field.NewInt64(table, "created_at")
@@ -100,13 +103,14 @@ func (w *winArticleInfo) GetFieldByName(fieldName string) (field.OrderExpr, bool
 }
 
 func (w *winArticleInfo) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 10)
+	w.fieldMap = make(map[string]field.Expr, 11)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["language"] = w.Language
 	w.fieldMap["title"] = w.Title
 	w.fieldMap["sort"] = w.Sort
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["content"] = w.Content
+	w.fieldMap["img"] = w.Img
 	w.fieldMap["create_by"] = w.CreateBy
 	w.fieldMap["update_by"] = w.UpdateBy
 	w.fieldMap["created_at"] = w.CreatedAt
