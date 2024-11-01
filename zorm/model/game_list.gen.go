@@ -22,6 +22,7 @@ type GameList struct {
 	OriginalIcon          string `gorm:"column:original_icon;type:varchar(512);not null;comment:英文图片" json:"originalIcon"`                                    // 英文图片
 	LatestIcon            string `gorm:"column:latest_icon;type:varchar(512);comment:新版游戏图片" json:"latestIcon"`                                               // 新版游戏图片
 	IsNew                 int64  `gorm:"column:is_new;type:tinyint;not null;comment:是否新游戏:1-是 0-否" json:"isNew"`                                              // 是否新游戏:1-是 0-否
+	IsRotated             int64  `gorm:"column:is_rotated;type:tinyint(1);not null;default:1;comment:1=否, 3=是" json:"isRotated"`                              // 1=否, 3=是
 	FavoriteStar          int64  `gorm:"column:favorite_star;type:int;not null;comment:收藏值" json:"favoriteStar"`                                              // 收藏值
 	HotStar               int64  `gorm:"column:hot_star;type:int;not null;comment:热度" json:"hotStar"`                                                         // 热度
 	Device                int64  `gorm:"column:device;type:tinyint;comment:设备:0-all 1-pc 2-h5" json:"device"`                                                 // 设备:0-all 1-pc 2-h5

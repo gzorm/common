@@ -41,6 +41,7 @@ func newGameList(db *gorm.DB, opts ...gen.DOOption) gameList {
 	_gameList.OriginalIcon = field.NewString(tableName, "original_icon")
 	_gameList.LatestIcon = field.NewString(tableName, "latest_icon")
 	_gameList.IsNew = field.NewInt64(tableName, "is_new")
+	_gameList.IsRotated = field.NewInt64(tableName, "is_rotated")
 	_gameList.FavoriteStar = field.NewInt64(tableName, "favorite_star")
 	_gameList.HotStar = field.NewInt64(tableName, "hot_star")
 	_gameList.Device = field.NewInt64(tableName, "device")
@@ -75,6 +76,7 @@ type gameList struct {
 	OriginalIcon          field.String // 英文图片
 	LatestIcon            field.String // 新版游戏图片
 	IsNew                 field.Int64  // 是否新游戏:1-是 0-否
+	IsRotated             field.Int64  // 1=否, 3=是
 	FavoriteStar          field.Int64  // 收藏值
 	HotStar               field.Int64  // 热度
 	Device                field.Int64  // 设备:0-all 1-pc 2-h5
@@ -114,6 +116,7 @@ func (g *gameList) updateTableName(table string) *gameList {
 	g.OriginalIcon = field.NewString(table, "original_icon")
 	g.LatestIcon = field.NewString(table, "latest_icon")
 	g.IsNew = field.NewInt64(table, "is_new")
+	g.IsRotated = field.NewInt64(table, "is_rotated")
 	g.FavoriteStar = field.NewInt64(table, "favorite_star")
 	g.HotStar = field.NewInt64(table, "hot_star")
 	g.Device = field.NewInt64(table, "device")
@@ -139,7 +142,7 @@ func (g *gameList) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (g *gameList) fillFieldMap() {
-	g.fieldMap = make(map[string]field.Expr, 23)
+	g.fieldMap = make(map[string]field.Expr, 24)
 	g.fieldMap["id"] = g.ID
 	g.fieldMap["code"] = g.Code
 	g.fieldMap["game_provider_subtype_id"] = g.GameProviderSubtypeID
@@ -154,6 +157,7 @@ func (g *gameList) fillFieldMap() {
 	g.fieldMap["original_icon"] = g.OriginalIcon
 	g.fieldMap["latest_icon"] = g.LatestIcon
 	g.fieldMap["is_new"] = g.IsNew
+	g.fieldMap["is_rotated"] = g.IsRotated
 	g.fieldMap["favorite_star"] = g.FavoriteStar
 	g.fieldMap["hot_star"] = g.HotStar
 	g.fieldMap["device"] = g.Device
