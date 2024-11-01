@@ -35,6 +35,7 @@ func newGameOperationUrl(db *gorm.DB, opts ...gen.DOOption) gameOperationUrl {
 	_gameOperationUrl.HomeIcon = field.NewString(tableName, "home_icon")
 	_gameOperationUrl.VisitorName = field.NewString(tableName, "visitor_name")
 	_gameOperationUrl.VisitorIcon = field.NewString(tableName, "visitor_icon")
+	_gameOperationUrl.GameProviderID = field.NewInt64(tableName, "game_provider_id")
 	_gameOperationUrl.MatchID = field.NewString(tableName, "match_id")
 	_gameOperationUrl.LeagueID = field.NewString(tableName, "league_id")
 	_gameOperationUrl.Status = field.NewInt64(tableName, "status")
@@ -52,22 +53,23 @@ func newGameOperationUrl(db *gorm.DB, opts ...gen.DOOption) gameOperationUrl {
 type gameOperationUrl struct {
 	gameOperationUrlDo
 
-	ALL         field.Asterisk
-	ID          field.Int64
-	Language    field.String // 语言
-	LeagueName  field.String // 联赛名称
-	MatchTime   field.Int64  // 比赛时间
-	HomeName    field.String // 主队名称
-	HomeIcon    field.String // 主队图标
-	VisitorName field.String // 客队名称
-	VisitorIcon field.String // 客队图标
-	MatchID     field.String // 比赛id
-	LeagueID    field.String // 联赛id
-	Status      field.Int64  // 状态: 1-启用 0-停用
-	CreatedAt   field.Int64  // 创建时间
-	UpdatedAt   field.Int64  // 更新时间
-	CreatedBy   field.String // 操作人姓名
-	UpdatedBy   field.String // 最后更新人
+	ALL            field.Asterisk
+	ID             field.Int64
+	Language       field.String // 语言
+	LeagueName     field.String // 联赛名称
+	MatchTime      field.Int64  // 比赛时间
+	HomeName       field.String // 主队名称
+	HomeIcon       field.String // 主队图标
+	VisitorName    field.String // 客队名称
+	VisitorIcon    field.String // 客队图标
+	GameProviderID field.Int64  // 游戏平台id
+	MatchID        field.String // 比赛id
+	LeagueID       field.String // 联赛id
+	Status         field.Int64  // 状态: 1-启用 0-停用
+	CreatedAt      field.Int64  // 创建时间
+	UpdatedAt      field.Int64  // 更新时间
+	CreatedBy      field.String // 操作人姓名
+	UpdatedBy      field.String // 最后更新人
 
 	fieldMap map[string]field.Expr
 }
@@ -92,6 +94,7 @@ func (g *gameOperationUrl) updateTableName(table string) *gameOperationUrl {
 	g.HomeIcon = field.NewString(table, "home_icon")
 	g.VisitorName = field.NewString(table, "visitor_name")
 	g.VisitorIcon = field.NewString(table, "visitor_icon")
+	g.GameProviderID = field.NewInt64(table, "game_provider_id")
 	g.MatchID = field.NewString(table, "match_id")
 	g.LeagueID = field.NewString(table, "league_id")
 	g.Status = field.NewInt64(table, "status")
@@ -115,7 +118,7 @@ func (g *gameOperationUrl) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (g *gameOperationUrl) fillFieldMap() {
-	g.fieldMap = make(map[string]field.Expr, 15)
+	g.fieldMap = make(map[string]field.Expr, 16)
 	g.fieldMap["id"] = g.ID
 	g.fieldMap["language"] = g.Language
 	g.fieldMap["league_name"] = g.LeagueName
@@ -124,6 +127,7 @@ func (g *gameOperationUrl) fillFieldMap() {
 	g.fieldMap["home_icon"] = g.HomeIcon
 	g.fieldMap["visitor_name"] = g.VisitorName
 	g.fieldMap["visitor_icon"] = g.VisitorIcon
+	g.fieldMap["game_provider_id"] = g.GameProviderID
 	g.fieldMap["match_id"] = g.MatchID
 	g.fieldMap["league_id"] = g.LeagueID
 	g.fieldMap["status"] = g.Status

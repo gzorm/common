@@ -299,6 +299,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	XxlJobLogglue = &Q.XxlJobLogglue
 	XxlJobRegistry = &Q.XxlJobRegistry
 	XxlJobUser = &Q.XxlJobUser
+	GameOperationUrl = &Q.GameOperationUrl
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
