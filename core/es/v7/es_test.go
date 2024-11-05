@@ -598,3 +598,38 @@ func extractFields2(result map[string]interface{}) ([]AggregationResult, int, er
 func TestBBB(t *testing.T) {
 
 }
+
+/*remark
+ ================SearchWithAfterAndSort=========================
+queryBody["sort"] = []map[string]string{
+    {"_doc": "asc"},
+}
+
+=================SearchWithScrollAndSort===========================
+results, totalHits, err := es.SearchWithScrollAndSort("my_index", conditions, 1*time.Minute, 10, "timestamp", "desc")
+if err != nil {
+    log.Fatalf("Search failed: %v", err)
+}
+fmt.Printf("Found %d documents\n", totalHits)
+
+==============================SearchWithPaginationAndSort=====================================
+sortFields := []SortField{
+    {Field: "timestamp", Order: "desc"},
+    {Field: "sort_order", Order: "asc"},
+}
+
+sources, totalCount, err := es.SearchWithPaginationAndSort("my_index", conditions, 0, 10, sortFields)
+if err != nil {
+    log.Fatalf("Search failed: %v", err)
+}
+==============================SearchSQLAndSort==============================================
+sortFields := []SortField{
+    {Field: "timestamp", Order: "desc"},
+    {Field: "sort_order", Order: "asc"},
+}
+
+results, err := es.SearchSQLAndSort("my_index", conditions, fields, aggs, sortFields)
+if err != nil {
+    log.Fatalf("Search failed: %v", err)
+}
+*/
