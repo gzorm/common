@@ -36,3 +36,9 @@ type QueryCondition struct {
 	Operator ComparisonOperator
 	Value    interface{}
 }
+
+// SearchWithPagination 查询带分页
+type SortField struct {
+	Field string
+	Order string
+}

@@ -126,7 +126,8 @@ func (es *ElasticsearchClient) GetDocument(index string, id string) (map[string]
 }
 
 // Search 查询
-func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition, fields []string) ([][]byte, int, error) {
+
+func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition, fields []string, sortFields []map[string]interface{}) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
 
@@ -199,6 +200,11 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 				"field": "_id", // 根据实际需要选择合适的字段
 			},
 		},
+	}
+
+	// 如果排序字段不为空，添加排序
+	if len(sortFields) > 0 {
+		queryBody["sort"] = sortFields
 	}
 
 	// 将查询体转换为 JSON 字符串
@@ -331,7 +337,148 @@ func (es *ElasticsearchClient) QueryByXPackSQL(query string) (map[string]interfa
 	return result, nil
 }
 
-// SearchWithPagination 查询带分页
+func (es *ElasticsearchClient) SearchWithPaginationAndMultiSort(index string, conditions []QueryCondition, from, size int, sortFields []SortField) ([][]byte, int, error) {
+	// 构建查询体
+	queryBody := make(map[string]interface{})
+	queryBody["from"] = from
+	queryBody["size"] = size
+
+	// 根据查询条件构建查询语句
+	if len(conditions) > 0 {
+		boolQuery := make(map[string]interface{})
+		mustClauses := make([]map[string]interface{}, 0)
+		mustNotClauses := make([]map[string]interface{}, 0)
+		for _, condition := range conditions {
+			switch condition.Operator {
+			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
+				// 数值类型范围查询
+				rangeQuery := map[string]interface{}{
+					string(condition.Operator): condition.Value,
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"range": map[string]interface{}{condition.Field: rangeQuery}})
+			case Equal:
+				// 精确匹配
+				mustClauses = append(mustClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+			case Match:
+				// 精确匹配
+				mustClauses = append(mustClauses, map[string]interface{}{"match": map[string]interface{}{condition.Field: condition.Value}})
+			case WildcardLeft:
+				// 左通配符匹配
+				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v", condition.Value)}})
+			case WildcardRight:
+				// 右通配符匹配
+				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("%v*", condition.Value)}})
+			case Wildcard:
+				// 双通配符匹配
+				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
+			case In:
+				// In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
+				}
+				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotIn:
+				// Not In 查询
+				values, ok := condition.Value.([]interface{})
+				if !ok {
+					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
+				}
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
+			case NotEqual:
+				// 不等于查询
+				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
+			default:
+				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
+			}
+		}
+
+		boolQuery["must"] = mustClauses
+		if len(mustNotClauses) > 0 {
+			boolQuery["must_not"] = mustNotClauses
+		}
+		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
+	}
+
+	// 添加聚合以获取总记录数
+	queryBody["aggs"] = map[string]interface{}{
+		"total_count": map[string]interface{}{
+			"cardinality": map[string]interface{}{
+				"field": "_id", // 这里根据实际需要选择合适的字段
+			},
+		},
+	}
+
+	// 添加排序字段
+	if len(sortFields) > 0 {
+		// 构建排序部分
+		sortArray := make([]map[string]interface{}, 0)
+		for _, sortField := range sortFields {
+			// 默认升序（asc），如果排序顺序是desc，则改为降序
+			if sortField.Order == "" {
+				sortField.Order = "asc" // 默认为升序
+			}
+			sortArray = append(sortArray, map[string]interface{}{
+				sortField.Field: map[string]interface{}{"order": sortField.Order},
+			})
+		}
+		queryBody["sort"] = sortArray
+	}
+
+	// 将查询体转换为 JSON 字符串
+	body, err := json.Marshal(queryBody)
+	if err != nil {
+		return nil, 0, fmt.Errorf("Error marshalling query body: %w", err)
+	}
+
+	// 创建搜索请求
+	req := esapi.SearchRequest{
+		Index: []string{index},
+		Body:  bytes.NewReader(body),
+	}
+
+	// 执行搜索
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
+	defer cancel()
+
+	res, err := req.Do(ctx, es.client.Transport)
+	if err != nil {
+		return nil, 0, fmt.Errorf("Error executing search request: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.IsError() {
+		return nil, 0, fmt.Errorf("Error response from Elasticsearch: %s", res.String())
+	}
+
+	// 解析响应
+	var result struct {
+		Hits struct {
+			Hits []struct {
+				Source json.RawMessage `json:"_source"`
+			} `json:"hits"`
+		} `json:"hits"`
+		Aggregations struct {
+			TotalCount struct {
+				Value int `json:"value"`
+			} `json:"total_count"`
+		} `json:"aggregations"`
+	}
+
+	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
+		return nil, 0, fmt.Errorf("Error parsing the response body: %w", err)
+	}
+
+	// 提取 _source 字段作为字节数组
+	sources := make([][]byte, len(result.Hits.Hits))
+	for i, hit := range result.Hits.Hits {
+		sources[i] = hit.Source
+	}
+
+	// 返回结果和总记录数
+	return sources, result.Aggregations.TotalCount.Value, nil
+}
+
 func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []QueryCondition, from, size int) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
@@ -460,7 +607,7 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 }
 
 // SearchWithScroll 使用Scroll API分页查询文档(适用于需要遍历大量数据的场景，它通过保持一个快照来避免每次查询重新计算的开销)
-func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []QueryCondition, scrollTime time.Duration, size int) ([][]byte, int, error) {
+func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []QueryCondition, scrollTime time.Duration, size int, sortFields []SortField) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
 	queryBody["size"] = size
@@ -523,6 +670,21 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
+	// 如果提供了排序字段，则加入排序
+	if len(sortFields) > 0 {
+		sortArray := make([]map[string]interface{}, 0)
+		for _, sortField := range sortFields {
+			// 默认升序（asc），如果排序顺序是desc，则改为降序
+			if sortField.Order == "" {
+				sortField.Order = "asc" // 默认为升序
+			}
+			sortArray = append(sortArray, map[string]interface{}{
+				sortField.Field: map[string]interface{}{"order": sortField.Order},
+			})
+		}
+		queryBody["sort"] = sortArray
+	}
+
 	// 将查询体转换为 JSON 字符串
 	body, err := json.Marshal(queryBody)
 	if err != nil {
@@ -532,6 +694,7 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 	var results [][]byte
 	var totalHits int
 
+	// 执行初次的滚动查询
 	res, err := es.client.Search(
 		es.client.Search.WithIndex(index),
 		es.client.Search.WithBody(bytes.NewReader(body)),
@@ -543,6 +706,7 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 	}
 	defer res.Body.Close()
 
+	// 循环获取每次滚动查询的结果
 	for {
 		var result struct {
 			ScrollID string `json:"_scroll_id"`
@@ -556,14 +720,15 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 			} `json:"hits"`
 		}
 
+		// 解析返回的JSON响应
 		if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
 			return nil, 0, fmt.Errorf("Error parsing the response body: %s", err)
 		}
 
 		// 更新总命中数
-		totalHits = result.Hits.Total.Value //result.Total.Value
+		totalHits = result.Hits.Total.Value
 
-		// 收集搜索结果
+		// 收集当前滚动查询的结果
 		for _, hit := range result.Hits.Hits {
 			results = append(results, hit.Source)
 		}
@@ -573,7 +738,7 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 			break
 		}
 
-		// 获取 scroll_id
+		// 获取 scroll_id 继续下一轮滚动查询
 		scrollID := result.ScrollID
 		res, err = es.client.Scroll(
 			es.client.Scroll.WithScrollID(scrollID),
@@ -587,8 +752,7 @@ func (es *ElasticsearchClient) SearchWithScroll(index string, conditions []Query
 
 	return results, totalHits, nil
 }
-
-func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}, size int, conditions []QueryCondition) ([][]byte, []interface{}, int, error) {
+func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}, size int, conditions []QueryCondition, sortFields map[string]string) ([][]byte, []interface{}, int, error) {
 	var res *esapi.Response
 	var err error
 
@@ -598,8 +762,19 @@ func (es *ElasticsearchClient) SearchWithAfter(index string, after []interface{}
 	if len(after) > 0 {
 		queryBody["search_after"] = after
 	}
-	queryBody["sort"] = []map[string]string{
-		{"_doc": "asc"},
+
+	// 如果提供了排序字段，使用提供的排序字段；否则使用默认排序（_doc）
+	if len(sortFields) > 0 {
+		var sortCriteria []map[string]interface{}
+		for field, order := range sortFields {
+			sortCriteria = append(sortCriteria, map[string]interface{}{field: order})
+		}
+		queryBody["sort"] = sortCriteria
+	} else {
+		// 使用默认排序方式：按照 _doc 排序
+		queryBody["sort"] = []map[string]string{
+			{"_doc": "asc"},
+		}
 	}
 
 	// 根据查询条件构建查询语句

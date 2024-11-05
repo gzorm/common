@@ -116,7 +116,7 @@ func TestSearchWithScroll(t *testing.T) {
 		//{Field: "age", Operator: GreaterThan, Value: 25},
 	}
 
-	results, total, err := esClientHTTP.SearchWithScroll("win_user", conditions, scrollTime, size)
+	results, total, err := esClientHTTP.SearchWithScroll("win_user", conditions, scrollTime, size, nil)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -151,7 +151,7 @@ func TestHttpSearchAfter(t *testing.T) {
 		{Field: "username", Operator: Wildcard, Value: "bin"},
 		//{Field: "id", Operator: Equal, Value: 9},
 	}
-	sources, nextAfter, total, err := esClientHTTP.SearchWithAfter("win_user", []interface{}{}, 20, queryConditions)
+	sources, nextAfter, total, err := esClientHTTP.SearchWithAfter("win_user", []interface{}{}, 20, queryConditions, nil)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -185,7 +185,7 @@ func TestSearch(t *testing.T) {
 		//{Field: "age", Operator: GreaterThan, Value: 25},
 	}
 	fields := []string{}
-	results, total, err := esClientHTTP.Search("win_notice", conditions, fields)
+	results, total, err := esClientHTTP.Search("win_notice", conditions, fields, nil)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -225,3 +225,51 @@ func TestES(test *testing.T) {
 	log.Println("Index created successfully (TLS)")
 
 }
+
+/* 排序
+===================Search====================================================================
+sortFields := []map[string]interface{}{
+    {"timestamp": "desc"},
+}
+
+results, totalCount, err := es.Search("my_index", conditions, []string{"field1", "field2"}, sortFields)
+===============================SearchWithPaginationAndMultiSort================================
+conditions := []QueryCondition{
+    {Field: "status", Operator: Equal, Value: "active"},
+}
+from := 0
+size := 10
+sortFields := []SortField{
+    {Field: "date", Order: "desc"},
+    {Field: "name", Order: "asc"},
+}
+
+results, totalCount, err := esClient.SearchWithPaginationAndMultiSort("my_index", conditions, from, size, sortFields)
+if err != nil {
+    fmt.Println("Error executing search:", err)
+} else {
+    fmt.Println("Total count:", totalCount)
+    fmt.Println("Search results:", results)
+}
+======================================SearchWithScroll============================================================
+conditions := []QueryCondition{
+    {Field: "status", Operator: Equal, Value: "active"},
+}
+scrollTime := time.Minute * 5 // 设置滚动时间为5分钟
+size := 10                    // 每次查询返回10条数据
+
+// 定义排序字段，按照日期降序、名称升序排序
+sortFields := []SortField{
+    {Field: "date", Order: "desc"},
+    {Field: "name", Order: "asc"},
+}
+
+results, totalHits, err := esClient.SearchWithScroll("my_index", conditions, scrollTime, size, sortFields)
+if err != nil {
+    fmt.Println("Error executing search:", err)
+} else {
+    fmt.Println("Total hits:", totalHits)
+    fmt.Println("Results:", results)
+}
+========================================================================================
+*/

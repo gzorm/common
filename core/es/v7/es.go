@@ -611,12 +611,6 @@ func (es *ElasticsearchClient) SearchSQLAndSort(index string, conditions []Query
 	return result, nil
 }
 
-// SortField 定义排序字段结构
-type SortField struct {
-	Field string
-	Order string // "asc" 或 "desc"
-}
-
 // QueryByOpenDistroSQL 原始SQL查询
 func (es *ElasticsearchClient) QueryByOpenDistroSQL(query string, formatType string) (map[string]interface{}, error) {
 	body := map[string]interface{}{
