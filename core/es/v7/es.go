@@ -476,7 +476,7 @@ func (es *ElasticsearchClient) SearchSQL(index string, conditions []QueryConditi
 		sortArray := make([]map[string]interface{}, 0)
 		for _, sortField := range sortFields {
 			sortOrder := "asc" // 默认排序方式是升序
-			if sortField.Order == "desc" {
+			if strings.ToLower(sortField.Order) == "desc" {
 				sortOrder = "desc"
 			}
 			sortArray = append(sortArray, map[string]interface{}{
@@ -679,7 +679,7 @@ func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []Q
 		sortArray := make([]map[string]interface{}, 0)
 		for _, sortField := range sortFields {
 			sortOrder := "asc" // 默认排序方式是升序
-			if sortField.Order == "desc" {
+			if strings.ToLower(sortField.Order) == "desc" {
 				sortOrder = "desc"
 			}
 			sortArray = append(sortArray, map[string]interface{}{
@@ -941,7 +941,7 @@ func (es *ElasticsearchClient) SearchWithScrollAndSort(index string, conditions 
 	if sortField != "" {
 		// Elasticsearch 需要的排序字段格式
 		sortOrderStr := "asc" // 默认升序
-		if sortOrder == "desc" {
+		if strings.ToLower(sortOrder) == "desc" {
 			sortOrderStr = "desc"
 		}
 		queryBody["sort"] = []map[string]interface{}{
