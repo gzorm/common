@@ -11,7 +11,7 @@ import (
 
 func TestHttpAdd(t *testing.T) {
 	// 使用HTTP
-	esClientHTTP, err := NewElasticsearchClient(false, "", "admin", "J>f6/yk?O8.l*p<z", []string{"https://189.1.232.60:9200 "})
+	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
 	if err != nil {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
 	}
@@ -71,9 +71,7 @@ func TestHttpDelete(t *testing.T) {
 	}
 	log.Println("Document deleted successfully (HTTP)")
 }
-
-// 查询带分页
-func TestSearchPaging(t *testing.T) {
+func TestSearch2(t *testing.T) {
 	// 使用HTTP
 	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
 
@@ -81,21 +79,50 @@ func TestSearchPaging(t *testing.T) {
 		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
 	}
 
+	index := "win_betslips"
+	// Define query conditions
+	conditions := []QueryCondition{
+		{Field: "created_at", Operator: GreaterThanOrEqual, Value: 1730044800},
+		{Field: "created_at", Operator: LessThanOrEqual, Value: 1730649599},
+	}
+
+	sources, total, err := esClientHTTP.Search(index, conditions, []string{"*"})
+	if err != nil {
+		fmt.Println("Error querying:", err)
+		return
+	}
+	fmt.Println("total:", total)
+	for _, source := range sources {
+		fmt.Println(string(source))
+	}
+
+}
+
+// 查询带分页
+func TestSearchPaging(t *testing.T) {
+	// 使用HTTP
+	esClientHTTP, err := NewElasticsearchClient(false, "", "elastic", "123456", []string{"http://192.168.114.133:9200"})
+	if err != nil {
+		log.Fatalf("Error creating Elasticsearch client (HTTP): %s", err)
+	}
+
 	// 分页查询
-	from := 0
+	from := 2
 	size := 10
 
 	queryConditions := []QueryCondition{
+		{Field: "created_at", Operator: GreaterThanOrEqual, Value: 1730044800},
+		{Field: "created_at", Operator: LessThanOrEqual, Value: 1730649599},
 		//{Field: "username", Operator: Wildcard, Value: "bin"},
 		//{Field: "id", Operator: Equal, Value: 9},
-		{
-			Field:    "id",
-			Operator: In,
-			Value:    []interface{}{3, 11, 16},
-		},
+		//{
+		//	Field:    "id",
+		//	Operator: In,
+		//	Value:    []interface{}{3, 11, 16},
+		//},
 	}
 
-	sources, total, err := esClientHTTP.SearchWithPagination("win_user", queryConditions, from, size)
+	sources, total, err := esClientHTTP.SearchWithPagination("win_betslips", queryConditions, from, size, nil)
 	if err != nil {
 		fmt.Println("Error querying:", err)
 		return
@@ -316,7 +343,7 @@ func TestESSQL(t *testing.T) {
 		}
 	}
 
-	result, err := esClientTLS.SearchSQL(index, conditions, nil, aggs)
+	result, err := esClientTLS.SearchSQL(index, conditions, nil, aggs, nil)
 	if err != nil {
 		log.Fatalf("Error performing search: %s", err)
 	}

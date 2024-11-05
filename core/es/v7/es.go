@@ -125,7 +125,7 @@ func (es *ElasticsearchClient) GetDocument(index string, id string) (map[string]
 	return doc, nil
 }
 
-// Search 查询
+// Search 查询(不能查询超过1W条的记录)
 func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition, fields []string) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
@@ -184,7 +184,6 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
-
 		boolQuery["must"] = mustClauses
 		if len(mustNotClauses) > 0 {
 			boolQuery["must_not"] = mustNotClauses
@@ -192,11 +191,14 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
+	// 设置 size 为一个较大的值以获取所有记录
+	queryBody["size"] = 10000 // 或其他适当的大值
+
 	// 添加聚合以获取总记录数
 	queryBody["aggs"] = map[string]interface{}{
 		"total_count": map[string]interface{}{
 			"cardinality": map[string]interface{}{
-				"field": "_id", // 根据实际需要选择合适的字段
+				"field": "_id",
 			},
 		},
 	}
@@ -314,7 +316,6 @@ func (es *ElasticsearchClient) SearchAndSort(index string, conditions []QueryCon
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
-
 		boolQuery["must"] = mustClauses
 		if len(mustNotClauses) > 0 {
 			boolQuery["must_not"] = mustNotClauses
@@ -322,15 +323,17 @@ func (es *ElasticsearchClient) SearchAndSort(index string, conditions []QueryCon
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
+	// 设置 size 为一个较大的值以获取所有记录
+	queryBody["size"] = 10000 // 或其他适当的大值
+
 	// 添加聚合以获取总记录数
 	queryBody["aggs"] = map[string]interface{}{
 		"total_count": map[string]interface{}{
 			"cardinality": map[string]interface{}{
-				"field": "_id", // 根据实际需要选择合适的字段
+				"field": "_id",
 			},
 		},
 	}
-
 	// 添加排序字段
 	if len(sortFields) > 0 {
 		sort := make([]map[string]interface{}, len(sortFields))
@@ -343,7 +346,6 @@ func (es *ElasticsearchClient) SearchAndSort(index string, conditions []QueryCon
 		}
 		queryBody["sort"] = sort
 	}
-
 	// 将查询体转换为 JSON 字符串
 	queryJson, err := json.Marshal(queryBody)
 	if err != nil {
@@ -399,97 +401,7 @@ func (es *ElasticsearchClient) SearchAndSort(index string, conditions []QueryCon
 }
 
 // SearchSQL 查询
-func (es *ElasticsearchClient) SearchSQL(index string, conditions []QueryCondition, fields []string, aggs map[string]interface{}) (map[string]interface{}, error) {
-	queryBody := make(map[string]interface{})
-
-	if len(fields) > 0 {
-		queryBody["_source"] = fields
-	}
-
-	if len(conditions) > 0 {
-		boolQuery := make(map[string]interface{})
-		mustClauses := make([]map[string]interface{}, 0)
-		mustNotClauses := make([]map[string]interface{}, 0)
-		for _, condition := range conditions {
-			switch condition.Operator {
-			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
-				rangeQuery := map[string]interface{}{
-					string(condition.Operator): condition.Value,
-				}
-				mustClauses = append(mustClauses, map[string]interface{}{"range": map[string]interface{}{condition.Field: rangeQuery}})
-			case Equal:
-				mustClauses = append(mustClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
-			case Match:
-				mustClauses = append(mustClauses, map[string]interface{}{"match": map[string]interface{}{condition.Field: condition.Value}})
-			case WildcardLeft:
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v", condition.Value)}})
-			case WildcardRight:
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("%v*", condition.Value)}})
-			case Wildcard:
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
-			case In:
-				values, ok := condition.Value.([]interface{})
-				if !ok {
-					return nil, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
-				}
-				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
-			case NotIn:
-				values, ok := condition.Value.([]interface{})
-				if !ok {
-					return nil, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
-				}
-				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
-			case NotEqual:
-				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
-			default:
-				return nil, fmt.Errorf("Unsupported operator: %s", condition.Operator)
-			}
-		}
-
-		boolQuery["must"] = mustClauses
-		if len(mustNotClauses) > 0 {
-			boolQuery["must_not"] = mustNotClauses
-		}
-		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
-	}
-
-	if len(aggs) > 0 {
-		queryBody["aggs"] = aggs
-	}
-
-	queryJson, err := json.Marshal(queryBody)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshalling query: %s", err)
-	}
-
-	req := esapi.SearchRequest{
-		Index: []string{index},
-		Body:  bytes.NewReader(queryJson),
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
-
-	res, err := req.Do(ctx, es.client.Transport)
-	if err != nil {
-		return nil, fmt.Errorf("Error executing search document: %s", err)
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		return nil, fmt.Errorf("Error response from Elasticsearch: %s", res.String())
-	}
-
-	var result map[string]interface{}
-	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
-		return nil, fmt.Errorf("Error parsing the response body: %s", err)
-	}
-
-	return result, nil
-}
-
-// SearchSQL 查询，增加排序功能
-func (es *ElasticsearchClient) SearchSQLAndSort(index string, conditions []QueryCondition, fields []string, aggs map[string]interface{}, sortFields []SortField) (map[string]interface{}, error) {
+func (es *ElasticsearchClient) SearchSQL(index string, conditions []QueryCondition, fields []string, aggs map[string]interface{}, sortFields []SortField) (map[string]interface{}, error) {
 	queryBody := make(map[string]interface{})
 
 	// 指定返回的字段
@@ -575,6 +487,8 @@ func (es *ElasticsearchClient) SearchSQLAndSort(index string, conditions []Query
 		}
 		queryBody["sort"] = sortArray
 	}
+	// 显式指定返回的记录数，假设需要不超过10000条记录
+	queryBody["size"] = 10000
 
 	// 将查询体转换为 JSON 字符串
 	queryJson, err := json.Marshal(queryBody)
@@ -687,139 +601,11 @@ func (es *ElasticsearchClient) QueryByXPackSQL(query string) (map[string]interfa
 	return result, nil
 }
 
-// SearchWithPagination 查询带分页
-func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []QueryCondition, from, size int) ([][]byte, int, error) {
-	// 构建查询体
-	queryBody := make(map[string]interface{})
-	queryBody["from"] = from
-	queryBody["size"] = size
-
-	// 根据查询条件构建查询语句
-	if len(conditions) > 0 {
-		boolQuery := make(map[string]interface{})
-		mustClauses := make([]map[string]interface{}, 0)
-		mustNotClauses := make([]map[string]interface{}, 0)
-		for _, condition := range conditions {
-			switch condition.Operator {
-			case GreaterThan, GreaterThanOrEqual, LessThan, LessThanOrEqual:
-				// 数值类型范围查询
-				rangeQuery := map[string]interface{}{
-					string(condition.Operator): condition.Value,
-				}
-				mustClauses = append(mustClauses, map[string]interface{}{"range": map[string]interface{}{condition.Field: rangeQuery}})
-			case Equal:
-				// 精确匹配
-				mustClauses = append(mustClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
-			case Match:
-				// 精确匹配
-				mustClauses = append(mustClauses, map[string]interface{}{"match": map[string]interface{}{condition.Field: condition.Value}})
-			case WildcardLeft:
-				// 左通配符匹配
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v", condition.Value)}})
-			case WildcardRight:
-				// 右通配符匹配
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("%v*", condition.Value)}})
-			case Wildcard:
-				// 双通配符匹配
-				mustClauses = append(mustClauses, map[string]interface{}{"wildcard": map[string]interface{}{condition.Field: fmt.Sprintf("*%v*", condition.Value)}})
-			case In:
-				// In 查询
-				values, ok := condition.Value.([]interface{})
-				if !ok {
-					return nil, 0, fmt.Errorf("Value for 'in' operator must be a slice of interfaces")
-				}
-				mustClauses = append(mustClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
-			case NotIn:
-				// Not In 查询
-				values, ok := condition.Value.([]interface{})
-				if !ok {
-					return nil, 0, fmt.Errorf("Value for 'not in' operator must be a slice of interfaces")
-				}
-				mustNotClauses = append(mustNotClauses, map[string]interface{}{"terms": map[string]interface{}{condition.Field: values}})
-			case NotEqual:
-				// 不等于查询
-				mustNotClauses = append(mustNotClauses, map[string]interface{}{"term": map[string]interface{}{condition.Field: condition.Value}})
-
-			default:
-				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
-			}
-		}
-
-		boolQuery["must"] = mustClauses
-		if len(mustNotClauses) > 0 {
-			boolQuery["must_not"] = mustNotClauses
-		}
-		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
-	}
-
-	// 添加聚合以获取总记录数
-	queryBody["aggs"] = map[string]interface{}{
-		"total_count": map[string]interface{}{
-			"cardinality": map[string]interface{}{
-				"field": "_id", // 这里根据实际需要选择合适的字段
-			},
-		},
-	}
-
-	// 将查询体转换为 JSON 字符串
-	body, err := json.Marshal(queryBody)
-	if err != nil {
-		return nil, 0, fmt.Errorf("Error marshalling query body: %w", err)
-	}
-
-	// 创建搜索请求
-	req := esapi.SearchRequest{
-		Index: []string{index},
-		Body:  bytes.NewReader(body),
-	}
-
-	// 执行搜索
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*30)
-	defer cancel()
-
-	res, err := req.Do(ctx, es.client.Transport)
-	if err != nil {
-		return nil, 0, fmt.Errorf("Error executing search request: %w", err)
-	}
-	defer res.Body.Close()
-
-	if res.IsError() {
-		return nil, 0, fmt.Errorf("Error response from Elasticsearch: %s", res.String())
-	}
-
-	// 解析响应
-	var result struct {
-		Hits struct {
-			Hits []struct {
-				Source json.RawMessage `json:"_source"`
-			} `json:"hits"`
-		} `json:"hits"`
-		Aggregations struct {
-			TotalCount struct {
-				Value int `json:"value"`
-			} `json:"total_count"`
-		} `json:"aggregations"`
-	}
-
-	if err := json.NewDecoder(res.Body).Decode(&result); err != nil {
-		return nil, 0, fmt.Errorf("Error parsing the response body: %w", err)
-	}
-
-	// 提取 _source 字段作为字节数组
-	sources := make([][]byte, len(result.Hits.Hits))
-	for i, hit := range result.Hits.Hits {
-		sources[i] = hit.Source
-	}
-
-	// 返回结果和总记录数
-	return sources, result.Aggregations.TotalCount.Value, nil
-}
-
 // SearchWithPagination 查询带分页和排序功能
-func (es *ElasticsearchClient) SearchWithPaginationAndSort(index string, conditions []QueryCondition, from, size int, sortFields []SortField) ([][]byte, int, error) {
+func (es *ElasticsearchClient) SearchWithPagination(index string, conditions []QueryCondition, pageIndex, size int, sortFields []SortField) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
-	queryBody["from"] = from
+	queryBody["from"] = (pageIndex - 1) * size
 	queryBody["size"] = size
 
 	// 根据查询条件构建查询语句

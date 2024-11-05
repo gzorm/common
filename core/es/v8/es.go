@@ -126,7 +126,6 @@ func (es *ElasticsearchClient) GetDocument(index string, id string) (map[string]
 }
 
 // Search 查询
-
 func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition, fields []string, sortFields []map[string]interface{}) ([][]byte, int, error) {
 	// 构建查询体
 	queryBody := make(map[string]interface{})
@@ -185,7 +184,6 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 				return nil, 0, fmt.Errorf("Unsupported operator: %s", condition.Operator)
 			}
 		}
-
 		boolQuery["must"] = mustClauses
 		if len(mustNotClauses) > 0 {
 			boolQuery["must_not"] = mustNotClauses
@@ -193,20 +191,33 @@ func (es *ElasticsearchClient) Search(index string, conditions []QueryCondition,
 		queryBody["query"] = map[string]interface{}{"bool": boolQuery}
 	}
 
+	// 设置 size 为一个较大的值以获取所有记录
+	queryBody["size"] = 10000 // 或其他适当的大值
+
 	// 添加聚合以获取总记录数
 	queryBody["aggs"] = map[string]interface{}{
 		"total_count": map[string]interface{}{
 			"cardinality": map[string]interface{}{
-				"field": "_id", // 根据实际需要选择合适的字段
+				"field": "_id",
 			},
 		},
 	}
-
+	// 添加排序字段
 	// 如果排序字段不为空，添加排序
 	if len(sortFields) > 0 {
 		queryBody["sort"] = sortFields
 	}
-
+	//if len(sortFields) > 0 {
+	//	sort := make([]map[string]interface{}, len(sortFields))
+	//	for i, field := range sortFields {
+	//		sort[i] = map[string]interface{}{
+	//			field: map[string]interface{}{
+	//				"order": "asc", // 默认升序，可根据需要修改为 "desc"
+	//			},
+	//		}
+	//	}
+	//	queryBody["sort"] = sort
+	//}
 	// 将查询体转换为 JSON 字符串
 	queryJson, err := json.Marshal(queryBody)
 	if err != nil {
