@@ -34,6 +34,7 @@ func newWinUserBankList(db *gorm.DB, opts ...gen.DOOption) winUserBankList {
 	_winUserBankList.CategoryTransfer = field.NewInt64(tableName, "category_transfer")
 	_winUserBankList.BankName = field.NewString(tableName, "bank_name")
 	_winUserBankList.Address = field.NewString(tableName, "address")
+	_winUserBankList.BankCode = field.NewString(tableName, "bank_code")
 	_winUserBankList.Status = field.NewInt64(tableName, "status")
 	_winUserBankList.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winUserBankList.UpdatedAt = field.NewInt64(tableName, "updated_at")
@@ -58,6 +59,7 @@ type winUserBankList struct {
 	CategoryTransfer field.Int64  // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
 	BankName         field.String // 银行名称
 	Address          field.String // 提款地址
+	BankCode         field.String // 银行编码
 	Status           field.Int64  // 状态:1-默认地址(启用) 2-正常启用 3-删除
 	CreatedAt        field.Int64
 	UpdatedAt        field.Int64
@@ -87,6 +89,7 @@ func (w *winUserBankList) updateTableName(table string) *winUserBankList {
 	w.CategoryTransfer = field.NewInt64(table, "category_transfer")
 	w.BankName = field.NewString(table, "bank_name")
 	w.Address = field.NewString(table, "address")
+	w.BankCode = field.NewString(table, "bank_code")
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
@@ -109,7 +112,7 @@ func (w *winUserBankList) GetFieldByName(fieldName string) (field.OrderExpr, boo
 }
 
 func (w *winUserBankList) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 13)
+	w.fieldMap = make(map[string]field.Expr, 14)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -117,6 +120,7 @@ func (w *winUserBankList) fillFieldMap() {
 	w.fieldMap["category_transfer"] = w.CategoryTransfer
 	w.fieldMap["bank_name"] = w.BankName
 	w.fieldMap["address"] = w.Address
+	w.fieldMap["bank_code"] = w.BankCode
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
