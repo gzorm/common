@@ -13,6 +13,7 @@ type WinPayChannel struct {
 	Name               string `gorm:"column:name;type:varchar(100);not null;comment:通道名称" json:"name"`                                                        // 通道名称
 	PlatID             int64  `gorm:"column:plat_id;type:int;not null;comment:平台ID" json:"platId"`                                                            // 平台ID
 	PlatName           string `gorm:"column:plat_name;type:varchar(100);not null;comment:平台名称" json:"platName"`                                               // 平台名称
+	PlatNameAr         string `gorm:"column:plat_name_ar;type:varchar(64);comment:阿拉伯名称" json:"platNameAr"`                                                   // 阿拉伯名称
 	PlatNickName       string `gorm:"column:plat_nick_name;type:varchar(100);comment:平台自定义名称" json:"platNickName"`                                            // 平台自定义名称
 	Category           int64  `gorm:"column:category;type:tinyint;not null;comment:支付类型；1:代收 2:代付" json:"category"`                                           // 支付类型；1:代收 2:代付
 	CategoryTransfer   int64  `gorm:"column:category_transfer;type:tinyint;not null;comment:转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH" json:"categoryTransfer"`   // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
@@ -24,7 +25,7 @@ type WinPayChannel struct {
 	NotifyURL          string `gorm:"column:notify_url;type:varchar(255);not null;comment:回调地址" json:"notifyUrl"`                                             // 回调地址
 	ReturnURL          string `gorm:"column:return_url;type:varchar(255);comment:返回URL" json:"returnUrl"`                                                     // 返回URL
 	Currency           string `gorm:"column:currency;type:varchar(100);not null;comment:币种" json:"currency"`                                                  // 币种
-	ChannelConfig      string `gorm:"column:channel_config;type:varchar(512);comment:通道配置参数" json:"channelConfig"`                                            // 通道配置参数
+	ChannelConfig      string `gorm:"column:channel_config;type:text;comment:通道配置参数" json:"channelConfig"`                                                    // 通道配置参数
 	CreatedAt          int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                                                        // 创建时间
 	UpdatedAt          int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                                                        // 修改时间
 	Sort               int64  `gorm:"column:sort;type:int;default:30;comment:排序" json:"sort"`                                                                 // 排序

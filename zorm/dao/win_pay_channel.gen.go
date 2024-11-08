@@ -32,6 +32,7 @@ func newWinPayChannel(db *gorm.DB, opts ...gen.DOOption) winPayChannel {
 	_winPayChannel.Name = field.NewString(tableName, "name")
 	_winPayChannel.PlatID = field.NewInt64(tableName, "plat_id")
 	_winPayChannel.PlatName = field.NewString(tableName, "plat_name")
+	_winPayChannel.PlatNameAr = field.NewString(tableName, "plat_name_ar")
 	_winPayChannel.PlatNickName = field.NewString(tableName, "plat_nick_name")
 	_winPayChannel.Category = field.NewInt64(tableName, "category")
 	_winPayChannel.CategoryTransfer = field.NewInt64(tableName, "category_transfer")
@@ -67,6 +68,7 @@ type winPayChannel struct {
 	Name               field.String // 通道名称
 	PlatID             field.Int64  // 平台ID
 	PlatName           field.String // 平台名称
+	PlatNameAr         field.String // 阿拉伯名称
 	PlatNickName       field.String // 平台自定义名称
 	Category           field.Int64  // 支付类型；1:代收 2:代付
 	CategoryTransfer   field.Int64  // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
@@ -108,6 +110,7 @@ func (w *winPayChannel) updateTableName(table string) *winPayChannel {
 	w.Name = field.NewString(table, "name")
 	w.PlatID = field.NewInt64(table, "plat_id")
 	w.PlatName = field.NewString(table, "plat_name")
+	w.PlatNameAr = field.NewString(table, "plat_name_ar")
 	w.PlatNickName = field.NewString(table, "plat_nick_name")
 	w.Category = field.NewInt64(table, "category")
 	w.CategoryTransfer = field.NewInt64(table, "category_transfer")
@@ -144,12 +147,13 @@ func (w *winPayChannel) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (w *winPayChannel) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 25)
+	w.fieldMap = make(map[string]field.Expr, 26)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["code"] = w.Code
 	w.fieldMap["name"] = w.Name
 	w.fieldMap["plat_id"] = w.PlatID
 	w.fieldMap["plat_name"] = w.PlatName
+	w.fieldMap["plat_name_ar"] = w.PlatNameAr
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
 	w.fieldMap["category"] = w.Category
 	w.fieldMap["category_transfer"] = w.CategoryTransfer
