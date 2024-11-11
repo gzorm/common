@@ -28,6 +28,7 @@ func newWinBetslipsDateStatistics(db *gorm.DB, opts ...gen.DOOption) winBetslips
 	tableName := _winBetslipsDateStatistics.winBetslipsDateStatisticsDo.TableName()
 	_winBetslipsDateStatistics.ALL = field.NewAsterisk(tableName)
 	_winBetslipsDateStatistics.ID = field.NewInt64(tableName, "id")
+	_winBetslipsDateStatistics.Type = field.NewInt64(tableName, "type")
 	_winBetslipsDateStatistics.UID = field.NewInt64(tableName, "uid")
 	_winBetslipsDateStatistics.Username = field.NewString(tableName, "username")
 	_winBetslipsDateStatistics.ActivityCommission = field.NewField(tableName, "activity_commission")
@@ -47,17 +48,18 @@ func newWinBetslipsDateStatistics(db *gorm.DB, opts ...gen.DOOption) winBetslips
 	return _winBetslipsDateStatistics
 }
 
-// winBetslipsDateStatistics 打码量统计表，记录用户每日的打码量
+// winBetslipsDateStatistics 打码量统计表，记录用户每日/每周/每月的打码量
 type winBetslipsDateStatistics struct {
 	winBetslipsDateStatisticsDo
 
 	ALL                  field.Asterisk
 	ID                   field.Int64  // 自增主键
+	Type                 field.Int64  // 类型: 1=每日反水,2=周返利,3=月返利
 	UID                  field.Int64  // 用户ID
 	Username             field.String // 用户名
 	ActivityCommission   field.Field  // 活动佣金
 	TotalBetAmount       field.Field  // 上一个周期下注总金额
-	CoinBefore           field.Field  // 全部实时金额
+	CoinBefore           field.Field  // 钱包实时金额
 	ReferID              field.Int64  // 关联ID(活动表ID)
 	ActicityName         field.String // 活动名称
 	ActicityLadderName   field.String // 活动内置配置名称
@@ -83,6 +85,7 @@ func (w winBetslipsDateStatistics) As(alias string) *winBetslipsDateStatistics {
 func (w *winBetslipsDateStatistics) updateTableName(table string) *winBetslipsDateStatistics {
 	w.ALL = field.NewAsterisk(table)
 	w.ID = field.NewInt64(table, "id")
+	w.Type = field.NewInt64(table, "type")
 	w.UID = field.NewInt64(table, "uid")
 	w.Username = field.NewString(table, "username")
 	w.ActivityCommission = field.NewField(table, "activity_commission")
@@ -112,8 +115,9 @@ func (w *winBetslipsDateStatistics) GetFieldByName(fieldName string) (field.Orde
 }
 
 func (w *winBetslipsDateStatistics) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 14)
+	w.fieldMap = make(map[string]field.Expr, 15)
 	w.fieldMap["id"] = w.ID
+	w.fieldMap["type"] = w.Type
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["activity_commission"] = w.ActivityCommission

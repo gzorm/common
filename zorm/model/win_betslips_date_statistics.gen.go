@@ -8,14 +8,15 @@ import "github.com/shopspring/decimal"
 
 const TableNameWinBetslipsDateStatistics = "win_betslips_date_statistics"
 
-// WinBetslipsDateStatistics 打码量统计表，记录用户每日的打码量
+// WinBetslipsDateStatistics 打码量统计表，记录用户每日/每周/每月的打码量
 type WinBetslipsDateStatistics struct {
 	ID                   int64           `gorm:"column:id;type:bigint unsigned;primaryKey;autoIncrement:true;comment:自增主键" json:"id,string"`                 // 自增主键
+	Type                 int64           `gorm:"column:type;type:tinyint(1);not null;default:1;comment:类型: 1=每日反水,2=周返利,3=月返利" json:"type"`                  // 类型: 1=每日反水,2=周返利,3=月返利
 	UID                  int64           `gorm:"column:uid;type:bigint unsigned;not null;comment:用户ID" json:"uid"`                                           // 用户ID
 	Username             string          `gorm:"column:username;type:varchar(255);not null;comment:用户名" json:"username"`                                     // 用户名
 	ActivityCommission   decimal.Decimal `gorm:"column:activity_commission;type:decimal(18,2);not null;comment:活动佣金" json:"activityCommission"`              // 活动佣金
 	TotalBetAmount       decimal.Decimal `gorm:"column:total_bet_amount;type:decimal(18,2);not null;comment:上一个周期下注总金额" json:"totalBetAmount"`               // 上一个周期下注总金额
-	CoinBefore           decimal.Decimal `gorm:"column:coin_before;type:decimal(18,2);not null;comment:全部实时金额" json:"coinBefore"`                            // 全部实时金额
+	CoinBefore           decimal.Decimal `gorm:"column:coin_before;type:decimal(18,2);not null;comment:钱包实时金额" json:"coinBefore"`                            // 钱包实时金额
 	ReferID              int64           `gorm:"column:refer_id;type:bigint;not null;comment:关联ID(活动表ID)" json:"referId"`                                    // 关联ID(活动表ID)
 	ActicityName         string          `gorm:"column:acticity_name;type:varchar(255);not null;comment:活动名称" json:"acticityName"`                           // 活动名称
 	ActicityLadderName   string          `gorm:"column:acticity_ladder_name;type:varchar(255);not null;comment:活动内置配置名称" json:"acticityLadderName"`          // 活动内置配置名称
