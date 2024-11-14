@@ -34,6 +34,7 @@ func newWinPayChannel(db *gorm.DB, opts ...gen.DOOption) winPayChannel {
 	_winPayChannel.PlatName = field.NewString(tableName, "plat_name")
 	_winPayChannel.PlatNameAr = field.NewString(tableName, "plat_name_ar")
 	_winPayChannel.PlatNickName = field.NewString(tableName, "plat_nick_name")
+	_winPayChannel.PayType = field.NewString(tableName, "pay_type")
 	_winPayChannel.Category = field.NewInt64(tableName, "category")
 	_winPayChannel.CategoryTransfer = field.NewInt64(tableName, "category_transfer")
 	_winPayChannel.CategoryCurrency = field.NewInt64(tableName, "category_currency")
@@ -70,6 +71,7 @@ type winPayChannel struct {
 	PlatName           field.String // 平台名称
 	PlatNameAr         field.String // 阿拉伯名称
 	PlatNickName       field.String // 平台自定义名称
+	PayType            field.String // 话费支付=1，银行卡支付=3，钱包支付=5
 	Category           field.Int64  // 支付类型；1:代收 2:代付
 	CategoryTransfer   field.Int64  // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
 	CategoryCurrency   field.Int64  // 提款货币类型:0-数字货币 1-法币方式;1:USDT 2:Bank Card
@@ -112,6 +114,7 @@ func (w *winPayChannel) updateTableName(table string) *winPayChannel {
 	w.PlatName = field.NewString(table, "plat_name")
 	w.PlatNameAr = field.NewString(table, "plat_name_ar")
 	w.PlatNickName = field.NewString(table, "plat_nick_name")
+	w.PayType = field.NewString(table, "pay_type")
 	w.Category = field.NewInt64(table, "category")
 	w.CategoryTransfer = field.NewInt64(table, "category_transfer")
 	w.CategoryCurrency = field.NewInt64(table, "category_currency")
@@ -147,7 +150,7 @@ func (w *winPayChannel) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (w *winPayChannel) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 26)
+	w.fieldMap = make(map[string]field.Expr, 27)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["code"] = w.Code
 	w.fieldMap["name"] = w.Name
@@ -155,6 +158,7 @@ func (w *winPayChannel) fillFieldMap() {
 	w.fieldMap["plat_name"] = w.PlatName
 	w.fieldMap["plat_name_ar"] = w.PlatNameAr
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
+	w.fieldMap["pay_type"] = w.PayType
 	w.fieldMap["category"] = w.Category
 	w.fieldMap["category_transfer"] = w.CategoryTransfer
 	w.fieldMap["category_currency"] = w.CategoryCurrency

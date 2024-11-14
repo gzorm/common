@@ -15,6 +15,7 @@ type WinPayChannel struct {
 	PlatName           string `gorm:"column:plat_name;type:varchar(100);not null;comment:平台名称" json:"platName"`                                               // 平台名称
 	PlatNameAr         string `gorm:"column:plat_name_ar;type:varchar(64);comment:阿拉伯名称" json:"platNameAr"`                                                   // 阿拉伯名称
 	PlatNickName       string `gorm:"column:plat_nick_name;type:varchar(100);comment:平台自定义名称" json:"platNickName"`                                            // 平台自定义名称
+	PayType            string `gorm:"column:pay_type;type:varchar(64);default:1;comment:话费支付=1，银行卡支付=3，钱包支付=5" json:"payType"`                                // 话费支付=1，银行卡支付=3，钱包支付=5
 	Category           int64  `gorm:"column:category;type:tinyint;not null;comment:支付类型；1:代收 2:代付" json:"category"`                                           // 支付类型；1:代收 2:代付
 	CategoryTransfer   int64  `gorm:"column:category_transfer;type:tinyint;not null;comment:转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH" json:"categoryTransfer"`   // 转账类型：1-TRC,2-ERC,3-BANK,4-PIX,5-GCASH
 	CategoryCurrency   int64  `gorm:"column:category_currency;type:tinyint;not null;comment:提款货币类型:0-数字货币 1-法币方式;1:USDT 2:Bank Card" json:"categoryCurrency"` // 提款货币类型:0-数字货币 1-法币方式;1:USDT 2:Bank Card
