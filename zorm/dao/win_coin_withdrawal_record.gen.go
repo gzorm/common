@@ -44,6 +44,7 @@ func newWinCoinWithdrawalRecord(db *gorm.DB, opts ...gen.DOOption) winCoinWithdr
 	_winCoinWithdrawalRecord.PlatNetfees = field.NewField(tableName, "plat_netfees")
 	_winCoinWithdrawalRecord.MainNetFees = field.NewField(tableName, "main_net_fees")
 	_winCoinWithdrawalRecord.Currency = field.NewString(tableName, "currency")
+	_winCoinWithdrawalRecord.PayType = field.NewInt64(tableName, "pay_type")
 	_winCoinWithdrawalRecord.Category = field.NewInt64(tableName, "category")
 	_winCoinWithdrawalRecord.CategoryCurrency = field.NewInt64(tableName, "category_currency")
 	_winCoinWithdrawalRecord.CategoryTransfer = field.NewInt64(tableName, "category_transfer")
@@ -87,6 +88,7 @@ type winCoinWithdrawalRecord struct {
 	PlatNetfees             field.Field  // 平台手续费
 	MainNetFees             field.Field  // 主网费
 	Currency                field.String // 币种
+	PayType                 field.Int64  // 话费支付=1，银行卡支付=3，钱包支付=5
 	Category                field.Int64  // 提现类型 1==正常提现  4==佣金提现
 	CategoryCurrency        field.Int64  // 货币类型:0-数字货币 1-法币
 	CategoryTransfer        field.Int64  // 转账类型:1-TRC-20 2-ERC-20 3-BANK 4-PIX 5-GCASH
@@ -135,6 +137,7 @@ func (w *winCoinWithdrawalRecord) updateTableName(table string) *winCoinWithdraw
 	w.PlatNetfees = field.NewField(table, "plat_netfees")
 	w.MainNetFees = field.NewField(table, "main_net_fees")
 	w.Currency = field.NewString(table, "currency")
+	w.PayType = field.NewInt64(table, "pay_type")
 	w.Category = field.NewInt64(table, "category")
 	w.CategoryCurrency = field.NewInt64(table, "category_currency")
 	w.CategoryTransfer = field.NewInt64(table, "category_transfer")
@@ -166,7 +169,7 @@ func (w *winCoinWithdrawalRecord) GetFieldByName(fieldName string) (field.OrderE
 }
 
 func (w *winCoinWithdrawalRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 32)
+	w.fieldMap = make(map[string]field.Expr, 33)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -184,6 +187,7 @@ func (w *winCoinWithdrawalRecord) fillFieldMap() {
 	w.fieldMap["plat_netfees"] = w.PlatNetfees
 	w.fieldMap["main_net_fees"] = w.MainNetFees
 	w.fieldMap["currency"] = w.Currency
+	w.fieldMap["pay_type"] = w.PayType
 	w.fieldMap["category"] = w.Category
 	w.fieldMap["category_currency"] = w.CategoryCurrency
 	w.fieldMap["category_transfer"] = w.CategoryTransfer

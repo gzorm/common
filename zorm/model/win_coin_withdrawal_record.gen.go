@@ -27,6 +27,7 @@ type WinCoinWithdrawalRecord struct {
 	PlatNetfees             decimal.Decimal `gorm:"column:plat_netfees;type:decimal(15,4);default:0.0000;comment:平台手续费" json:"platNetfees"`                                               // 平台手续费
 	MainNetFees             decimal.Decimal `gorm:"column:main_net_fees;type:decimal(15,4);not null;default:0.0000;comment:主网费" json:"mainNetFees"`                                       // 主网费
 	Currency                string          `gorm:"column:currency;type:varchar(50);not null;comment:币种" json:"currency"`                                                                 // 币种
+	PayType                 int64           `gorm:"column:pay_type;type:tinyint;default:1;comment:话费支付=1，银行卡支付=3，钱包支付=5" json:"payType"`                                                  // 话费支付=1，银行卡支付=3，钱包支付=5
 	Category                int64           `gorm:"column:category;type:tinyint;default:1;comment:提现类型 1==正常提现  4==佣金提现" json:"category"`                                                 // 提现类型 1==正常提现  4==佣金提现
 	CategoryCurrency        int64           `gorm:"column:category_currency;type:tinyint;not null;default:1;comment:货币类型:0-数字货币 1-法币" json:"categoryCurrency"`                            // 货币类型:0-数字货币 1-法币
 	CategoryTransfer        int64           `gorm:"column:category_transfer;type:tinyint;not null;default:3;comment:转账类型:1-TRC-20 2-ERC-20 3-BANK 4-PIX 5-GCASH" json:"categoryTransfer"` // 转账类型:1-TRC-20 2-ERC-20 3-BANK 4-PIX 5-GCASH
