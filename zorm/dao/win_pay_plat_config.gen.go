@@ -39,6 +39,9 @@ func newWinPayPlatConfig(db *gorm.DB, opts ...gen.DOOption) winPayPlatConfig {
 	_winPayPlatConfig.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_winPayPlatConfig.Operator = field.NewString(tableName, "operator")
 	_winPayPlatConfig.OperatorName = field.NewString(tableName, "operator_name")
+	_winPayPlatConfig.StartTime = field.NewString(tableName, "start_time")
+	_winPayPlatConfig.PayTimeShow = field.NewInt64(tableName, "pay_time_show")
+	_winPayPlatConfig.EndTime = field.NewString(tableName, "end_time")
 
 	_winPayPlatConfig.fillFieldMap()
 
@@ -62,6 +65,9 @@ type winPayPlatConfig struct {
 	UpdatedAt    field.Int64  // 修改时间
 	Operator     field.String // 操作人
 	OperatorName field.String // 操作人姓名
+	StartTime    field.String // 开始时间
+	PayTimeShow  field.Int64  // 1==关闭营业时间 3==启用时间
+	EndTime      field.String // 结束时间
 
 	fieldMap map[string]field.Expr
 }
@@ -90,6 +96,9 @@ func (w *winPayPlatConfig) updateTableName(table string) *winPayPlatConfig {
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
 	w.Operator = field.NewString(table, "operator")
 	w.OperatorName = field.NewString(table, "operator_name")
+	w.StartTime = field.NewString(table, "start_time")
+	w.PayTimeShow = field.NewInt64(table, "pay_time_show")
+	w.EndTime = field.NewString(table, "end_time")
 
 	w.fillFieldMap()
 
@@ -106,7 +115,7 @@ func (w *winPayPlatConfig) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (w *winPayPlatConfig) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 12)
+	w.fieldMap = make(map[string]field.Expr, 15)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["plat_name"] = w.PlatName
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
@@ -119,6 +128,9 @@ func (w *winPayPlatConfig) fillFieldMap() {
 	w.fieldMap["updated_at"] = w.UpdatedAt
 	w.fieldMap["operator"] = w.Operator
 	w.fieldMap["operator_name"] = w.OperatorName
+	w.fieldMap["start_time"] = w.StartTime
+	w.fieldMap["pay_time_show"] = w.PayTimeShow
+	w.fieldMap["end_time"] = w.EndTime
 }
 
 func (w winPayPlatConfig) clone(db *gorm.DB) winPayPlatConfig {
