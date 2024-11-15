@@ -78,6 +78,8 @@ func newWinUser(db *gorm.DB, opts ...gen.DOOption) winUser {
 	_winUser.FbCid = field.NewString(tableName, "fb_cid")
 	_winUser.CreatedName = field.NewString(tableName, "created_name")
 	_winUser.MemberType = field.NewInt64(tableName, "memberType")
+	_winUser.GoogleSubID = field.NewInt64(tableName, "google_sub_id")
+	_winUser.FacebookSubID = field.NewInt64(tableName, "facebook_sub_id")
 
 	_winUser.fillFieldMap()
 
@@ -140,6 +142,8 @@ type winUser struct {
 	FbCid             field.String
 	CreatedName       field.String // 创建人
 	MemberType        field.Int64  // 会员类型1==直客 2==非直客
+	GoogleSubID       field.Int64
+	FacebookSubID     field.Int64
 
 	fieldMap map[string]field.Expr
 }
@@ -207,6 +211,8 @@ func (w *winUser) updateTableName(table string) *winUser {
 	w.FbCid = field.NewString(table, "fb_cid")
 	w.CreatedName = field.NewString(table, "created_name")
 	w.MemberType = field.NewInt64(table, "memberType")
+	w.GoogleSubID = field.NewInt64(table, "google_sub_id")
+	w.FacebookSubID = field.NewInt64(table, "facebook_sub_id")
 
 	w.fillFieldMap()
 
@@ -223,7 +229,7 @@ func (w *winUser) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winUser) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 51)
+	w.fieldMap = make(map[string]field.Expr, 53)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
@@ -275,6 +281,8 @@ func (w *winUser) fillFieldMap() {
 	w.fieldMap["fb_cid"] = w.FbCid
 	w.fieldMap["created_name"] = w.CreatedName
 	w.fieldMap["memberType"] = w.MemberType
+	w.fieldMap["google_sub_id"] = w.GoogleSubID
+	w.fieldMap["facebook_sub_id"] = w.FacebookSubID
 }
 
 func (w winUser) clone(db *gorm.DB) winUser {

@@ -61,6 +61,8 @@ type WinUser struct {
 	FbCid             string          `gorm:"column:fb_cid;type:varchar(350)" json:"fbCid"`
 	CreatedName       string          `gorm:"column:created_name;type:varchar(32);not null;comment:创建人" json:"createdName"`        // 创建人
 	MemberType        int64           `gorm:"column:memberType;type:tinyint;default:1;comment:会员类型1==直客 2==非直客" json:"memberType"` // 会员类型1==直客 2==非直客
+	GoogleSubID       int64           `gorm:"column:google_sub_id;type:int" json:"googleSubId"`
+	FacebookSubID     int64           `gorm:"column:facebook_sub_id;type:int" json:"facebookSubId"`
 }
 
 // TableName WinUser's table name
