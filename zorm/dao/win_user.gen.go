@@ -78,8 +78,8 @@ func newWinUser(db *gorm.DB, opts ...gen.DOOption) winUser {
 	_winUser.FbCid = field.NewString(tableName, "fb_cid")
 	_winUser.CreatedName = field.NewString(tableName, "created_name")
 	_winUser.MemberType = field.NewInt64(tableName, "memberType")
-	_winUser.GoogleSubID = field.NewInt64(tableName, "google_sub_id")
-	_winUser.FacebookSubID = field.NewInt64(tableName, "facebook_sub_id")
+	_winUser.GoogleSubID = field.NewString(tableName, "google_sub_id")
+	_winUser.FacebookSubID = field.NewString(tableName, "facebook_sub_id")
 
 	_winUser.fillFieldMap()
 
@@ -142,8 +142,8 @@ type winUser struct {
 	FbCid             field.String
 	CreatedName       field.String // 创建人
 	MemberType        field.Int64  // 会员类型1==直客 2==非直客
-	GoogleSubID       field.Int64
-	FacebookSubID     field.Int64
+	GoogleSubID       field.String
+	FacebookSubID     field.String
 
 	fieldMap map[string]field.Expr
 }
@@ -211,8 +211,8 @@ func (w *winUser) updateTableName(table string) *winUser {
 	w.FbCid = field.NewString(table, "fb_cid")
 	w.CreatedName = field.NewString(table, "created_name")
 	w.MemberType = field.NewInt64(table, "memberType")
-	w.GoogleSubID = field.NewInt64(table, "google_sub_id")
-	w.FacebookSubID = field.NewInt64(table, "facebook_sub_id")
+	w.GoogleSubID = field.NewString(table, "google_sub_id")
+	w.FacebookSubID = field.NewString(table, "facebook_sub_id")
 
 	w.fillFieldMap()
 

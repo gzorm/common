@@ -30,7 +30,7 @@ func newGameOperationUrl(db *gorm.DB, opts ...gen.DOOption) gameOperationUrl {
 	_gameOperationUrl.ID = field.NewInt64(tableName, "id")
 	_gameOperationUrl.Language = field.NewString(tableName, "language")
 	_gameOperationUrl.LeagueName = field.NewString(tableName, "league_name")
-	_gameOperationUrl.MatchTime = field.NewString(tableName, "match_time")
+	_gameOperationUrl.MatchTime = field.NewInt64(tableName, "match_time")
 	_gameOperationUrl.HomeName = field.NewString(tableName, "home_name")
 	_gameOperationUrl.HomeIcon = field.NewString(tableName, "home_icon")
 	_gameOperationUrl.VisitorName = field.NewString(tableName, "visitor_name")
@@ -57,7 +57,7 @@ type gameOperationUrl struct {
 	ID             field.Int64
 	Language       field.String // 语言
 	LeagueName     field.String // 联赛名称
-	MatchTime      field.String // 比赛时间
+	MatchTime      field.Int64  // 比赛时间
 	HomeName       field.String // 主队名称
 	HomeIcon       field.String // 主队图标
 	VisitorName    field.String // 客队名称
@@ -89,7 +89,7 @@ func (g *gameOperationUrl) updateTableName(table string) *gameOperationUrl {
 	g.ID = field.NewInt64(table, "id")
 	g.Language = field.NewString(table, "language")
 	g.LeagueName = field.NewString(table, "league_name")
-	g.MatchTime = field.NewString(table, "match_time")
+	g.MatchTime = field.NewInt64(table, "match_time")
 	g.HomeName = field.NewString(table, "home_name")
 	g.HomeIcon = field.NewString(table, "home_icon")
 	g.VisitorName = field.NewString(table, "visitor_name")
