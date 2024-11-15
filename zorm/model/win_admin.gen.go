@@ -17,10 +17,11 @@ type WinAdmin struct {
 	OperateID    int64  `gorm:"column:operate_id;type:int;not null;comment:操作人ID" json:"operateId"`                      // 操作人ID
 	Parent       int64  `gorm:"column:parent;type:int;comment:上级ID" json:"parent"`                                       // 上级ID
 	Secret       string `gorm:"column:secret;type:varchar(100);not null;comment:Google密钥" json:"secret"`                 // Google密钥
+	CodeURL      string `gorm:"column:code_url;type:varchar(255);comment:google二维码" json:"codeUrl"`                      // google二维码
 	Status       int64  `gorm:"column:status;type:tinyint;not null;default:10;comment:状态:10-正常 9-冻结 8-删除" json:"status"` // 状态:10-正常 9-冻结 8-删除
 	CreatedAt    int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt    int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	Nickname     string `gorm:"column:nickname;type:varchar(255);not null;comment:Nickname | 昵称" json:"nickname"`                                                                        // Nickname | 昵称
+	Nickname     string `gorm:"column:nickname;type:varchar(255);comment:Nickname | 昵称" json:"nickname"`                                                                                 // Nickname | 昵称
 	HomePath     string `gorm:"column:home_path;type:varchar(255);not null;default:/dashboard;comment:The home page that the user enters after logging in | 用户登陆后进入的首页" json:"homePath"` // The home page that the user enters after logging in | 用户登陆后进入的首页
 	Mobile       string `gorm:"column:mobile;type:varchar(255);comment:Mobile number" json:"mobile"`                                                                                     // Mobile number
 	Email        string `gorm:"column:email;type:varchar(255);comment:Email | 邮箱号" json:"email"`                                                                                         // Email | 邮箱号

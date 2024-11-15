@@ -36,6 +36,7 @@ func newWinAdmin(db *gorm.DB, opts ...gen.DOOption) winAdmin {
 	_winAdmin.OperateID = field.NewInt64(tableName, "operate_id")
 	_winAdmin.Parent = field.NewInt64(tableName, "parent")
 	_winAdmin.Secret = field.NewString(tableName, "secret")
+	_winAdmin.CodeURL = field.NewString(tableName, "code_url")
 	_winAdmin.Status = field.NewInt64(tableName, "status")
 	_winAdmin.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winAdmin.UpdatedAt = field.NewInt64(tableName, "updated_at")
@@ -65,6 +66,7 @@ type winAdmin struct {
 	OperateID    field.Int64  // 操作人ID
 	Parent       field.Int64  // 上级ID
 	Secret       field.String // Google密钥
+	CodeURL      field.String // google二维码
 	Status       field.Int64  // 状态:10-正常 9-冻结 8-删除
 	CreatedAt    field.Int64
 	UpdatedAt    field.Int64
@@ -99,6 +101,7 @@ func (w *winAdmin) updateTableName(table string) *winAdmin {
 	w.OperateID = field.NewInt64(table, "operate_id")
 	w.Parent = field.NewInt64(table, "parent")
 	w.Secret = field.NewString(table, "secret")
+	w.CodeURL = field.NewString(table, "code_url")
 	w.Status = field.NewInt64(table, "status")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.UpdatedAt = field.NewInt64(table, "updated_at")
@@ -124,7 +127,7 @@ func (w *winAdmin) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winAdmin) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 18)
+	w.fieldMap = make(map[string]field.Expr, 19)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
@@ -134,6 +137,7 @@ func (w *winAdmin) fillFieldMap() {
 	w.fieldMap["operate_id"] = w.OperateID
 	w.fieldMap["parent"] = w.Parent
 	w.fieldMap["secret"] = w.Secret
+	w.fieldMap["code_url"] = w.CodeURL
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["updated_at"] = w.UpdatedAt
