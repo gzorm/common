@@ -34,6 +34,7 @@ func newWinCoinDepositRecord(db *gorm.DB, opts ...gen.DOOption) winCoinDepositRe
 	_winCoinDepositRecord.Username = field.NewString(tableName, "username")
 	_winCoinDepositRecord.MerchantID = field.NewInt64(tableName, "merchant_id")
 	_winCoinDepositRecord.Code = field.NewString(tableName, "code")
+	_winCoinDepositRecord.PlatType = field.NewInt64(tableName, "plat_type")
 	_winCoinDepositRecord.PlatName = field.NewString(tableName, "plat_name")
 	_winCoinDepositRecord.PlatNickName = field.NewString(tableName, "plat_nick_name")
 	_winCoinDepositRecord.CoinBefore = field.NewField(tableName, "coin_before")
@@ -71,6 +72,7 @@ type winCoinDepositRecord struct {
 	Username         field.String // 用户名
 	MerchantID       field.Int64  // 门店ID
 	Code             field.String // 支付通道编码
+	PlatType         field.Int64  // 通道类型 话费支付=1，银行卡支付=3，钱包支付=5
 	PlatName         field.String // 平台名称
 	PlatNickName     field.String // 平台自定义名称
 	CoinBefore       field.Field  // 充值前金额
@@ -113,6 +115,7 @@ func (w *winCoinDepositRecord) updateTableName(table string) *winCoinDepositReco
 	w.Username = field.NewString(table, "username")
 	w.MerchantID = field.NewInt64(table, "merchant_id")
 	w.Code = field.NewString(table, "code")
+	w.PlatType = field.NewInt64(table, "plat_type")
 	w.PlatName = field.NewString(table, "plat_name")
 	w.PlatNickName = field.NewString(table, "plat_nick_name")
 	w.CoinBefore = field.NewField(table, "coin_before")
@@ -148,7 +151,7 @@ func (w *winCoinDepositRecord) GetFieldByName(fieldName string) (field.OrderExpr
 }
 
 func (w *winCoinDepositRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 26)
+	w.fieldMap = make(map[string]field.Expr, 27)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -156,6 +159,7 @@ func (w *winCoinDepositRecord) fillFieldMap() {
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
 	w.fieldMap["code"] = w.Code
+	w.fieldMap["plat_type"] = w.PlatType
 	w.fieldMap["plat_name"] = w.PlatName
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
 	w.fieldMap["coin_before"] = w.CoinBefore
