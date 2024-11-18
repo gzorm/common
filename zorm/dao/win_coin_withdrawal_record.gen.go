@@ -34,7 +34,6 @@ func newWinCoinWithdrawalRecord(db *gorm.DB, opts ...gen.DOOption) winCoinWithdr
 	_winCoinWithdrawalRecord.Username = field.NewString(tableName, "username")
 	_winCoinWithdrawalRecord.MerchantID = field.NewInt64(tableName, "merchant_id")
 	_winCoinWithdrawalRecord.Code = field.NewString(tableName, "code")
-	_winCoinWithdrawalRecord.PlatType = field.NewInt64(tableName, "plat_type")
 	_winCoinWithdrawalRecord.PlatName = field.NewString(tableName, "plat_name")
 	_winCoinWithdrawalRecord.PlatNickName = field.NewString(tableName, "plat_nick_name")
 	_winCoinWithdrawalRecord.WithdrawalAddress = field.NewString(tableName, "withdrawal_address")
@@ -79,7 +78,6 @@ type winCoinWithdrawalRecord struct {
 	Username                field.String // 用户名
 	MerchantID              field.Int64  // 商户id
 	Code                    field.String // 支付通道编码
-	PlatType                field.Int64  // 通道类型 话费支付=1，银行卡支付=3，钱包支付=5
 	PlatName                field.String // 平台名称
 	PlatNickName            field.String // 平台自定义名称
 	WithdrawalAddress       field.String // 加密地址
@@ -129,7 +127,6 @@ func (w *winCoinWithdrawalRecord) updateTableName(table string) *winCoinWithdraw
 	w.Username = field.NewString(table, "username")
 	w.MerchantID = field.NewInt64(table, "merchant_id")
 	w.Code = field.NewString(table, "code")
-	w.PlatType = field.NewInt64(table, "plat_type")
 	w.PlatName = field.NewString(table, "plat_name")
 	w.PlatNickName = field.NewString(table, "plat_nick_name")
 	w.WithdrawalAddress = field.NewString(table, "withdrawal_address")
@@ -172,7 +169,7 @@ func (w *winCoinWithdrawalRecord) GetFieldByName(fieldName string) (field.OrderE
 }
 
 func (w *winCoinWithdrawalRecord) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 34)
+	w.fieldMap = make(map[string]field.Expr, 33)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["plat_order_id"] = w.PlatOrderID
@@ -180,7 +177,6 @@ func (w *winCoinWithdrawalRecord) fillFieldMap() {
 	w.fieldMap["username"] = w.Username
 	w.fieldMap["merchant_id"] = w.MerchantID
 	w.fieldMap["code"] = w.Code
-	w.fieldMap["plat_type"] = w.PlatType
 	w.fieldMap["plat_name"] = w.PlatName
 	w.fieldMap["plat_nick_name"] = w.PlatNickName
 	w.fieldMap["withdrawal_address"] = w.WithdrawalAddress
