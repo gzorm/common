@@ -34,12 +34,15 @@ func newWinCoinLog(db *gorm.DB, opts ...gen.DOOption) winCoinLog {
 	_winCoinLog.WalletID = field.NewInt64(tableName, "wallet_id")
 	_winCoinLog.Currency = field.NewInt64(tableName, "currency")
 	_winCoinLog.Category = field.NewInt64(tableName, "category")
+	_winCoinLog.Code = field.NewString(tableName, "code")
+	_winCoinLog.PlatName = field.NewString(tableName, "plat_name")
+	_winCoinLog.PlatNickName = field.NewString(tableName, "plat_nick_name")
 	_winCoinLog.ReferID = field.NewInt64(tableName, "refer_id")
+	_winCoinLog.OrderID = field.NewString(tableName, "order_id")
 	_winCoinLog.Coin = field.NewField(tableName, "coin")
 	_winCoinLog.CoinReal = field.NewField(tableName, "coin_real")
 	_winCoinLog.PlatID = field.NewInt64(tableName, "plat_id")
 	_winCoinLog.OutIn = field.NewInt64(tableName, "out_in")
-	_winCoinLog.OrderID = field.NewString(tableName, "order_id")
 	_winCoinLog.GameID = field.NewInt64(tableName, "game_id")
 	_winCoinLog.CoinBefore = field.NewField(tableName, "coin_before")
 	_winCoinLog.CoinAfter = field.NewField(tableName, "coin_after")
@@ -55,26 +58,29 @@ func newWinCoinLog(db *gorm.DB, opts ...gen.DOOption) winCoinLog {
 type winCoinLog struct {
 	winCoinLogDo
 
-	ALL        field.Asterisk
-	ID         field.Int64
-	UID        field.Int64  // UID
-	Username   field.String // 用户名
-	MerchantID field.Int64  // 商户id
-	WalletID   field.Int64  // 钱包id
-	Currency   field.Int64  // 币种
-	Category   field.Int64  // 类型:1-存款 2-提款 3-投注 4-派彩 5-返水 6-佣金 7-活动(奖励) 8-系统调账 9-退款 10-佣金钱包转主账户余额 11-小费,12-提款退款,13-系统调账转出,14-系统调账转入,15-余额带出入游戏,16-游戏调整余额
-	ReferID    field.Int64  // 关联ID
-	Coin       field.Field  // 金额
-	CoinReal   field.Field  // 实际金额
-	PlatID     field.Int64  // 游戏平台ID
-	OutIn      field.Int64  // 收支类型:0-支出 1-收入
-	OrderID    field.String // 订单号
-	GameID     field.Int64  // 三方游戏ID
-	CoinBefore field.Field  // 前金额
-	CoinAfter  field.Field  // 帐变后金额
-	Status     field.Int64  // 状态:0-处理中 1-成功 2-失败
-	CreatedAt  field.Int64
-	UpdatedAt  field.Int64
+	ALL          field.Asterisk
+	ID           field.Int64
+	UID          field.Int64  // UID
+	Username     field.String // 用户名
+	MerchantID   field.Int64  // 商户id
+	WalletID     field.Int64  // 钱包id
+	Currency     field.Int64  // 币种
+	Category     field.Int64  // 类型:1-存款 2-提款 3-投注 4-派彩 5-返水 6-佣金 7-活动(奖励) 8-系统调账 9-退款 10-佣金钱包转主账户余额 11-小费,12-提款退款,13-系统调账转出,14-系统调账转入,15-余额带出入游戏,16-游戏调整余额
+	Code         field.String // 支付通道编码
+	PlatName     field.String // 平台名称
+	PlatNickName field.String // 平台自定义名称
+	ReferID      field.Int64  // 关联ID
+	OrderID      field.String // 订单id
+	Coin         field.Field  // 金额
+	CoinReal     field.Field  // 实际金额
+	PlatID       field.Int64  // 游戏平台ID
+	OutIn        field.Int64  // 收支类型:0-支出 1-收入
+	GameID       field.Int64  // 三方游戏ID
+	CoinBefore   field.Field  // 前金额
+	CoinAfter    field.Field  // 帐变后金额
+	Status       field.Int64  // 状态:0-处理中 1-成功 2-失败
+	CreatedAt    field.Int64
+	UpdatedAt    field.Int64
 
 	fieldMap map[string]field.Expr
 }
@@ -98,12 +104,15 @@ func (w *winCoinLog) updateTableName(table string) *winCoinLog {
 	w.WalletID = field.NewInt64(table, "wallet_id")
 	w.Currency = field.NewInt64(table, "currency")
 	w.Category = field.NewInt64(table, "category")
+	w.Code = field.NewString(table, "code")
+	w.PlatName = field.NewString(table, "plat_name")
+	w.PlatNickName = field.NewString(table, "plat_nick_name")
 	w.ReferID = field.NewInt64(table, "refer_id")
+	w.OrderID = field.NewString(table, "order_id")
 	w.Coin = field.NewField(table, "coin")
 	w.CoinReal = field.NewField(table, "coin_real")
 	w.PlatID = field.NewInt64(table, "plat_id")
 	w.OutIn = field.NewInt64(table, "out_in")
-	w.OrderID = field.NewString(table, "order_id")
 	w.GameID = field.NewInt64(table, "game_id")
 	w.CoinBefore = field.NewField(table, "coin_before")
 	w.CoinAfter = field.NewField(table, "coin_after")
@@ -126,7 +135,7 @@ func (w *winCoinLog) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (w *winCoinLog) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 19)
+	w.fieldMap = make(map[string]field.Expr, 22)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -134,12 +143,15 @@ func (w *winCoinLog) fillFieldMap() {
 	w.fieldMap["wallet_id"] = w.WalletID
 	w.fieldMap["currency"] = w.Currency
 	w.fieldMap["category"] = w.Category
+	w.fieldMap["code"] = w.Code
+	w.fieldMap["plat_name"] = w.PlatName
+	w.fieldMap["plat_nick_name"] = w.PlatNickName
 	w.fieldMap["refer_id"] = w.ReferID
+	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["coin"] = w.Coin
 	w.fieldMap["coin_real"] = w.CoinReal
 	w.fieldMap["plat_id"] = w.PlatID
 	w.fieldMap["out_in"] = w.OutIn
-	w.fieldMap["order_id"] = w.OrderID
 	w.fieldMap["game_id"] = w.GameID
 	w.fieldMap["coin_before"] = w.CoinBefore
 	w.fieldMap["coin_after"] = w.CoinAfter
