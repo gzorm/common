@@ -63,6 +63,9 @@ type WinUser struct {
 	MemberType        int64           `gorm:"column:memberType;type:tinyint;default:1;comment:会员类型1==直客 2==非直客" json:"memberType"` // 会员类型1==直客 2==非直客
 	GoogleSubID       string          `gorm:"column:google_sub_id;type:varchar(128)" json:"googleSubId"`
 	FacebookSubID     string          `gorm:"column:facebook_sub_id;type:varchar(128)" json:"facebookSubId"`
+	Secret            string          `gorm:"column:secret;type:varchar(100);not null;comment:Google密钥" json:"secret"`                         // Google密钥
+	CodeURL           string          `gorm:"column:code_url;type:varchar(255);comment:google二维码" json:"codeUrl"`                              // google二维码
+	CodeStatus        int64           `gorm:"column:code_status;type:tinyint(1);not null;comment:google绑定验证记录:0=未绑定 ,1=已绑定" json:"codeStatus"` // google绑定验证记录:0=未绑定 ,1=已绑定
 }
 
 // TableName WinUser's table name
