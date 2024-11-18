@@ -9,16 +9,17 @@ const TableNameWinAdmin = "win_admin"
 // WinAdmin 后台管理员账号
 type WinAdmin struct {
 	ID           int64  `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id,string"`
-	Username     string `gorm:"column:username;type:varchar(32);not null;comment:用户名" json:"username"`                   // 用户名
-	MerchantID   int64  `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"`                     // 商户id
-	AgentID      int64  `gorm:"column:agent_id;type:int;not null;comment:代理ID" json:"agentId"`                           // 代理ID
-	PasswordHash string `gorm:"column:password_hash;type:varchar(255);not null;comment:登录密码" json:"passwordHash"`        // 登录密码
-	AdminGroupID int64  `gorm:"column:admin_group_id;type:int;not null;comment:用户组ID" json:"adminGroupId"`               // 用户组ID
-	OperateID    int64  `gorm:"column:operate_id;type:int;not null;comment:操作人ID" json:"operateId"`                      // 操作人ID
-	Parent       int64  `gorm:"column:parent;type:int;comment:上级ID" json:"parent"`                                       // 上级ID
-	Secret       string `gorm:"column:secret;type:varchar(100);not null;comment:Google密钥" json:"secret"`                 // Google密钥
-	CodeURL      string `gorm:"column:code_url;type:varchar(255);comment:google二维码" json:"codeUrl"`                      // google二维码
-	Status       int64  `gorm:"column:status;type:tinyint;not null;default:10;comment:状态:10-正常 9-冻结 8-删除" json:"status"` // 状态:10-正常 9-冻结 8-删除
+	Username     string `gorm:"column:username;type:varchar(32);not null;comment:用户名" json:"username"`                           // 用户名
+	MerchantID   int64  `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"`                             // 商户id
+	AgentID      int64  `gorm:"column:agent_id;type:int;not null;comment:代理ID" json:"agentId"`                                   // 代理ID
+	PasswordHash string `gorm:"column:password_hash;type:varchar(255);not null;comment:登录密码" json:"passwordHash"`                // 登录密码
+	AdminGroupID int64  `gorm:"column:admin_group_id;type:int;not null;comment:用户组ID" json:"adminGroupId"`                       // 用户组ID
+	OperateID    int64  `gorm:"column:operate_id;type:int;not null;comment:操作人ID" json:"operateId"`                              // 操作人ID
+	Parent       int64  `gorm:"column:parent;type:int;comment:上级ID" json:"parent"`                                               // 上级ID
+	Secret       string `gorm:"column:secret;type:varchar(100);not null;comment:Google密钥" json:"secret"`                         // Google密钥
+	CodeURL      string `gorm:"column:code_url;type:varchar(255);comment:google二维码" json:"codeUrl"`                              // google二维码
+	CodeStatus   int64  `gorm:"column:code_status;type:tinyint(1);not null;comment:google绑定验证记录:0=未绑定 ,1=已绑定" json:"codeStatus"` // google绑定验证记录:0=未绑定 ,1=已绑定
+	Status       int64  `gorm:"column:status;type:tinyint;not null;default:10;comment:状态:10-正常 9-冻结 8-删除" json:"status"`         // 状态:10-正常 9-冻结 8-删除
 	CreatedAt    int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt    int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
 	Nickname     string `gorm:"column:nickname;type:varchar(255);comment:Nickname | 昵称" json:"nickname"`                                                                                 // Nickname | 昵称
