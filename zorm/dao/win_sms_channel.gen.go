@@ -37,6 +37,7 @@ func newWinSmsChannel(db *gorm.DB, opts ...gen.DOOption) winSmsChannel {
 	_winSmsChannel.Status = field.NewInt64(tableName, "status")
 	_winSmsChannel.Sender = field.NewString(tableName, "sender")
 	_winSmsChannel.TemplateID = field.NewString(tableName, "template_id")
+	_winSmsChannel.Signature = field.NewString(tableName, "signature")
 	_winSmsChannel.CreatedAt = field.NewInt64(tableName, "created_at")
 	_winSmsChannel.Remark = field.NewString(tableName, "remark")
 	_winSmsChannel.Operator = field.NewString(tableName, "operator")
@@ -62,6 +63,7 @@ type winSmsChannel struct {
 	Status       field.Int64  // 1==禁用  3==启用
 	Sender       field.String // 发送者
 	TemplateID   field.String // 模板序号
+	Signature    field.String // 签名
 	CreatedAt    field.Int64  // 创建时间
 	Remark       field.String // 备注
 	Operator     field.String // 操作人
@@ -93,6 +95,7 @@ func (w *winSmsChannel) updateTableName(table string) *winSmsChannel {
 	w.Status = field.NewInt64(table, "status")
 	w.Sender = field.NewString(table, "sender")
 	w.TemplateID = field.NewString(table, "template_id")
+	w.Signature = field.NewString(table, "signature")
 	w.CreatedAt = field.NewInt64(table, "created_at")
 	w.Remark = field.NewString(table, "remark")
 	w.Operator = field.NewString(table, "operator")
@@ -114,7 +117,7 @@ func (w *winSmsChannel) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (w *winSmsChannel) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 15)
+	w.fieldMap = make(map[string]field.Expr, 16)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["app_Id"] = w.AppID
 	w.fieldMap["app_code"] = w.AppCode
@@ -125,6 +128,7 @@ func (w *winSmsChannel) fillFieldMap() {
 	w.fieldMap["status"] = w.Status
 	w.fieldMap["sender"] = w.Sender
 	w.fieldMap["template_id"] = w.TemplateID
+	w.fieldMap["signature"] = w.Signature
 	w.fieldMap["created_at"] = w.CreatedAt
 	w.fieldMap["remark"] = w.Remark
 	w.fieldMap["operator"] = w.Operator

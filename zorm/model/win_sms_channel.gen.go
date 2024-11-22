@@ -18,6 +18,7 @@ type WinSmsChannel struct {
 	Status       int64  `gorm:"column:status;type:tinyint;default:3;comment:1==禁用  3==启用" json:"status"` // 1==禁用  3==启用
 	Sender       string `gorm:"column:sender;type:varchar(255);comment:发送者" json:"sender"`               // 发送者
 	TemplateID   string `gorm:"column:template_id;type:varchar(255);comment:模板序号" json:"templateId"`     // 模板序号
+	Signature    string `gorm:"column:signature;type:varchar(255);comment:签名" json:"signature"`          // 签名
 	CreatedAt    int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                         // 创建时间
 	Remark       string `gorm:"column:remark;type:varchar(250);comment:备注" json:"remark"`                // 备注
 	Operator     string `gorm:"column:operator;type:varchar(50);comment:操作人" json:"operator"`            // 操作人
