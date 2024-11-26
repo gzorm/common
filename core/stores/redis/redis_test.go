@@ -59,9 +59,10 @@ func TestNewRedis(t *testing.T) {
 		{
 			name: "missing host",
 			RedisConf: RedisConf{
-				Host: "",
+				Host: "localhost:6379",
 				Type: NodeType,
 				Pass: "",
+				Db:   1,
 			},
 			ok: false,
 		},
@@ -69,8 +70,9 @@ func TestNewRedis(t *testing.T) {
 			name: "missing type",
 			RedisConf: RedisConf{
 				Host: "localhost:6379",
-				Type: "",
+				Type: NodeType,
 				Pass: "",
+				Db:   1,
 			},
 			ok: false,
 		},

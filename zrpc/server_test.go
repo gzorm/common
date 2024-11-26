@@ -29,6 +29,7 @@ func TestServer_setupInterceptors(t *testing.T) {
 			RedisConf: redis.RedisConf{
 				Host: rds.Addr(),
 				Type: redis.NodeType,
+				Db:   1,
 			},
 			Key: "foo",
 		},
