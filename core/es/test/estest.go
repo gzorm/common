@@ -14,10 +14,10 @@ import (
 func main() {
 	cfg := elasticsearch.Config{
 		Addresses: []string{
-			"https://189.1.232.60:9200/",
+			"https://129.3.212.60:9200/",
 		},
 		Username: "admin",
-		Password: "J>f6/yk?O8.l*p<z",
+		Password: "",
 		Transport: &http.Transport{
 			TLSClientConfig: &tls.Config{
 				InsecureSkipVerify: true,

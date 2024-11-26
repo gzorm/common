@@ -15,7 +15,8 @@ type WinSmsRecord struct {
 	SendSmsType string `gorm:"column:send_sms_type;type:varchar(20);comment:发送短信类型" json:"sendSmsType"`  // 发送短信类型
 	CreatedAt   int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`
 	UpdatedAt   int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`
-	IP          string `gorm:"column:ip;type:varchar(64);not null;comment:ip地址" json:"ip"` // ip地址
+	IP          string `gorm:"column:ip;type:varchar(64);not null;comment:ip地址" json:"ip"`             // ip地址
+	ChannelCode string `gorm:"column:channel_code;type:varchar(64);comment:短信渠道编码" json:"channelCode"` // 短信渠道编码
 }
 
 // TableName WinSmsRecord's table name

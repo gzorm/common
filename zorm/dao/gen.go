@@ -18,6 +18,7 @@ import (
 
 var (
 	Q                         = new(Query)
+	WinSmsChannel             *winSmsChannel
 	WinArticleInfo            *winArticleInfo
 	WinFacebookClick          *winFacebookClick
 	WinAgentUserReport        *winAgentUserReport
@@ -161,6 +162,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	WinSmsChannel = &Q.WinSmsChannel
 	WinArticleInfo = &Q.WinArticleInfo
 	WinFacebookClick = &Q.WinFacebookClick
 	WinAgentUserReport = &Q.WinAgentUserReport
@@ -305,6 +307,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                        db,
+		WinSmsChannel:             newWinSmsChannel(db, opts...),
 		WinArticleInfo:            newWinArticleInfo(db, opts...),
 		WinFacebookClick:          newWinFacebookClick(db, opts...),
 		WinAgentUserReport:        newWinAgentUserReport(db, opts...),
@@ -449,6 +452,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                        *gorm.DB
+	WinSmsChannel             winSmsChannel
 	WinArticleInfo            winArticleInfo
 	WinFacebookClick          winFacebookClick
 	WinAgentUserReport        winAgentUserReport
@@ -595,6 +599,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinSmsChannel:             q.WinSmsChannel.clone(db),
 		WinArticleInfo:            q.WinArticleInfo.clone(db),
 		WinFacebookClick:          q.WinFacebookClick.clone(db),
 		WinAgentUserReport:        q.WinAgentUserReport.clone(db),
@@ -748,6 +753,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinSmsChannel:             q.WinSmsChannel.replaceDB(db),
 		WinArticleInfo:            q.WinArticleInfo.replaceDB(db),
 		WinFacebookClick:          q.WinFacebookClick.replaceDB(db),
 		WinAgentUserReport:        q.WinAgentUserReport.replaceDB(db),
@@ -891,6 +897,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	WinSmsChannel             IWinSmsChannelDo
 	WinArticleInfo            IWinArticleInfoDo
 	WinFacebookClick          IWinFacebookClickDo
 	WinAgentUserReport        IWinAgentUserReportDo
@@ -1034,6 +1041,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		WinSmsChannel:             q.WinSmsChannel.WithContext(ctx),
 		WinArticleInfo:            q.WinArticleInfo.WithContext(ctx),
 		WinFacebookClick:          q.WinFacebookClick.WithContext(ctx),
 		WinAgentUserReport:        q.WinAgentUserReport.WithContext(ctx),

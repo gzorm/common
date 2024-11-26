@@ -17,6 +17,7 @@ type WinCoinDepositRecord struct {
 	Username         string          `gorm:"column:username;type:varchar(255);comment:用户名" json:"username"`                                                 // 用户名
 	MerchantID       int64           `gorm:"column:merchant_id;type:int;comment:门店ID" json:"merchantId"`                                                    // 门店ID
 	Code             string          `gorm:"column:code;type:varchar(255);comment:支付通道编码" json:"code"`                                                      // 支付通道编码
+	PlatType         int64           `gorm:"column:plat_type;type:tinyint;default:3;comment:通道类型 话费支付=1，银行卡支付=3，钱包支付=5" json:"platType"`                    // 通道类型 话费支付=1，银行卡支付=3，钱包支付=5
 	PlatName         string          `gorm:"column:plat_name;type:varchar(255);comment:平台名称" json:"platName"`                                               // 平台名称
 	PlatNickName     string          `gorm:"column:plat_nick_name;type:varchar(255);comment:平台自定义名称" json:"platNickName"`                                   // 平台自定义名称
 	CoinBefore       decimal.Decimal `gorm:"column:coin_before;type:decimal(19,4);comment:充值前金额" json:"coinBefore"`                                         // 充值前金额
