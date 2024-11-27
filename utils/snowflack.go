@@ -86,7 +86,7 @@ func (s *snowflake) getWorkId(redis *redis.Redis) (int64, error) {
 		defer ticker.Stop()
 		for {
 			<-ticker.C
-			logx.Infof("expire key【%s】time:%v", fmt.Sprintf("%s:%d", WorkIdKey, r&workerMax), time.Now())
+			//logx.Infof("expire key【%s】time:%v", fmt.Sprintf("%s:%d", WorkIdKey, r&workerMax), time.Now())
 			err = redis.Expire(fmt.Sprintf("%s:%d", WorkIdKey, r&workerMax), 120)
 			if err != nil {
 				logx.Error(err)
