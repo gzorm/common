@@ -18,6 +18,9 @@ import (
 
 var (
 	Q                         = new(Query)
+	WinPromotionRequirements  *winPromotionRequirements
+	WinPromotionLevel         *winPromotionLevel
+	WinPromotionKpi           *winPromotionKpi
 	WinSmsChannel             *winSmsChannel
 	WinArticleInfo            *winArticleInfo
 	WinFacebookClick          *winFacebookClick
@@ -162,6 +165,9 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	WinPromotionRequirements = &Q.WinPromotionRequirements
+	WinPromotionLevel = &Q.WinPromotionLevel
+	WinPromotionKpi = &Q.WinPromotionKpi
 	WinSmsChannel = &Q.WinSmsChannel
 	WinArticleInfo = &Q.WinArticleInfo
 	WinFacebookClick = &Q.WinFacebookClick
@@ -307,6 +313,9 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                        db,
+		WinPromotionRequirements:  newWinPromotionRequirements(db, opts...),
+		WinPromotionLevel:         newWinPromotionLevel(db, opts...),
+		WinPromotionKpi:           newWinPromotionKpi(db, opts...),
 		WinSmsChannel:             newWinSmsChannel(db, opts...),
 		WinArticleInfo:            newWinArticleInfo(db, opts...),
 		WinFacebookClick:          newWinFacebookClick(db, opts...),
@@ -452,6 +461,9 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                        *gorm.DB
+	WinPromotionRequirements  winPromotionRequirements
+	WinPromotionLevel         winPromotionLevel
+	WinPromotionKpi           winPromotionKpi
 	WinSmsChannel             winSmsChannel
 	WinArticleInfo            winArticleInfo
 	WinFacebookClick          winFacebookClick
@@ -599,6 +611,9 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinPromotionRequirements:  q.WinPromotionRequirements.clone(db),
+		WinPromotionLevel:         q.WinPromotionLevel.clone(db),
+		WinPromotionKpi:           q.WinPromotionKpi.clone(db),
 		WinSmsChannel:             q.WinSmsChannel.clone(db),
 		WinArticleInfo:            q.WinArticleInfo.clone(db),
 		WinFacebookClick:          q.WinFacebookClick.clone(db),
@@ -753,6 +768,9 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinPromotionRequirements:  q.WinPromotionRequirements.replaceDB(db),
+		WinPromotionLevel:         q.WinPromotionLevel.replaceDB(db),
+		WinPromotionKpi:           q.WinPromotionKpi.replaceDB(db),
 		WinSmsChannel:             q.WinSmsChannel.replaceDB(db),
 		WinArticleInfo:            q.WinArticleInfo.replaceDB(db),
 		WinFacebookClick:          q.WinFacebookClick.replaceDB(db),
@@ -897,6 +915,9 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	WinPromotionRequirements  IWinPromotionRequirementsDo
+	WinPromotionLevel         IWinPromotionLevelDo
+	WinPromotionKpi           IWinPromotionKpiDo
 	WinSmsChannel             IWinSmsChannelDo
 	WinArticleInfo            IWinArticleInfoDo
 	WinFacebookClick          IWinFacebookClickDo
@@ -1041,6 +1062,9 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		WinPromotionRequirements:  q.WinPromotionRequirements.WithContext(ctx),
+		WinPromotionLevel:         q.WinPromotionLevel.WithContext(ctx),
+		WinPromotionKpi:           q.WinPromotionKpi.WithContext(ctx),
 		WinSmsChannel:             q.WinSmsChannel.WithContext(ctx),
 		WinArticleInfo:            q.WinArticleInfo.WithContext(ctx),
 		WinFacebookClick:          q.WinFacebookClick.WithContext(ctx),
