@@ -162,6 +162,31 @@ func init() {
 	message[WithdrawalIsDeposit] = "Users need to top up to initiate a withdrawal"
 	message[PictureCodeException] = "Verification failure"
 
+	message[MemberOnLine] = "Member On Line"                                                       //会员在线
+	message[InvalidSecretKey] = "Invalid SecretKey"                                                //密钥无效
+	message[MemberNotExist] = "Member Not Exist"                                                   //会员不存在
+	message[OffLine] = "OffLine"                                                                   //会员已下线
+	message[MemberNotExist] = "Member Not Exist"                                                   //会员不存在
+	message[AccountNotExist] = "Account Not Exist"                                                 //帐户不存在
+	message[InvalidAuthenticationKey] = "Invalid Authentication Key"                               //身份验证密钥无效
+	message[InsufficientBalance] = "Insufficient player balance"                                   //玩家余额不足
+	message[IpIsRestricted] = "IP address is restricted"                                           //IP地址被限制
+	message[DuplicateTransaction] = "Repeated transactions"                                        //重复的交易
+	message[BetNotFound] = "No such order found"                                                   //查无该注单
+	message[BetNotFound] = "No information found"                                                  //查无资料
+	message[InfoNotFound] = "No information found"                                                 //查无资料
+	message[CannotExecute] = "Unable to execute, please try again later"                           //无法执行，请稍后再试一次
+	message[BettingNotEligibleForBonus] = "The order does not meet the bonus eligibility criteria" //注单不符合 Bonus 资格
+	message[PlacebetSeriesCannotBeRetried] = "Placebet series cannot be retried"                   //无法重试Placebet系列
+	message[NetworkError] = "network error"                                                        //网络错误
+	message[SystemMaintenance] = "System maintenance in progress"                                  //系统维修中
+	message[RequestTimeout] = "Request overdue"                                                    //请求逾时
+	message[SystemBusy] = "The system is busy"                                                     //系统忙碌中
+	message[SystemError] = "system error"                                                          //系统错误
+	message[ActiveBetCoinNoEnough] = "Insufficient Balance"                                        //余额不足
+	message[BetslipsRepetitionError] = "Betslips Repetition Error"                                 //订单重复错误
+	message[InvalidAmount] = "Invalid Amount"                                                      //无效金额
+
 }
 
 func MapErrMsg(error ErrCode) string {

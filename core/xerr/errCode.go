@@ -224,3 +224,27 @@ const (
 	PictureCodeException
 	UserBlack
 )
+
+/******新加plat 结算code*****/
+const (
+	MemberOnLine                  = 0
+	InvalidSecretKey              = 1
+	MemberNotExist                = 2
+	OffLine                       = 3
+	AccountNotExist               = 203
+	InvalidAuthenticationKey      = 311
+	InsufficientBalance           = 502
+	IpIsRestricted                = 503
+	BetNotFound                   = 504
+	InfoNotFound                  = 505
+	CannotExecute                 = 506
+	BettingNotEligibleForBonus    = 507
+	PlacebetSeriesCannotBeRetried = 508
+	DuplicateTransaction          = 509
+	InvalidAmount                 = 510
+	NetworkError                  = 902
+	SystemMaintenance             = 903
+	RequestTimeout                = 904
+	SystemBusy                    = 905
+	SystemError                   = 999
+)
