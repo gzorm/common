@@ -161,6 +161,8 @@ var (
 	XxlJobRegistry                *xxlJobRegistry
 	XxlJobUser                    *xxlJobUser
 	GameOperationUrl              *gameOperationUrl
+	CompetitionRankingRewards     *competitionRankingRewards
+	PointsRewards                 *pointsRewards
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
@@ -308,6 +310,8 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	XxlJobRegistry = &Q.XxlJobRegistry
 	XxlJobUser = &Q.XxlJobUser
 	GameOperationUrl = &Q.GameOperationUrl
+	CompetitionRankingRewards = &Q.CompetitionRankingRewards
+	PointsRewards = &Q.PointsRewards
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
@@ -456,6 +460,8 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		XxlJobRegistry:                newXxlJobRegistry(db, opts...),
 		XxlJobUser:                    newXxlJobUser(db, opts...),
 		GameOperationUrl:              newGameOperationUrl(db, opts...),
+		CompetitionRankingRewards:     newCompetitionRankingRewards(db, opts...),
+		PointsRewards:                 newPointsRewards(db, opts...),
 	}
 }
 
@@ -604,6 +610,8 @@ type Query struct {
 	XxlJobRegistry                xxlJobRegistry
 	XxlJobUser                    xxlJobUser
 	GameOperationUrl              gameOperationUrl
+	CompetitionRankingRewards     competitionRankingRewards
+	PointsRewards                 pointsRewards
 }
 
 func (q *Query) Available() bool { return q.db != nil }
@@ -754,6 +762,8 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		XxlJobRegistry:                q.XxlJobRegistry.clone(db),
 		XxlJobUser:                    q.XxlJobUser.clone(db),
 		GameOperationUrl:              q.GameOperationUrl.clone(db),
+		CompetitionRankingRewards:     q.CompetitionRankingRewards.clone(db),
+		PointsRewards:                 q.PointsRewards.clone(db),
 	}
 }
 
@@ -911,6 +921,8 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		XxlJobRegistry:                q.XxlJobRegistry.replaceDB(db),
 		XxlJobUser:                    q.XxlJobUser.replaceDB(db),
 		GameOperationUrl:              q.GameOperationUrl.replaceDB(db),
+		CompetitionRankingRewards:     q.CompetitionRankingRewards.replaceDB(db),
+		PointsRewards:                 q.PointsRewards.replaceDB(db),
 	}
 }
 
@@ -1058,6 +1070,8 @@ type queryCtx struct {
 	XxlJobRegistry                IXxlJobRegistryDo
 	XxlJobUser                    IXxlJobUserDo
 	GameOperationUrl              IGameOperationUrlDo
+	CompetitionRankingRewards     ICompetitionRankingRewardsDo
+	PointsRewards                 IPointsRewardsDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
@@ -1205,6 +1219,8 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		XxlJobRegistry:                q.XxlJobRegistry.WithContext(ctx),
 		XxlJobUser:                    q.XxlJobUser.WithContext(ctx),
 		GameOperationUrl:              q.GameOperationUrl.WithContext(ctx),
+		CompetitionRankingRewards:     q.CompetitionRankingRewards.WithContext(ctx),
+		PointsRewards:                 q.PointsRewards.WithContext(ctx),
 	}
 }
 
