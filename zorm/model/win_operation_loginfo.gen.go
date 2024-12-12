@@ -19,6 +19,7 @@ type WinOperationLoginfo struct {
 	Content        string `gorm:"column:content;type:mediumtext;comment:操作内容" json:"content"`  // 操作内容
 	IP             string `gorm:"column:ip;type:varchar(128);not null;comment:操作IP" json:"ip"` // 操作IP
 	CreatedAt      int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`             // 操作时间
+	UpdatedAt      int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`             // 更新时间
 }
 
 // TableName WinOperationLoginfo's table name

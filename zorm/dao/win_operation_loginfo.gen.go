@@ -38,6 +38,7 @@ func newWinOperationLoginfo(db *gorm.DB, opts ...gen.DOOption) winOperationLogin
 	_winOperationLoginfo.Content = field.NewString(tableName, "content")
 	_winOperationLoginfo.IP = field.NewString(tableName, "ip")
 	_winOperationLoginfo.CreatedAt = field.NewInt64(tableName, "created_at")
+	_winOperationLoginfo.UpdatedAt = field.NewInt64(tableName, "updated_at")
 
 	_winOperationLoginfo.fillFieldMap()
 
@@ -60,6 +61,7 @@ type winOperationLoginfo struct {
 	Content        field.String // 操作内容
 	IP             field.String // 操作IP
 	CreatedAt      field.Int64  // 操作时间
+	UpdatedAt      field.Int64  // 更新时间
 
 	fieldMap map[string]field.Expr
 }
@@ -87,6 +89,7 @@ func (w *winOperationLoginfo) updateTableName(table string) *winOperationLoginfo
 	w.Content = field.NewString(table, "content")
 	w.IP = field.NewString(table, "ip")
 	w.CreatedAt = field.NewInt64(table, "created_at")
+	w.UpdatedAt = field.NewInt64(table, "updated_at")
 
 	w.fillFieldMap()
 
@@ -103,7 +106,7 @@ func (w *winOperationLoginfo) GetFieldByName(fieldName string) (field.OrderExpr,
 }
 
 func (w *winOperationLoginfo) fillFieldMap() {
-	w.fieldMap = make(map[string]field.Expr, 11)
+	w.fieldMap = make(map[string]field.Expr, 12)
 	w.fieldMap["id"] = w.ID
 	w.fieldMap["uid"] = w.UID
 	w.fieldMap["username"] = w.Username
@@ -115,6 +118,7 @@ func (w *winOperationLoginfo) fillFieldMap() {
 	w.fieldMap["content"] = w.Content
 	w.fieldMap["ip"] = w.IP
 	w.fieldMap["created_at"] = w.CreatedAt
+	w.fieldMap["updated_at"] = w.UpdatedAt
 }
 
 func (w winOperationLoginfo) clone(db *gorm.DB) winOperationLoginfo {
