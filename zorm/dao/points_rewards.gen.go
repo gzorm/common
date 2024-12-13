@@ -31,6 +31,7 @@ func newPointsRewards(db *gorm.DB, opts ...gen.DOOption) pointsRewards {
 	_pointsRewards.Language = field.NewString(tableName, "language")
 	_pointsRewards.Name = field.NewString(tableName, "name")
 	_pointsRewards.Integral = field.NewInt64(tableName, "integral")
+	_pointsRewards.GoldCoins = field.NewInt64(tableName, "gold_coins")
 	_pointsRewards.Image = field.NewString(tableName, "image")
 	_pointsRewards.Status = field.NewInt64(tableName, "status")
 	_pointsRewards.CreatedAt = field.NewInt64(tableName, "created_at")
@@ -51,6 +52,7 @@ type pointsRewards struct {
 	Language    field.String // 语言包
 	Name        field.String // 奖励物品名称
 	Integral    field.Int64  // 奖励领取所需积分
+	GoldCoins   field.Int64  // 金币
 	Image       field.String // 图片
 	Status      field.Int64  // 状态: 1=开启,2=禁用
 	CreatedAt   field.Int64  // 创建时间
@@ -76,6 +78,7 @@ func (p *pointsRewards) updateTableName(table string) *pointsRewards {
 	p.Language = field.NewString(table, "language")
 	p.Name = field.NewString(table, "name")
 	p.Integral = field.NewInt64(table, "integral")
+	p.GoldCoins = field.NewInt64(table, "gold_coins")
 	p.Image = field.NewString(table, "image")
 	p.Status = field.NewInt64(table, "status")
 	p.CreatedAt = field.NewInt64(table, "created_at")
@@ -97,11 +100,12 @@ func (p *pointsRewards) GetFieldByName(fieldName string) (field.OrderExpr, bool)
 }
 
 func (p *pointsRewards) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 9)
+	p.fieldMap = make(map[string]field.Expr, 10)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["language"] = p.Language
 	p.fieldMap["name"] = p.Name
 	p.fieldMap["integral"] = p.Integral
+	p.fieldMap["gold_coins"] = p.GoldCoins
 	p.fieldMap["image"] = p.Image
 	p.fieldMap["status"] = p.Status
 	p.fieldMap["created_at"] = p.CreatedAt
