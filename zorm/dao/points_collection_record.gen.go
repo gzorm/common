@@ -33,6 +33,7 @@ func newPointsCollectionRecord(db *gorm.DB, opts ...gen.DOOption) pointsCollecti
 	_pointsCollectionRecord.Name = field.NewString(tableName, "name")
 	_pointsCollectionRecord.Integral = field.NewInt64(tableName, "integral")
 	_pointsCollectionRecord.Score = field.NewInt64(tableName, "score")
+	_pointsCollectionRecord.Status = field.NewInt64(tableName, "status")
 	_pointsCollectionRecord.CreatedAt = field.NewInt64(tableName, "created_at")
 	_pointsCollectionRecord.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_pointsCollectionRecord.UpdatedUser = field.NewString(tableName, "updated_user")
@@ -53,6 +54,7 @@ type pointsCollectionRecord struct {
 	Name            field.String // 奖励物品名称
 	Integral        field.Int64  // 奖励领取所需积分
 	Score           field.Int64  // 更新后积分
+	Status          field.Int64  // 状态: 1=未领取,2=领取成功,3=已过期
 	CreatedAt       field.Int64  // 创建时间
 	UpdatedAt       field.Int64  // 更新时间
 	UpdatedUser     field.String // 最后修改人
@@ -78,6 +80,7 @@ func (p *pointsCollectionRecord) updateTableName(table string) *pointsCollection
 	p.Name = field.NewString(table, "name")
 	p.Integral = field.NewInt64(table, "integral")
 	p.Score = field.NewInt64(table, "score")
+	p.Status = field.NewInt64(table, "status")
 	p.CreatedAt = field.NewInt64(table, "created_at")
 	p.UpdatedAt = field.NewInt64(table, "updated_at")
 	p.UpdatedUser = field.NewString(table, "updated_user")
@@ -97,13 +100,14 @@ func (p *pointsCollectionRecord) GetFieldByName(fieldName string) (field.OrderEx
 }
 
 func (p *pointsCollectionRecord) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 9)
+	p.fieldMap = make(map[string]field.Expr, 10)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["points_rewards_id"] = p.PointsRewardsID
 	p.fieldMap["user_id"] = p.UserID
 	p.fieldMap["name"] = p.Name
 	p.fieldMap["integral"] = p.Integral
 	p.fieldMap["score"] = p.Score
+	p.fieldMap["status"] = p.Status
 	p.fieldMap["created_at"] = p.CreatedAt
 	p.fieldMap["updated_at"] = p.UpdatedAt
 	p.fieldMap["updated_user"] = p.UpdatedUser

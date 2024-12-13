@@ -9,14 +9,15 @@ const TableNamePointsCollectionRecord = "points_collection_record"
 // PointsCollectionRecord 积分领取记录
 type PointsCollectionRecord struct {
 	ID              int64  `gorm:"column:id;type:int unsigned;primaryKey;autoIncrement:true" json:"id,string"`
-	PointsRewardsID int64  `gorm:"column:points_rewards_id;type:int;not null;comment:分商城奖励配置id" json:"pointsRewardsId"` // 分商城奖励配置id
-	UserID          int64  `gorm:"column:user_id;type:int;not null;comment:领取用户id" json:"userId"`                       // 领取用户id
-	Name            string `gorm:"column:name;type:varchar(255);not null;comment:奖励物品名称" json:"name"`                   // 奖励物品名称
-	Integral        int64  `gorm:"column:integral;type:int;not null;comment:奖励领取所需积分" json:"integral"`                  // 奖励领取所需积分
-	Score           int64  `gorm:"column:score;type:int;not null;comment:更新后积分" json:"score"`                           // 更新后积分
-	CreatedAt       int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                     // 创建时间
-	UpdatedAt       int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                     // 更新时间
-	UpdatedUser     string `gorm:"column:updated_user;type:varchar(255);not null;comment:最后修改人" json:"updatedUser"`     // 最后修改人
+	PointsRewardsID int64  `gorm:"column:points_rewards_id;type:int;not null;comment:分商城奖励配置id" json:"pointsRewardsId"`           // 分商城奖励配置id
+	UserID          int64  `gorm:"column:user_id;type:int;not null;comment:领取用户id" json:"userId"`                                 // 领取用户id
+	Name            string `gorm:"column:name;type:varchar(255);not null;comment:奖励物品名称" json:"name"`                             // 奖励物品名称
+	Integral        int64  `gorm:"column:integral;type:int;not null;comment:奖励领取所需积分" json:"integral"`                            // 奖励领取所需积分
+	Score           int64  `gorm:"column:score;type:int;not null;comment:更新后积分" json:"score"`                                     // 更新后积分
+	Status          int64  `gorm:"column:status;type:tinyint(1);not null;default:1;comment:状态: 1=未领取,2=领取成功,3=已过期" json:"status"` // 状态: 1=未领取,2=领取成功,3=已过期
+	CreatedAt       int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                               // 创建时间
+	UpdatedAt       int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                               // 更新时间
+	UpdatedUser     string `gorm:"column:updated_user;type:varchar(255);not null;comment:最后修改人" json:"updatedUser"`               // 最后修改人
 }
 
 // TableName PointsCollectionRecord's table name
