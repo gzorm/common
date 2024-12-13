@@ -18,6 +18,7 @@ import (
 
 var (
 	Q                         = new(Query)
+	WinOperationLoginfo       *winOperationLoginfo
 	WinPromotionRequirements  *winPromotionRequirements
 	WinPromotionLevel         *winPromotionLevel
 	WinPromotionKpi           *winPromotionKpi
@@ -167,6 +168,7 @@ var (
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	*Q = *Use(db, opts...)
+	WinOperationLoginfo = &Q.WinOperationLoginfo
 	WinPromotionRequirements = &Q.WinPromotionRequirements
 	WinPromotionLevel = &Q.WinPromotionLevel
 	WinPromotionKpi = &Q.WinPromotionKpi
@@ -317,6 +319,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 	return &Query{
 		db:                        db,
+		WinOperationLoginfo:       newWinOperationLoginfo(db, opts...),
 		WinPromotionRequirements:  newWinPromotionRequirements(db, opts...),
 		WinPromotionLevel:         newWinPromotionLevel(db, opts...),
 		WinPromotionKpi:           newWinPromotionKpi(db, opts...),
@@ -467,6 +470,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 
 type Query struct {
 	db                        *gorm.DB
+	WinOperationLoginfo       winOperationLoginfo
 	WinPromotionRequirements  winPromotionRequirements
 	WinPromotionLevel         winPromotionLevel
 	WinPromotionKpi           winPromotionKpi
@@ -619,6 +623,7 @@ func (q *Query) Available() bool { return q.db != nil }
 func (q *Query) clone(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinOperationLoginfo:       q.WinOperationLoginfo.clone(db),
 		WinPromotionRequirements:  q.WinPromotionRequirements.clone(db),
 		WinPromotionLevel:         q.WinPromotionLevel.clone(db),
 		WinPromotionKpi:           q.WinPromotionKpi.clone(db),
@@ -778,6 +783,7 @@ func (q *Query) WriteDB() *Query {
 func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 	return &Query{
 		db:                        db,
+		WinOperationLoginfo:       q.WinOperationLoginfo.replaceDB(db),
 		WinPromotionRequirements:  q.WinPromotionRequirements.replaceDB(db),
 		WinPromotionLevel:         q.WinPromotionLevel.replaceDB(db),
 		WinPromotionKpi:           q.WinPromotionKpi.replaceDB(db),
@@ -927,6 +933,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 }
 
 type queryCtx struct {
+	WinOperationLoginfo       IWinOperationLoginfoDo
 	WinPromotionRequirements  IWinPromotionRequirementsDo
 	WinPromotionLevel         IWinPromotionLevelDo
 	WinPromotionKpi           IWinPromotionKpiDo
@@ -1076,6 +1083,7 @@ type queryCtx struct {
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
 	return &queryCtx{
+		WinOperationLoginfo:       q.WinOperationLoginfo.WithContext(ctx),
 		WinPromotionRequirements:  q.WinPromotionRequirements.WithContext(ctx),
 		WinPromotionLevel:         q.WinPromotionLevel.WithContext(ctx),
 		WinPromotionKpi:           q.WinPromotionKpi.WithContext(ctx),

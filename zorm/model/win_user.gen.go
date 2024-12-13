@@ -11,7 +11,7 @@ const TableNameWinUser = "win_user"
 // WinUser 客户表
 type WinUser struct {
 	ID                int64           `gorm:"column:id;type:int;primaryKey;autoIncrement:true" json:"id,string"`
-	Username          string          `gorm:"column:username;type:varchar(32);not null;comment:用户名" json:"username"`                                   // 用户名
+	Username          string          `gorm:"column:username;type:varchar(60);not null;comment:用户名" json:"username"`                                   // 用户名
 	MerchantID        int64           `gorm:"column:merchant_id;type:int;not null;comment:商户id" json:"merchantId"`                                     // 商户id
 	Avatar            string          `gorm:"column:avatar;type:varchar(350);comment:头像" json:"avatar"`                                                // 头像
 	Fcoin             decimal.Decimal `gorm:"column:fcoin;type:decimal(15,4);not null;default:0.0000;comment:冻结金额" json:"fcoin"`                       // 冻结金额
@@ -66,6 +66,7 @@ type WinUser struct {
 	Secret            string          `gorm:"column:secret;type:varchar(100);not null;comment:Google密钥" json:"secret"`                         // Google密钥
 	CodeURL           string          `gorm:"column:code_url;type:varchar(255);comment:google二维码" json:"codeUrl"`                              // google二维码
 	CodeStatus        int64           `gorm:"column:code_status;type:tinyint(1);not null;comment:google绑定验证记录:0=未绑定 ,1=已绑定" json:"codeStatus"` // google绑定验证记录:0=未绑定 ,1=已绑定
+	UserType          int64           `gorm:"column:user_type;type:tinyint(1);default:1;comment:1==手机注册  3==whatsapp 5==邮箱" json:"userType"`   // 1==手机注册  3==whatsapp 5==邮箱
 }
 
 // TableName WinUser's table name
