@@ -164,6 +164,7 @@ var (
 	GameOperationUrl              *gameOperationUrl
 	CompetitionRankingRewards     *competitionRankingRewards
 	PointsRewards                 *pointsRewards
+	PointsCollectionRecord        *pointsCollectionRecord
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
@@ -314,6 +315,8 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	GameOperationUrl = &Q.GameOperationUrl
 	CompetitionRankingRewards = &Q.CompetitionRankingRewards
 	PointsRewards = &Q.PointsRewards
+	PointsCollectionRecord = &Q.PointsCollectionRecord
+
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
@@ -465,6 +468,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		GameOperationUrl:              newGameOperationUrl(db, opts...),
 		CompetitionRankingRewards:     newCompetitionRankingRewards(db, opts...),
 		PointsRewards:                 newPointsRewards(db, opts...),
+		PointsCollectionRecord:        newPointsCollectionRecord(db, opts...),
 	}
 }
 
@@ -616,6 +620,7 @@ type Query struct {
 	GameOperationUrl              gameOperationUrl
 	CompetitionRankingRewards     competitionRankingRewards
 	PointsRewards                 pointsRewards
+	PointsCollectionRecord        pointsCollectionRecord
 }
 
 func (q *Query) Available() bool { return q.db != nil }
@@ -769,6 +774,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		GameOperationUrl:              q.GameOperationUrl.clone(db),
 		CompetitionRankingRewards:     q.CompetitionRankingRewards.clone(db),
 		PointsRewards:                 q.PointsRewards.clone(db),
+		PointsCollectionRecord:        q.PointsCollectionRecord.clone(db),
 	}
 }
 
@@ -929,6 +935,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		GameOperationUrl:              q.GameOperationUrl.replaceDB(db),
 		CompetitionRankingRewards:     q.CompetitionRankingRewards.replaceDB(db),
 		PointsRewards:                 q.PointsRewards.replaceDB(db),
+		PointsCollectionRecord:        q.PointsCollectionRecord.replaceDB(db),
 	}
 }
 
@@ -1079,6 +1086,7 @@ type queryCtx struct {
 	GameOperationUrl              IGameOperationUrlDo
 	CompetitionRankingRewards     ICompetitionRankingRewardsDo
 	PointsRewards                 IPointsRewardsDo
+	PointsCollectionRecord        IPointsCollectionRecordDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
@@ -1229,6 +1237,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		GameOperationUrl:              q.GameOperationUrl.WithContext(ctx),
 		CompetitionRankingRewards:     q.CompetitionRankingRewards.WithContext(ctx),
 		PointsRewards:                 q.PointsRewards.WithContext(ctx),
+		PointsCollectionRecord:        q.PointsCollectionRecord.WithContext(ctx),
 	}
 }
 

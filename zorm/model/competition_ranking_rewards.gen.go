@@ -13,6 +13,7 @@ type CompetitionRankingRewards struct {
 	MinRank      int64  `gorm:"column:min_rank;type:int;not null;comment:名次范围的起始名次" json:"minRank"`                    // 名次范围的起始名次
 	MaxRank      int64  `gorm:"column:max_rank;type:int;not null;comment:名次范围的结束名次" json:"maxRank"`                    // 名次范围的结束名次
 	RewardAmount int64  `gorm:"column:reward_amount;type:int;not null;comment:奖励金额" json:"rewardAmount"`               // 奖励金额
+	GoldCoins    int64  `gorm:"column:gold_coins;type:int;not null;comment:金币" json:"goldCoins"`                       // 金币
 	Status       int64  `gorm:"column:status;type:tinyint(1);not null;comment:状态: 1=开启, 2=禁用" json:"status"`           // 状态: 1=开启, 2=禁用
 	CreatedAt    int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                       // 创建时间，时间戳格式
 	UpdatedAt    int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                       // 更新时间，时间戳格式

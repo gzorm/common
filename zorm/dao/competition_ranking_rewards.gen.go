@@ -32,6 +32,7 @@ func newCompetitionRankingRewards(db *gorm.DB, opts ...gen.DOOption) competition
 	_competitionRankingRewards.MinRank = field.NewInt64(tableName, "min_rank")
 	_competitionRankingRewards.MaxRank = field.NewInt64(tableName, "max_rank")
 	_competitionRankingRewards.RewardAmount = field.NewInt64(tableName, "reward_amount")
+	_competitionRankingRewards.GoldCoins = field.NewInt64(tableName, "gold_coins")
 	_competitionRankingRewards.Status = field.NewInt64(tableName, "status")
 	_competitionRankingRewards.CreatedAt = field.NewInt64(tableName, "created_at")
 	_competitionRankingRewards.UpdatedAt = field.NewInt64(tableName, "updated_at")
@@ -52,6 +53,7 @@ type competitionRankingRewards struct {
 	MinRank      field.Int64  // 名次范围的起始名次
 	MaxRank      field.Int64  // 名次范围的结束名次
 	RewardAmount field.Int64  // 奖励金额
+	GoldCoins    field.Int64  // 金币
 	Status       field.Int64  // 状态: 1=开启, 2=禁用
 	CreatedAt    field.Int64  // 创建时间，时间戳格式
 	UpdatedAt    field.Int64  // 更新时间，时间戳格式
@@ -77,6 +79,7 @@ func (c *competitionRankingRewards) updateTableName(table string) *competitionRa
 	c.MinRank = field.NewInt64(table, "min_rank")
 	c.MaxRank = field.NewInt64(table, "max_rank")
 	c.RewardAmount = field.NewInt64(table, "reward_amount")
+	c.GoldCoins = field.NewInt64(table, "gold_coins")
 	c.Status = field.NewInt64(table, "status")
 	c.CreatedAt = field.NewInt64(table, "created_at")
 	c.UpdatedAt = field.NewInt64(table, "updated_at")
@@ -97,12 +100,13 @@ func (c *competitionRankingRewards) GetFieldByName(fieldName string) (field.Orde
 }
 
 func (c *competitionRankingRewards) fillFieldMap() {
-	c.fieldMap = make(map[string]field.Expr, 9)
+	c.fieldMap = make(map[string]field.Expr, 10)
 	c.fieldMap["id"] = c.ID
 	c.fieldMap["room_fee"] = c.RoomFee
 	c.fieldMap["min_rank"] = c.MinRank
 	c.fieldMap["max_rank"] = c.MaxRank
 	c.fieldMap["reward_amount"] = c.RewardAmount
+	c.fieldMap["gold_coins"] = c.GoldCoins
 	c.fieldMap["status"] = c.Status
 	c.fieldMap["created_at"] = c.CreatedAt
 	c.fieldMap["updated_at"] = c.UpdatedAt
