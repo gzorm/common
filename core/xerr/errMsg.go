@@ -186,6 +186,8 @@ func init() {
 	message[ActiveBetCoinNoEnough] = "Insufficient Balance"                                        //余额不足
 	message[BetslipsRepetitionError] = "Betslips Repetition Error"                                 //订单重复错误
 	message[InvalidAmount] = "Invalid Amount"                                                      //无效金额
+	message[RecordDoesNotExist] = "Record does not exist"                                          //记录不存在
+	message[InsufficientPoints] = "Insufficient points"                                            //积分不足
 
 }
 

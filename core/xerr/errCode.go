@@ -223,6 +223,7 @@ const (
 	WithdrawalIsDeposit
 	PictureCodeException
 	UserBlack
+	InsufficientPoints
 )
 
 /******新加plat 结算code*****/
