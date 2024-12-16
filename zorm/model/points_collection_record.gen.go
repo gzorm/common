@@ -11,6 +11,7 @@ type PointsCollectionRecord struct {
 	ID              int64  `gorm:"column:id;type:int unsigned;primaryKey;autoIncrement:true" json:"id,string"`
 	PointsRewardsID int64  `gorm:"column:points_rewards_id;type:int;not null;comment:分商城奖励配置id" json:"pointsRewardsId"`           // 分商城奖励配置id
 	UserID          int64  `gorm:"column:user_id;type:int;not null;comment:领取用户id" json:"userId"`                                 // 领取用户id
+	Username        string `gorm:"column:username;type:varchar(255);not null;comment:用户名称" json:"username"`                       // 用户名称
 	Name            string `gorm:"column:name;type:varchar(255);not null;comment:奖励物品名称" json:"name"`                             // 奖励物品名称
 	Integral        int64  `gorm:"column:integral;type:int;not null;comment:奖励领取所需积分" json:"integral"`                            // 奖励领取所需积分
 	Score           int64  `gorm:"column:score;type:int;not null;comment:更新后积分" json:"score"`                                     // 更新后积分
