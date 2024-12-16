@@ -19,6 +19,7 @@ type PointsCollectionRecord struct {
 	CreatedAt       int64  `gorm:"column:created_at;comment:创建时间" json:"createdAt"`                                               // 创建时间
 	UpdatedAt       int64  `gorm:"column:updated_at;comment:更新时间" json:"updatedAt"`                                               // 更新时间
 	UpdatedUser     string `gorm:"column:updated_user;type:varchar(255);not null;comment:最后修改人" json:"updatedUser"`               // 最后修改人
+	Mobile          string `gorm:"column:mobile;type:varchar(100);not null;comment:手机号码" json:"mobile"`                           // 手机号码
 }
 
 // TableName PointsCollectionRecord's table name

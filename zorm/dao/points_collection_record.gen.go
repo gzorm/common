@@ -38,6 +38,7 @@ func newPointsCollectionRecord(db *gorm.DB, opts ...gen.DOOption) pointsCollecti
 	_pointsCollectionRecord.CreatedAt = field.NewInt64(tableName, "created_at")
 	_pointsCollectionRecord.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_pointsCollectionRecord.UpdatedUser = field.NewString(tableName, "updated_user")
+	_pointsCollectionRecord.Mobile = field.NewString(tableName, "mobile")
 
 	_pointsCollectionRecord.fillFieldMap()
 
@@ -60,6 +61,7 @@ type pointsCollectionRecord struct {
 	CreatedAt       field.Int64  // 创建时间
 	UpdatedAt       field.Int64  // 更新时间
 	UpdatedUser     field.String // 最后修改人
+	Mobile          field.String // 手机号码
 
 	fieldMap map[string]field.Expr
 }
@@ -87,6 +89,7 @@ func (p *pointsCollectionRecord) updateTableName(table string) *pointsCollection
 	p.CreatedAt = field.NewInt64(table, "created_at")
 	p.UpdatedAt = field.NewInt64(table, "updated_at")
 	p.UpdatedUser = field.NewString(table, "updated_user")
+	p.Mobile = field.NewString(table, "mobile")
 
 	p.fillFieldMap()
 
@@ -103,7 +106,7 @@ func (p *pointsCollectionRecord) GetFieldByName(fieldName string) (field.OrderEx
 }
 
 func (p *pointsCollectionRecord) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 11)
+	p.fieldMap = make(map[string]field.Expr, 12)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["points_rewards_id"] = p.PointsRewardsID
 	p.fieldMap["user_id"] = p.UserID
@@ -115,6 +118,7 @@ func (p *pointsCollectionRecord) fillFieldMap() {
 	p.fieldMap["created_at"] = p.CreatedAt
 	p.fieldMap["updated_at"] = p.UpdatedAt
 	p.fieldMap["updated_user"] = p.UpdatedUser
+	p.fieldMap["mobile"] = p.Mobile
 }
 
 func (p pointsCollectionRecord) clone(db *gorm.DB) pointsCollectionRecord {
