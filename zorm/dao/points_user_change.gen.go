@@ -37,6 +37,8 @@ func newPointsUserChange(db *gorm.DB, opts ...gen.DOOption) pointsUserChange {
 	_pointsUserChange.CreatedAt = field.NewInt64(tableName, "created_at")
 	_pointsUserChange.UpdatedAt = field.NewInt64(tableName, "updated_at")
 	_pointsUserChange.UpdatedUser = field.NewString(tableName, "updated_user")
+	_pointsUserChange.CoinBefore = field.NewField(tableName, "coin_before")
+	_pointsUserChange.GoldCoins = field.NewInt64(tableName, "gold_coins")
 
 	_pointsUserChange.fillFieldMap()
 
@@ -58,6 +60,8 @@ type pointsUserChange struct {
 	CreatedAt   field.Int64  // 创建时间
 	UpdatedAt   field.Int64  // 更新时间
 	UpdatedUser field.String // 最后修改人
+	CoinBefore  field.Field  // 投注前金额
+	GoldCoins   field.Int64  // 金币(用户主钱包)
 
 	fieldMap map[string]field.Expr
 }
@@ -84,6 +88,8 @@ func (p *pointsUserChange) updateTableName(table string) *pointsUserChange {
 	p.CreatedAt = field.NewInt64(table, "created_at")
 	p.UpdatedAt = field.NewInt64(table, "updated_at")
 	p.UpdatedUser = field.NewString(table, "updated_user")
+	p.CoinBefore = field.NewField(table, "coin_before")
+	p.GoldCoins = field.NewInt64(table, "gold_coins")
 
 	p.fillFieldMap()
 
@@ -100,7 +106,7 @@ func (p *pointsUserChange) GetFieldByName(fieldName string) (field.OrderExpr, bo
 }
 
 func (p *pointsUserChange) fillFieldMap() {
-	p.fieldMap = make(map[string]field.Expr, 10)
+	p.fieldMap = make(map[string]field.Expr, 12)
 	p.fieldMap["id"] = p.ID
 	p.fieldMap["user_id"] = p.UserID
 	p.fieldMap["username"] = p.Username
@@ -111,6 +117,8 @@ func (p *pointsUserChange) fillFieldMap() {
 	p.fieldMap["created_at"] = p.CreatedAt
 	p.fieldMap["updated_at"] = p.UpdatedAt
 	p.fieldMap["updated_user"] = p.UpdatedUser
+	p.fieldMap["coin_before"] = p.CoinBefore
+	p.fieldMap["gold_coins"] = p.GoldCoins
 }
 
 func (p pointsUserChange) clone(db *gorm.DB) pointsUserChange {
