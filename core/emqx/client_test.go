@@ -30,6 +30,39 @@ func TestMQTT(t *testing.T) {
 	time.Sleep(10 * time.Second)
 }
 
+/*长连接的场景 DEMO
+
+func main() {
+	client := emqxclient.NewEMQXClient("tcp://broker.emqx.io:1883", "test-client", "", "")
+
+	if err := client.Connect(); err != nil {
+		fmt.Printf("Failed to connect: %v\n", err)
+		return
+	}
+	// 使用 defer 确保程序退出时断开连接
+	defer client.Disconnect()
+
+	// 订阅主题
+	client.Subscribe("test/topic", 1, func(client mqtt.Client, msg mqtt.Message) {
+		fmt.Printf("Received message: %s\n", msg.Payload())
+	})
+
+    // 发布消息
+	client.Publish("test/topic", 1, false, "Hello from Golang!")
+
+	// 捕获退出信号
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
+
+	fmt.Println("Running... Press Ctrl+C to exit.")
+	<-signalChan
+	fmt.Println("Exiting...")
+}
+
+
+
+*/
+
 /*JS 调用如下
 import mqtt from 'mqtt';
 
